@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${DATASOURCE_URL}?characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${LOCAL_USERNAME}
+    password: ${LOCAL_PASSWORD}
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원 여부 (default: true)
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+server:
+  port: 8081
+
+
+rds:
+  username: ${RDS_USERNAME}
+  password: ${RDS_PASSWORD}
