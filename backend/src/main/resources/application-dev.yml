@@ -1,0 +1,28 @@
+
+
+spring:
+  # 1) DB 연결 설정
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${RDS_URL}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+
+  # 2) jpa 설정
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true # SQL이 로그창에 정갈하게 표시되도록
+        show_sql: true # 로그창에 SQL이 뜨도록
+
+# 3) 포트번호 보이지 않도록 조치
+server:
+  servlet:
+    encoding:
+      force: 'true'
+      enabled: 'true'
+      charset: UTF-8
+    context-path: /
+  port: '8081'
