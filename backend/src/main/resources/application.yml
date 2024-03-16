@@ -1,11 +1,6 @@
 spring:
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: ${DATASOURCE_URL}?characterEncoding=UTF-8&serverTimezone=UTC
-    username: ${LOCAL_USERNAME}
-    password: ${LOCAL_PASSWORD}
   profiles:
-    active: dev
+    active: dev # 어떤 설정파일을 쓸지에 대한 표시
   servlet:
     multipart:
       enabled: true # 멀티파트 업로드 지원 여부 (default: true)
@@ -16,6 +11,17 @@ server:
   port: 8081
 
 
-rds:
-  username: ${RDS_USERNAME}
-  password: ${RDS_PASSWORD}
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ap-northeast-2  # S3가 가용될 수 있는 지역 -> 동북아시아/대한민국으로 한정
+    stack:
+      auto: false # 프로젝트를 EC2로 배포 시에, 이 값이 true 되어있으면 SpringBoot에서 CloudFormation 구성을 시작함
+                  # 근데 따로 설정한 CloudFormation이 없으면 프로젝트가 배포단계에서 죽어버림
+                  # 따라서 우리는 애초에 Cloud 구성 기능을 사용하지 않겠다는 의미에서 false로 바꿔 둔다.
+
+    s3:
+      bucket:  d210
