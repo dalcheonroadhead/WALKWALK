@@ -15,6 +15,7 @@ import org.ssafy.d210._common.service.S3MultiPartUploader;
 
 import java.io.IOException;
 
+// 이건 테스트용, 다른 곳에서 구현이 다 된다면 지웁니다.
 @RestController
 @RequiredArgsConstructor
 public class TempController {

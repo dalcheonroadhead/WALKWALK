@@ -13,4 +13,5 @@ public class Mission {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 1)
     @Column(name = "mission_id")
     private Long id;
+
 }

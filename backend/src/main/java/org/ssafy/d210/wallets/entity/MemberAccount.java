@@ -13,4 +13,5 @@ public class MemberAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 1)
     @Column(name = "member_account_id")
     private Long id;
+
 }

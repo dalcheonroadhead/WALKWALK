@@ -14,4 +14,5 @@ public class HalleyGalley {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 1)
     @Column(name = "halley_galley_id")
     private Long id;
+
 }
