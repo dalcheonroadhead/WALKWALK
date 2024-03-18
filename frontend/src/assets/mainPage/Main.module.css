@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "bc_b";
+    src: url(/public/fonts/BCcardB.ttf);
+}
+
+@font-face {
+    font-family: "bc_l";
+    src: url(/public/fonts/BCcardL.ttf);
+}
+
+.main_container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+}
+
