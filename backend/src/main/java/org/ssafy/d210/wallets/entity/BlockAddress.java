@@ -14,3 +14,4 @@ public class BlockAddress {
     @Column(name = "block_address_id")
     private Long id;
 }
+
