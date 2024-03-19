@@ -23,7 +23,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/login",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#FFCB23",
   "background_color": "#ffffff"
