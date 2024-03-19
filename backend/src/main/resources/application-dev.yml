@@ -11,7 +11,7 @@ spring:
   # 2) jpa 설정
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true # SQL이 로그창에 정갈하게 표시되도록
