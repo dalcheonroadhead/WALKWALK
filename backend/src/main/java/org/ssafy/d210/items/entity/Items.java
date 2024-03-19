@@ -31,6 +31,7 @@ public class Items {
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String effect;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
-    private String type;
+    private ItemsType type;
 }
