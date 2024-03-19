@@ -3,9 +3,6 @@ const CACHE_NAME = 'v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/src/main.jsx',
-  '/imgs/favicon.ico',
-  '/manifest.json',
   // 추가적으로 캐싱할 리소스를 여기에 추가
 ];
 
