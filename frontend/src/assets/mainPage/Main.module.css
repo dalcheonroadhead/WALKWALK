@@ -12,6 +12,342 @@
     position: relative;
     height: 100vh;
     width: 100vw;
-    background-size: cover;
 }
 
+.tab_container{
+    height: 18.75rem;
+    width: 22.5rem;
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mode_tabs{
+    display: flex;
+    width: 22.5rem;
+    height: 3.125rem;
+}
+
+.mode_my{
+    width: 5rem;
+    height: 3.125rem;
+    background: #FFFEFC;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: -0.313rem -0.625rem 2.5rem 0 rgba(0, 0, 0, 0.05);
+}
+
+.mode_my_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.my_content{
+    width: 22.5rem;
+    height: 18rem;
+    border-top-right-radius: 0.938rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    box-shadow: 0.313rem 0.625rem 2.5rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.my_progress_container{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.my_time_progress_container{
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 20.5rem;
+    height: 3.125rem;
+}
+
+.my_time_progress_base{
+    width: 20rem;
+    height: 1.8rem;
+    background: #E4DDC6;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 0.938rem;
+}
+
+.my_time_progress_move{
+    height: 1.8rem;
+    background: #FFCB23;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0.938rem;
+}
+
+.my_time_ori_container{
+    height: 1.8rem;
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    border-radius: 0.938rem;
+}
+
+.my_time_mine{
+    position: absolute;
+    top: -60%;
+    left: 0;
+    font-size: 1.2rem;
+    font-family: "bc_b";
+    color: white;
+    text-shadow: 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black;
+}
+
+.ch1{
+    width: auto;
+    position: absolute;
+    height: 6rem;
+    top: -140%;
+}
+
+.my_time_number_base{
+    width: 20rem;
+    height: 1.8rem;
+    position: absolute;
+    display: flex;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.my_time_min{
+    position: absolute;
+    font-size: 1rem;
+    font-family: "bc_b";
+    top: 0;
+    left: 0;
+}
+
+.my_time_min2{
+    position: absolute;
+    font-size: 1rem;
+    font-family: "bc_b";
+    top: 0;
+    right: 0;
+}
+
+.my_walk_time{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.time_txt{
+    margin-top: -1%;
+    margin-left: -37%;
+    font-family: "bc_b";
+    font-size: 1.4rem;
+}
+
+.my_walk_foot{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.foot_txt{
+    margin-left: -32%;
+    font-family: "bc_b";
+    font-size: 1.4rem;
+}
+
+.my_walk_progress_container{
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 20.5rem;
+    height: 3.125rem;
+}
+
+.my_walk_progress_base{
+    width: 20rem;
+    height: 1.8rem;
+    background: #E4DDC6;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 0.938rem;
+}
+
+.my_walk_progress_move{
+    height: 1.8rem;
+    background: #FFCB23;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0.938rem;
+}
+
+.my_walk_ori_container{
+    height: 1.8rem;
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    border-radius: 0.938rem;
+}
+
+.my_walk_mine{
+    position: absolute;
+    top: -60%;
+    left: 0;
+    font-size: 1.2rem;
+    font-family: "bc_b";
+    color: white;
+    text-shadow: 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black;
+}
+
+.ch1_2{
+    width: auto;
+    position: absolute;
+    height: 6rem;
+    top: -140%;
+}
+
+.my_walk_number_base{
+    width: 20rem;
+    height: 1.8rem;
+    position: absolute;
+    display: flex;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.my_walk_min{
+    position: absolute;
+    font-size: 1rem;
+    font-family: "bc_b";
+    top: 0;
+    left: 0;
+}
+
+.my_walk_min2{
+    position: absolute;
+    font-size: 1rem;
+    font-family: "bc_b";
+    top: 0;
+    right: 0;
+}
+
+.mode_halli{
+    width: 5rem;
+    height: 3.125rem;
+    background: #FFFEFC;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 -0.625rem 2.5rem 0 rgba(0, 0, 0, 0.05);
+}
+
+.mode_halli_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.mode_galli{
+    width: 5rem;
+    height: 3.125rem;
+    background: #FFFEFC;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 -0.625rem 2.5rem 0 rgba(0, 0, 0, 0.05);
+}
+
+.mode_galli_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.week_graph_container{
+    height: 23.75rem;
+    width: 22.5rem;
+    position: absolute;
+    top: 71%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.week_content_container{
+    width: 22.5rem;
+    height: 22rem;
+    border-top-right-radius: 0.938rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    border-top-left-radius: 0.938rem;
+    background: #FFDD71;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    position: relative;
+    box-shadow: 0.313rem 0.625rem 2.5rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.week_title{
+    position: absolute;
+    top: 0%;
+    left: 7%;
+    font-family: "bc_b";
+    font-size: 1.4rem;
+}
+
+.week_detail{
+    position: absolute;
+    top: 14%;
+    left: 7%;
+    font-family: "bc_b";
+    font-size: 1.1rem;
+}
+
+.avg_container{
+    display: flex;
+}
+
+.week_avg_number{
+    position: absolute;
+    top: 15%;
+    left: 33%;
+    font-family: "bc_b";
+    font-size: 2.5rem;
+    text-shadow: 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white;
+}
+
+.week_avg_walk{
+    position: absolute;
+    top: 28%;
+    left: 60%;
+    font-family: "bc_b";
+    font-size: 1.1rem;
+}
