@@ -1,10 +1,12 @@
 package org.ssafy.d210.members.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Struct;
 import org.ssafy.d210._common.entity.BaseTime;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
@@ -26,8 +28,11 @@ public class Members extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment 설정
-    @Column(name = "id")  // 필드명이 entity 와 다를 경우에만 설정
+    @Column(name = "member_id")  // 필드명이 entity 와 다를 경우에만 설정
     private Long id;
+
+    @Column(name = "member_email")
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "member_account_id")
@@ -38,6 +43,10 @@ public class Members extends BaseTime {
 
     @Column(name = "profile_url", nullable = false, length = 500)
     private String profileUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Role role;
 
     @Column(name = "main_badge", length = 100)
     private String mainBadge;
@@ -80,4 +89,25 @@ public class Members extends BaseTime {
 
     @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
     private List<BlockAddress> blockAddresses = new ArrayList<>();
+
+
+    @Builder
+    public Members( String email, String nickname, String profileUrl, Role role){
+        this.email = email;
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+        this.role = role;
+    }
+
+    public Members update (String nickname, String profileUrl) {
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+
+        return this;
+    }
+
+    public String getRoleKey() {
+        return role.getKey();
+    }
+
 }
