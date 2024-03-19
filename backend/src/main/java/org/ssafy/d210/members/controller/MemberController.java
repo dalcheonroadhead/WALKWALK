@@ -1,0 +1,84 @@
+package org.ssafy.d210.members.controller;
+
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.ssafy.d210._common.response.ApiResponseDto;
+import org.ssafy.d210._common.response.MsgType;
+import org.ssafy.d210._common.response.ResponseUtils;
+import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
+import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
+import org.ssafy.d210._common.response.oauth2Google.GoogleRefreshTokenInfo;
+import org.ssafy.d210._common.service.UserDetailsImpl;
+import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210.members.service.MemberService;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class MemberController {
+
+    private final MemberService memberService;
+
+    // A. 프론트에서 인가코드 다시 주는 주소.
+    // B. 백에서 해야할 일: 인가코드로 Google AccessToken, RefreshToken 받아 놓기
+    //      -> 해당 사용자의 기본 정보(추가로 [WALK_WALK]에서 받아야 할 것을 뺀 정보)를 DB에 저장 -> jwtAccessToken, jwtRefreshToken 발급 -> 프론트에 토큰 전달
+    @GetMapping("/oauth/callback/google/token/l-t-d")
+    public ApiResponseDto<Map<String, Boolean>> getAccessTokenLocalToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+        return handleAccessTokenRequest(code, "http://localhost:3000/oauth/callback/google/token", response);
+    }
+
+    // local -> local
+    @GetMapping("/oauth/callback/google/token/l-t-l")
+    public ApiResponseDto<Map<String, Boolean>> getAccessTokenLocalToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+        return handleAccessTokenRequest(code, "http://localhost:3000/oauth/callback/google/token", response);
+    }
+
+
+    @GetMapping("/oauth/callback/google/token/d-t-d")
+    public ApiResponseDto<Map<String, Boolean>> getAccessTokenDistToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+        return handleAccessTokenRequest(code, "https://j10d210.p.ssafy.io/oauth/callback/google/token", response);
+    }
+
+    @GetMapping("/oauth/callback/google/token/d-t-l")
+    public ApiResponseDto<Map<String, Boolean>> getAccessTokenDistToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+        return handleAccessTokenRequest(code, "https://j10d210.p.ssafy.io/oauth/callback/google/token", response);
+    }
+
+    @GetMapping("/me")
+    public ApiResponseDto<String> getCurrentUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+
+        log.info("클라이언트에서 자신의 정보를 요청: {}", userDetails.getUsername());
+        return ResponseUtils.ok("유저 : " + userDetails.getUsername(), MsgType.SEARCH_SUCCESSFULLY);
+    }
+
+    private ApiResponseDto<Map<String, Boolean>> handleAccessTokenRequest(String code, String redirectUri, HttpServletResponse response) {
+        log.info("들어온 인가코드는 다음과 같습니다.={}",code);
+        GoogleOauthTokenInfo gti = memberService.getAccessToken(code, redirectUri);
+
+        GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getIssued_at(), gti.getAccess_token(), gti.getExpires_in());
+        GoogleRefreshTokenInfo grt = new GoogleRefreshTokenInfo(gti.getRefresh_token(), gti.getRefresh_token_issued_at(), gti.getRefresh_token_expires_in(), gti.getRefresh_count());
+
+        List<String> ans = memberService.SaveUserAndGetToken(gti.getAccess_token(),response,gat,grt);
+        String jwtAccessToken = ans.get(0);
+        String jwtRefreshToken = ans.get(2);
+        boolean isNew = ans.get(1).equals("true");
+        log.info("해당 사용자는 첫번째 가입 입니까?={}",isNew? "Yes" : "NO");
+        log.info("해당 사용자의 AccessToken: {}, RefreshToken: {}", jwtAccessToken, jwtRefreshToken);
+        Map<String, Boolean> ret = new HashMap<>();
+        ret.put("isNew", isNew);
+
+        return ResponseUtils.ok(ret, MsgType.GENERATE_TOKEN_SUCCESSFULLY);
+    }
+}
