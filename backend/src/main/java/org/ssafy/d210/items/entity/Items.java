@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -17,4 +18,19 @@ public class Items {
     @Column(name = "items_id")
     private Long id;
 
+    @Column(nullable = false, length = 15)
+    private String name;
+
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    private String icon;
+
+    @Column(name = "egg_price")
+    @ColumnDefault("0")
+    private Integer eggPrice;
+
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    private String effect;
+
+    @Column(nullable = false, length = 15)
+    private String type;
 }
