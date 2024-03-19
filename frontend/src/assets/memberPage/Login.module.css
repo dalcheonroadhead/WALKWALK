@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "bc_b";
+  src: url(/public/fonts/BCcardB.ttf);
+}
+
+@font-face {
+  font-family: "bc_l";
+  src: url(/public/fonts/BCcardL.ttf);
+}
+
+.login_app_name {
+  font-family: "bc_b";
+  font-size: 5rem;
+  color: #3B3934;
+}
