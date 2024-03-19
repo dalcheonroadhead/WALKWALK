@@ -17,12 +17,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.ssafy.d210._common.handler.JwtAccessDeniedHandler;
 import org.ssafy.d210._common.handler.JwtAuthenticationEntryPoint;
-import org.ssafy.d210._common.handler.OAuth2LoginFailureHandler;
-import org.ssafy.d210._common.handler.OAuth2LoginSuccessHandler;
 import org.ssafy.d210._common.jwt.JwtFilter;
 import org.ssafy.d210._common.jwt.TokenProvider;
-import org.ssafy.d210._common.respository.HttpCookieOAuth2AuthorizationRequestRepository;
-import org.ssafy.d210._common.service.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -35,10 +31,6 @@ public class WebSecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final TokenProvider tokenProvider;
 
-    // * OAuth2 페이지용
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     // 1. 비밀번호를 안전하게 저장할 수 있도록 비밀번호의 단방향 암호화를 지원하는 인터페이스
@@ -71,27 +63,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(                     // 7)
                         (authorizeRequest) ->
                                 authorizeRequest
-                                        .requestMatchers("/api/Oauth/callback/google/token/**").permitAll()
-                                        .requestMatchers("/api/Oauth/authorize").permitAll()
-                                        .requestMatchers("/oauth2//**").permitAll() //모든 소셜 로그인 후 인가코드 Redirect URL는 다음과 같이 설정
+                                        .requestMatchers("/api/oauth/callback/google/token").permitAll()
+                                        .requestMatchers("/api/oauth/authorize").permitAll()
+                                        .requestMatchers("/oauth2/**").permitAll() //모든 소셜 로그인 후 인가코드 Redirect URL는 다음과 같이 설정
                                         .requestMatchers("/hello").permitAll()
                                         .anyRequest().authenticated()
 
                 )
-                .oauth2Login(                               // 9)
-                        (oauth2Login) -> oauth2Login
-                                        .authorizationEndpoint(
-                                                authorizationEndpointConfig ->
-                                                        authorizationEndpointConfig
-                                                                .baseUri("/oauth2/authorization")
-                                                                .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository())
-                                        )
-                                .successHandler(oAuth2LoginSuccessHandler)
-                                .failureHandler(oAuth2LoginFailureHandler)
-                                .userInfoEndpoint(userInfoEndpointConfig ->
-                                        userInfoEndpointConfig.userService(customOAuth2UserService))
-                )
-                                                            // 10)
+                                                            // 8)
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.getOrBuild();
@@ -116,9 +95,5 @@ public class WebSecurityConfig {
     }
 
 
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieOAuth2AuthorizationRequestRepository(){
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import org.ssafy.d210._common.exception.ErrorType;
 
 import java.io.IOException;
 
@@ -50,7 +51,21 @@ public class JwtFilter extends GenericFilterBean {
 
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다., uri: {}", authentication.getName(), requestURI);
         } else{
-            log.debug("유효한 JWT 토큰이 없습니다. uri:{}", requestURI);
+
+
+            if(jwt == null) {
+                log.debug("JWT 토큰이 없습니다. uri:{}", requestURI);
+                servletRequest.setAttribute("exception", ErrorType.TOKEN_DOESNT_EXIST);
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
+
+            else{
+                log.debug("토큰이 유효하지 않습니다.");
+                servletRequest.setAttribute("exception", ErrorType.NOT_VALID_TOKEN);
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
         }
 
         // 1-6) 다음 필터가 있으면 필터를 호출하고 없으면 컨트롤러와 매핑시켜줄 Dispatcher Servlet가 매핑 시켜줌.

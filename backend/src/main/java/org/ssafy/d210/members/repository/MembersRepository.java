@@ -8,5 +8,5 @@ import java.util.Optional;
 
 // JpaRepository<사용할 Entity 이름, PK의 타입>
 public interface MembersRepository extends JpaRepository<Members, Long> {
-    
+    Optional<Members> findByEmail(String email);
 }
