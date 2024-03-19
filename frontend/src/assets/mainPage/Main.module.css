@@ -18,7 +18,7 @@
     height: 18.75rem;
     width: 22.5rem;
     position: absolute;
-    top: 27%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -39,7 +39,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: -0.313rem -0.625rem 2.5rem 0 rgba(0, 0, 0, 0.05);
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
 }
 
 .mode_my_txt{
@@ -58,7 +58,7 @@
     align-items: center;
     text-align: center;
     display: flex;
-    box-shadow: 0.313rem 0.625rem 2.5rem 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .my_progress_container{
@@ -264,7 +264,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: 0 -0.625rem 2.5rem 0 rgba(0, 0, 0, 0.05);
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
 }
 
 .mode_halli_txt{
@@ -282,7 +282,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: 0 -0.625rem 2.5rem 0 rgba(0, 0, 0, 0.05);
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
 }
 
 .mode_galli_txt{
@@ -294,14 +294,14 @@
     height: 23.75rem;
     width: 22.5rem;
     position: absolute;
-    top: 71%;
+    top: 68.5%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
 .week_content_container{
     width: 22.5rem;
-    height: 22rem;
+    height: 25rem;
     border-top-right-radius: 0.938rem;
     border-bottom-left-radius: 0.938rem;
     border-bottom-right-radius: 0.938rem;
@@ -312,7 +312,7 @@
     text-align: center;
     display: flex;
     position: relative;
-    box-shadow: 0.313rem 0.625rem 2.5rem 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .week_title{
@@ -346,8 +346,33 @@
 
 .week_avg_walk{
     position: absolute;
-    top: 28%;
-    left: 60%;
+    top: 27%;
+    left: 61%;
     font-family: "bc_b";
     font-size: 1.1rem;
+}
+
+.graph_container{
+    height: 16.75rem;
+    width: 22.5rem;
+    position: relative;
+    top: 29%;
+    display: flex;
+}
+
+.graph_back{
+    height: 13rem;
+    width: 20.5rem;
+    position: absolute;
+    top: -4%;
+    left: 4.5%;
+    border-radius: 0.938rem;
+    background: #FFFBEE;
+}
+
+.graph_style{
+    position: absolute;
+    top: -10%;
+    width: 22rem;
+    height: 15rem;
 }
