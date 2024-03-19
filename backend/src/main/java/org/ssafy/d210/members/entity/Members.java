@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.ssafy.d210._common.entity.BaseTime;
+import org.ssafy.d210.wallets.entity.BlockAddress;
+import org.ssafy.d210.wallets.entity.MemberAccount;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,8 +29,9 @@ public class Members extends BaseTime {
     @Column(name = "id")  // 필드명이 entity 와 다를 경우에만 설정
     private Long id;
 
-    @Column(name = "member_account_id", nullable = false)
-    private Long memberAccountId;
+    @ManyToOne
+    @JoinColumn(name = "member_account_id")
+    private MemberAccount memberAccountId;
 
     @Column(name = "nickname", nullable = false, length = 15)
     private String nickname;
@@ -71,4 +77,7 @@ public class Members extends BaseTime {
 
     @Column(name = "daily_criteria")
     private Long dailyCriteria;
+
+    @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
+    private List<BlockAddress> blockAddresses = new ArrayList<>();
 }
