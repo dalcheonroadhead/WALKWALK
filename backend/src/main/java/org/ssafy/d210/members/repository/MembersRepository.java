@@ -11,8 +11,12 @@ import java.util.Optional;
 // JpaRepository<사용할 Entity 이름, PK의 타입>
 public interface MembersRepository extends JpaRepository<Members, Long> {
 
+    Optional<Members> findByEmail(String email);
+
     Optional<Members> findByEmailAndDeletedAtIsNull(String googleEmail);
 
-    @Query(value = "UPDATE members set updated_at = now() where member_id = :id",nativeQuery = true)
+    @Query(value = "UPDATE members set updated_at = now() where member_id = :id", nativeQuery = true)
     void updateById(@Param("id") Long id);
+
+    Optional<Members> findByNicknameAndDeletedAtIsNull(String nickname);
 }

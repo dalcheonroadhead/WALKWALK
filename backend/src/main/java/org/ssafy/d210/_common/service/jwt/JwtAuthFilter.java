@@ -42,11 +42,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // D. 유효한 토큰이라면, 토큰으로부터 사용자 정보를 가져온다.
         Claims info = jwtUtil.getUserInfoFromToken(token);  // 토큰 해부
+
+        log.info("토큰에 들어있는 값={}",info.toString());
+
+
         try {
+
             setAuthentication(info.getSubject());   // 이메일로 사용자 정보를 얻어오고, 그 사용자 정보로 인증 객체 만든다.
 
         } catch (UsernameNotFoundException e) {
-            request.setAttribute("exception", ErrorType.NOT_FOUND_USER);
+            request.setAttribute("exception", ErrorType.NOT_FOUND_MEMBER);
         }
         // 다음 필터로 넘어간다.
         filterChain.doFilter(request, response);
