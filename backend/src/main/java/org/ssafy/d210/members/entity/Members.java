@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Struct;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "members") // 테이블 명이 entity랑 다를 때만 작성하면 됩니다.
 @Getter
+@Setter
 // soft delete 구현
 @SQLDelete(sql = "UPDATE members set deleted_at = CONVERT_TZ(NOW(), 'UTC', 'Asia/Seoul') WHERE id = ?")
 public class Members extends BaseTime {
@@ -92,11 +94,66 @@ public class Members extends BaseTime {
 
 
     @Builder
-    public Members( String email, String nickname, String profileUrl, Role role){
+    public Members(
+            String email, String nickname, String profileUrl, Role role,
+            GenderType gender, Long height, Long weight, String location,
+            Long birthYear, double longitude, double latitude, boolean isNew,
+            String streakColor, String comment, String phoneNumber, Long dailyCriteria
+
+    ){
         this.email = email;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
         this.role = role;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
+        this.location = location;
+        this.birthYear = birthYear;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.isNew = isNew;
+        this.streakColor = streakColor;
+        this.comment = comment;
+        this.phoneNumber = phoneNumber;
+        this.dailyCriteria = dailyCriteria;
+    }
+
+    public static Members of(String email, String nickname, String profileUrl, Role role){
+        return builder()
+                .email(email)
+                .nickname(nickname)
+                .profileUrl(profileUrl)
+                .role(role)
+                .build();
+    }
+
+    public static Members of(
+            String email, String nickname, String profileUrl, Role role,
+            GenderType gender, Long height, Long weight, String location,
+            Long birthYear, double longitude, double latitude, boolean isNew,
+            String streakColor, String comment, String phoneNumber, Long dailyCriteria
+    ) {
+
+        return builder()
+                .email(email)
+                .nickname(nickname)
+                .profileUrl(profileUrl)
+                .role(role)
+                .gender(gender)
+                .height(height)
+                .weight(weight)
+                .location(location)
+                .birthYear(birthYear)
+                .longitude(longitude)
+                .latitude(latitude)
+                .isNew(isNew)
+                .streakColor(streakColor)
+                .comment(comment)
+                .phoneNumber(phoneNumber)
+                .dailyCriteria(dailyCriteria)
+                .build();
+
     }
 
     public Members update (String nickname, String profileUrl) {
