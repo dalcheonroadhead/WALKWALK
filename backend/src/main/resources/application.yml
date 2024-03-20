@@ -58,22 +58,26 @@ jwt:
   secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
   token:
       #접근토큰시간: 5시간  #60*60*5*1000 =18000000    #샘플테스트 :30초 ==>30*1000=30000
-      access-expiration-time: 30000
-      #갱신토큰시간: 7일  #60*60*24*7*1000=604800000  #샘플테스트: 1분 ===>60000
-      refresh-expiration-time: 120000
+      access-expiration-time: 18000000
+    #갱신토큰시간: 7일  #60*60*24*7*1000=604800000  #샘플테스트: 1분 ===>60000
+      refresh-expiration-time: 604800000
 
 springdoc:
-  version: '@project.version@'
+  swagger-ui:
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    default-models-expand-depth: 2
+    default-model-expand-depth: 2
   api-docs:
     path: /api-docs
+
+  show-actuator: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
-  swagger-ui:
-    operations-sorter: alpha
-    tags-sorter: alpha
-    path: /swagger-ui.html
-    disable-swagger-default-url: true
-    display-query-params-without-oauth2: true
-    doc-expansion: none
-    paths-to-match:
-      - /api/**
+  writer-with-default-pretty-printer: true
+  model-and-view-allowed: true
+  paths-to-match:
+    - /api/**

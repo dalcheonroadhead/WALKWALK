@@ -92,7 +92,7 @@ public class SecurityConfig {
                         (auth) ->
                                 auth
                                         .requestMatchers("/api/**").permitAll()
-                                        .requestMatchers("/api-docs/**").permitAll()
+                                        .requestMatchers("/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**" ).permitAll()
 //                                        .requestMatchers("/api/oauth/authorize").permitAll()
                                         .requestMatchers("/oauth2/**").permitAll() //모든 소셜 로그인 후 인가코드 Redirect URL는 다음과 같이 설정
 //                                        .requestMatchers("/api/hello").permitAll()
