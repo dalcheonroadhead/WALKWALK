@@ -12,6 +12,7 @@ public enum ErrorType {
 
     //----------------------------MEMBERS----------------------------
     NOT_FOUND_MEMBER(401, "해당 멤버가 존재하지 않습니다."),
+    CANT_PASS_SECURITY(401, "[Security Config]를 통과할 수 없습니다. 접두사로 [/api]를 붙였는지 확인해주세요"),
 
     //-------------------------파일 업로드 부분-------------------------
     CANT_UPLOAD_FILE(415, "해당 파일을 업로드할 수가 없습니다."),
@@ -19,7 +20,6 @@ public enum ErrorType {
     //----------------------------WALLETS-----------------------------
     NOT_FOUND_MEMBER_ACCOUNT(401, "해당 멤버 계좌가 존재하지 않습니다."),
     ;
-
 
     private int code;
     private String msg;

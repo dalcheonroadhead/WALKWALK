@@ -26,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Members member = membersRepository.findByEmailAndDeletedAtIsNull(email)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorType.NOT_FOUND_MEMBER.getMsg()));
 
+
         return new UserDetailsImpl(member, member.getEmail());
     }
 }

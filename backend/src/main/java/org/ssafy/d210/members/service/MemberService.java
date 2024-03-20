@@ -46,9 +46,6 @@ public class MemberService {
     // A. 명세와 구현의 분리
     public GoogleOauthTokenInfo getAccessToken(String code, String redirectUri) {
 
-        System.out.println(client_id);
-        System.out.println(client_secret);
-
         return requestAccessToken(code, redirectUri);
     }
 
@@ -108,7 +105,7 @@ public class MemberService {
         if(member == null){
             member = Members.of(
                     googleProfileInfo.getEmail(),
-                    googleProfileInfo.getName(),
+                    googleProfileInfo.getName() == null? "없음" : googleProfileInfo.getName(),
                     googleProfileInfo.getPicture(),
                     Role.USER
             );
@@ -175,9 +172,15 @@ public class MemberService {
     }
 
 
+    // E .해당 이메일을 가진 사용자가 있는지 확인
     public Members validateMemberByEmail(String email) {
         return membersRepository.findByEmailAndDeletedAtIsNull(email)
                 .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
+    }
+
+    // F. 닉네임 중복확인
+    public boolean isDuplicatedID(String nickname){
+        return membersRepository.findByNicknameAndDeletedAtIsNull(nickname).isPresent();
     }
 
 }
