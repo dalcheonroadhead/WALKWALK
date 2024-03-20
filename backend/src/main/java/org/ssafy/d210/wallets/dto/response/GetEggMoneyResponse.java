@@ -17,7 +17,7 @@ public class GetEggMoneyResponse {
         this.money = money;
     }
 
-    public static GetEggMoneyResponse of(MemberAccount memberAccount) {
+    public static GetEggMoneyResponse from(MemberAccount memberAccount) {
         return builder()
                 .egg(memberAccount.getEgg())
                 .money(memberAccount.getMoney())
