@@ -19,7 +19,6 @@ public class ExerciseAcc { // 운동 누적
     @JoinColumn(name = "member_id")
     private Members member;
 
-    @Column(name = "steps")
     @ColumnDefault("0")
     private Long steps;
 
@@ -31,6 +30,5 @@ public class ExerciseAcc { // 운동 누적
     @ColumnDefault("0")
     private Long exerciseDistance;
 
-    @Column(name = "calorie")
     private Long calorie;
 }

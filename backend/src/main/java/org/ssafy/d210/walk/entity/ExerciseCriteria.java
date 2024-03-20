@@ -17,7 +17,6 @@ public class ExerciseCriteria { // 운동 기준
     @Column(name = "age_group")
     private Long ageGroup;
 
-    @Column(name = "steps")
     @ColumnDefault("0")
     private Long steps;
 
@@ -33,6 +32,5 @@ public class ExerciseCriteria { // 운동 기준
     @ColumnDefault("0")
     private Long exerciseDistance;
 
-    @Column(name = "calorie")
     private Long calorie;
 }

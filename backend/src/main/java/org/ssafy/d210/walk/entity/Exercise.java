@@ -24,7 +24,6 @@ public class Exercise {
     @JoinColumn(name = "member_id", nullable = false)
     private Members member;
 
-    @Column(name = "steps")
     @ColumnDefault("0")
     private Long steps;
 
@@ -47,9 +46,6 @@ public class Exercise {
     @ColumnDefault("false")
     private Boolean isAchieved;
 
-    @Column(name = "calorie")
     private Long calorie;
-
-    @Column(name = "streak")
     private Long streak;
 }
