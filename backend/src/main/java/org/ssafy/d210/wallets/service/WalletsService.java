@@ -12,8 +12,8 @@ import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
 import java.util.Optional;
 
-import static org.ssafy.d210._common.exception.ErrorType.MEMBER_ACCOUNT_NOT_FOUND;
-import static org.ssafy.d210._common.exception.ErrorType.MEMBER_NOT_FOUND;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER_ACCOUNT;
 
 @Slf4j
 @Service
@@ -28,7 +28,7 @@ public class WalletsService {
 
         Optional<MemberAccount> optionalMemberAccount = memberAccountRepository.findMemberAccountById(members.getMemberAccountId().getId());
         if (!optionalMemberAccount.isPresent()) {
-            throw new CustomException(MEMBER_ACCOUNT_NOT_FOUND);
+            throw new CustomException(NOT_FOUND_MEMBER_ACCOUNT);
         }
 
         return GetEggMoneyResponse.of(optionalMemberAccount.get());
@@ -36,6 +36,6 @@ public class WalletsService {
 
     private Members findMembersById(Long membersId) {
         return membersRepository.findMembersById(membersId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
     }
 }

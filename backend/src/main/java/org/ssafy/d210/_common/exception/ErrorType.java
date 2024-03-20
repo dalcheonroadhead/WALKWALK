@@ -11,14 +11,15 @@ public enum ErrorType {
     NOT_VALID_TOKEN(401, "[Token]이 유효하지 않습니다."),
 
     //----------------------------MEMBERS----------------------------
-    MEMBER_NOT_FOUND(400, "해당 멤버가 존재하지 않습니다."),
+    NOT_FOUND_MEMBER(401, "해당 멤버가 존재하지 않습니다."),
 
     //-------------------------파일 업로드 부분-------------------------
     CANT_UPLOAD_FILE(415, "해당 파일을 업로드할 수가 없습니다."),
 
     //----------------------------WALLETS-----------------------------
-    MEMBER_ACCOUNT_NOT_FOUND(400, "해당 멤버가 존재하지 않습니다.")
+    NOT_FOUND_MEMBER_ACCOUNT(401, "해당 멤버 계좌가 존재하지 않습니다."),
     ;
+
 
     private int code;
     private String msg;
