@@ -15,4 +15,6 @@ public interface MembersRepository extends JpaRepository<Members, Long> {
 
     @Query(value = "UPDATE members set updated_at = now() where member_id = :id",nativeQuery = true)
     void updateById(@Param("id") Long id);
+
+    Optional<Members> findByNicknameAndDeletedAtIsNull(String nickname);
 }

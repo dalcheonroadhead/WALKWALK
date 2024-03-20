@@ -15,7 +15,6 @@ import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleRefreshTokenInfo;
 import org.ssafy.d210._common.service.UserDetailsImpl;
-import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.service.MemberService;
 
 import java.util.HashMap;
@@ -26,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class MemberController {
+public class MemberOauth2Controller {
 
     private final MemberService memberService;
 

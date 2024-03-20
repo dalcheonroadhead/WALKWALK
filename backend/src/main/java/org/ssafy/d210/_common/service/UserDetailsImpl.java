@@ -42,7 +42,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return googleEmail;
+        return member.getEmail();
     }
 
     @Override
