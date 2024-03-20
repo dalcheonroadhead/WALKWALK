@@ -14,6 +14,7 @@ const Main = function(){
     };
 
     const [tabIndex, settabIndex] = useState(0);
+    const [halli, sethalli] = useState(0);
 
     const tabClickHandler = function(index){
         settabIndex(index)
@@ -21,7 +22,7 @@ const Main = function(){
 
     const tabArr=[{
         tabTitle:(
-            <div className={styles.mode_my} onClick={()=>tabClickHandler(0)}>
+            <div className={tabIndex===0 ? styles.mode_choose : styles.mode_my} onClick={()=>tabClickHandler(0)}>
                 <p className={styles.mode_my_txt}>나</p>
             </div>
         ),
@@ -75,24 +76,31 @@ const Main = function(){
     },
     {
         tabTitle:(
-            <div className={styles.mode_halli} onClick={()=>tabClickHandler(1)}>
+            <div className={tabIndex===1 ? styles.mode_choose : styles.mode_halli} onClick={()=>tabClickHandler(1)}>
                 <p className={styles.mode_halli_txt}>할리</p>
             </div>
         ),
         tabCont:(
-            <div>
-                <h1>할리하이</h1>
+            <div className={styles.no_halli_content}>
+                <div className={styles.no_halli_container}>
+                    <p className={styles.no_halli_detail}> 등록된 <br></br> 나의 할리가 <br></br> 없습니다.</p> 
+                    <img src="/imgs/ch2_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
+                </div>
+                <div className={styles.no_halli_btn}>
+                    <p className={styles.no_halli_btn_txt}>요청 목록 보러가기</p>
+                </div>
+
             </div>
         )
     },
     {
         tabTitle:(
-            <div className={styles.mode_galli} onClick={()=>tabClickHandler(2)}>
+            <div className={tabIndex===2 ? styles.mode_choose : styles.mode_galli} onClick={()=>tabClickHandler(2)}>
                 <p className={styles.mode_galli_txt}>갈리</p>
             </div>
         ),
         tabCont:(
-            <div>
+            <div className={styles.galli_content}>
                 <h1>갈리하이</h1>
             </div>
         )
@@ -129,160 +137,157 @@ const Main = function(){
                             <ResponsiveBar /**
                          * chart에 사용될 데이터
                          */
-                                data={[
-                                    {
-                                        "요일": "월",
-                                        "걸음 수": 6204,
-                                        "걸음 수 색": "#5F5745",
-                                      },
-                                      {
-                                        "요일": "화",
-                                        "걸음 수": 7345,
-                                        "걸음 수 색": "#5F5745",
-                                      },
-                                      {
-                                        "요일": "수",
-                                        "걸음 수": 3234,
-                                        "걸음 수 색": "#5F5745",
-                                      },
-                                      {
-                                        "요일": "목",
-                                        "걸음 수": 2311,
-                                        "걸음 수 색": "#5F5745",
-                                      },
-                                      {
-                                        "요일": "금",
-                                        "걸음 수": 0,
-                                        "걸음 수 색": "#5F5745",
-                                      },
-                                      {
-                                        "요일": "토",
-                                        "걸음 수": 0,
-                                        "걸음 수 색": "#5F5745",
-                                      },
-                                      {
-                                        "요일": "일",
-                                        "걸음 수": 0,
-                                        "걸음 수 색": "#5F5745",
-                                      }
-                                ]}
-                                keys={[
-                                    '걸음 수',
-                                ]}
-                                indexBy="요일"
-                                margin={{ top: 80, right: 30, bottom: 50, left: 75 }}
-                                padding={0.4}
-                                valueScale={{ type: 'linear' }}
-                                indexScale={{ type: 'band', round: true }}
-                                colors={['#5F5745']} // 커스텀해서 사용할 때
-                                defs={[
-                                    {
-                                        id: 'dots',
-                                        type: 'patternDots',
-                                        background: 'inherit',
-                                        color: '#38bcb2',
-                                        size: 4,
-                                        padding: 1,
-                                        stagger: true
-                                    },
-                                    {
-                                        id: 'lines',
-                                        type: 'patternLines',
-                                        background: 'inherit',
-                                        color: '#eed312',
-                                        rotation: -45,
-                                        lineWidth: 6,
-                                        spacing: 10
-                                    }
-                                ]}
-                                fill={[
-                                    {
-                                        match: {
-                                            id: 'fries'
-                                        },
-                                        id: 'dots'
-                                    },
-                                    {
-                                        match: {
-                                            id: 'sandwich'
-                                        },
-                                        id: 'lines'
-                                    }
-                                ]}
-                                borderRadius={8}
-                                borderColor={{
-                                    from: 'color',
-                                    modifiers: [
-                                        [
-                                            'darker',
-                                            1.6
-                                        ]
-                                    ]
-                                }}
-                                axisLeft={{
-                                    tickValues: [0, 6000, 10000], // 축에 표시될 값들
-                                    format: value => value.toLocaleString(), // 숫자 포맷팅 함수 (예: 천 단위 구분자)
+                         data={[
+                            {
+                                "요일": "월",
+                                "걸음 수": 6204,
+                              },
+                              {
+                                "요일": "화",
+                                "걸음 수": 12311,
+                              },
+                              {
+                                "요일": "수",
+                                "걸음 수": 3234,
+                              },
+                              {
+                                "요일": "목",
+                                "걸음 수": 2311,
+                              },
+                              {
+                                "요일": "금",
+                                "걸음 수": 0,
+                              },
+                              {
+                                "요일": "토",
+                                "걸음 수": 0,
+                              },
+                              {
+                                "요일": "일",
+                                "걸음 수": 0,
+                              }
+                        ]}
+                        keys={[
+                            '걸음 수',
+                        ]}
+                        indexBy="요일"
+                        margin={{ top: 40, right: 5, bottom: 30, left: 60 }}
+                        padding={0.4}
+                        valueScale={{ type: 'linear' }}
+                        indexScale={{ type: 'band', round: true }}
+                        colors={['#5F5745']} // 커스텀해서 사용할 때
+                        defs={[
+                            {
+                                id: 'dots',
+                                type: 'patternDots',
+                                background: 'inherit',
+                                color: '#38bcb2',
+                                size: 4,
+                                padding: 1,
+                                stagger: true
+                            },
+                            {
+                                id: 'lines',
+                                type: 'patternLines',
+                                background: 'inherit',
+                                color: '#eed312',
+                                rotation: -45,
+                                lineWidth: 6,
+                                spacing: 10
+                            }
+                        ]}
+                        borderRadius={6}
+                        borderColor={{
+                            from: 'color',
+                            modifiers: [
+                                [
+                                    'darker',
+                                    1.6
+                                ]
+                            ]
+                        }}
+                        axisLeft={{
+                            tickValues: [0, 6000, 10000], // 0만 포함하도록 설정
+                            format: value => value.toLocaleString(),
+                            text: {
+                                fontSize: 10,
+                                fontFamily: "bc_b",
+                                fill: '#000000',
+                            },
+                            tickLineSize: (value) => (value === 0 ? 5 : 3), // 0에 해당하는 기준선만 크기를 더 크게 설정
+                        }}
+                        theme={{
+                            /**
+                             * label style (pad에 표현되는 글씨)
+                             */
+                            labels: {
+                                text: {
+                                    fontSize: 10,
+                                    fontFamily: "bc_b",
+                                    fill: '#000000',
+                                },
+                            },
+                            /**
+                             * legend style (default로 하단에 있는 색상별 key 표시)
+                             */
+                            legends: {
+                                text: {
+                                    fontSize: 12,
+                                    fontFamily: "bc_b",
+                                    fill: '#000000',
+                                },
+                            },
+                            axis: {
+                                legend: {
                                     text: {
-                                        fontSize: 10,
+                                        fontSize: 8,
                                         fontFamily: "bc_b",
                                         fill: '#000000',
                                     },
-                                }}
-                                theme={{
-                                    /**
-                                     * label style (pad에 표현되는 글씨)
-                                     */
-                                    labels: {
-                                        text: {
-                                            fontSize: 14,
-                                            fontFamily: "bc_b",
-                                            fill: '#000000',
-                                        },
+                                },
+                                ticks: {
+                                    text: {
+                                        fontSize: 14,
+                                        fontFamily: "bc_b",
+                                        fill: '#000000',
                                     },
-                                    /**
-                                     * legend style (default로 하단에 있는 색상별 key 표시)
-                                     */
-                                    legends: {
-                                        text: {
-                                            fontSize: 12,
-                                            fontFamily: "bc_b",
-                                            fill: '#000000',
-                                        },
-                                    },
-                                    axis: {
-                                        legend: {
-                                            text: {
-                                                fontSize: 8,
-                                                fontFamily: "bc_b",
-                                                fill: '#000000',
-                                            },
-                                        },
-                                        ticks: {
-                                            text: {
-                                                fontSize: 14,
-                                                fontFamily: "bc_b",
-                                                fill: '#000000',
-                                            },
-                                        },
-                                    }
-                                }}
-                                axisTop={null}
-                                axisRight={null}
-                                labelSkipWidth={12}
-                                labelSkipHeight={12}
-                                labelTextColor={{
-                                    from: 'color',
-                                    modifiers: [
-                                        [
-                                            'darker',
-                                            1.6
-                                        ]
-                                    ]
-                                }}
-                                role="application"
-                                ariaLabel="Nivo bar chart demo"
-                                barAriaLabel={e=>e.id+": "+e.formattedValue+" in country: "+e.indexValue}
-                            />
+                                },
+                                line: {
+                                    stroke: '#000000',
+                                    strokeWidth: 2,
+                                },
+                            },
+
+                            grid: {
+                                line: {
+                                    stroke: '#000000',
+                                    strokeWidth: 0.5,
+                                    strokeDasharray: '4 4' // 점선 스타일
+                                }
+                            }
+                        }}
+                        axisTop={null}
+                        axisRight={null}
+                        enableLabel={false}
+                        enableTotals={true}
+
+                        totalsOffset={14}
+                        labelSkipWidth={12}
+                        labelSkipHeight={12}
+
+                        labelTextColor={{
+                            from: 'color',
+                            modifiers: [
+                                [
+                                    'darker',
+                                    1.6
+                                ]
+                            ]
+                        }}
+                        role="application"
+                        ariaLabel="Nivo bar chart demo"
+                        barAriaLabel={e=>e.id+": "+e.formattedValue+" in country: "+e.indexValue}
+                    />
                             </div>
                         </div>
                     </div>
