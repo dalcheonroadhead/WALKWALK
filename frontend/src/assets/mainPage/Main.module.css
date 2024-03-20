@@ -23,6 +23,20 @@
     transform: translate(-50%, -50%);
 }
 
+.mode_choose{
+    width: 5rem;
+    height: 3.125rem;
+    background: #FFFEFC;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+
 .mode_tabs{
     display: flex;
     width: 22.5rem;
@@ -32,7 +46,7 @@
 .mode_my{
     width: 5rem;
     height: 3.125rem;
-    background: #FFFEFC;
+    background: #E4DDC6;
     border-top-left-radius: 0.938rem;
     border-top-right-radius: 0.938rem;
     display: flex;
@@ -257,7 +271,7 @@
 .mode_halli{
     width: 5rem;
     height: 3.125rem;
-    background: #FFFEFC;
+    background: #E4DDC6;
     border-top-left-radius: 0.938rem;
     border-top-right-radius: 0.938rem;
     display: flex;
@@ -272,10 +286,70 @@
     font-family: "bc_b";
 }
 
+.no_halli_content{
+    width: 22.5rem;
+    height: 18rem;
+    border-top-right-radius: 0.938rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
+}
+
+.no_halli_container{
+    width: 22.5rem;
+    height: 12rem;
+    position: relative;
+    display: flex;
+    top: 5%;
+}
+
+.no_halli_detail{
+    position: absolute;
+    left: 8%;
+    font-family: "bc_b";
+    font-size: 2.2rem;
+    line-height: 2.5rem
+}
+
+.no_halli_img{
+    position: absolute;
+    height: 13rem;
+    width: auto;
+    top: -15%;
+    left: 53%;
+}
+
+.no_halli_btn{
+    position: absolute;
+    width: 15rem;
+    height: 3.8rem;
+    background: #FFCB23;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1.5rem;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+}
+
+.no_halli_btn_txt{
+    position: absolute;
+    font-family: "bc_b";
+    font-size: 1.5rem;
+    width: 15rem;
+    top: 14%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .mode_galli{
     width: 5rem;
     height: 3.125rem;
-    background: #FFFEFC;
+    background: #E4DDC6;
     border-top-left-radius: 0.938rem;
     border-top-right-radius: 0.938rem;
     display: flex;
@@ -288,6 +362,21 @@
 .mode_galli_txt{
     font-size: 1.3rem;
     font-family: "bc_b";
+}
+
+.galli_content{
+    width: 22.5rem;
+    height: 18rem;
+    border-top-right-radius: 0.938rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
 }
 
 .week_graph_container{
@@ -325,29 +414,34 @@
 
 .week_detail{
     position: absolute;
-    top: 14%;
+    top: 12%;
     left: 7%;
     font-family: "bc_b";
     font-size: 1.1rem;
 }
 
 .avg_container{
+    position: relative;
+    top: -18%;
+    width: 22.5rem;
+    height: 4rem;
     display: flex;
 }
 
 .week_avg_number{
     position: absolute;
-    top: 15%;
-    left: 33%;
     font-family: "bc_b";
-    font-size: 2.5rem;
+    top: -30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
     text-shadow: 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white;
 }
 
 .week_avg_walk{
     position: absolute;
-    top: 27%;
-    left: 61%;
+    top: 29%;
+    left: 81%;
     font-family: "bc_b";
     font-size: 1.1rem;
 }
@@ -355,8 +449,8 @@
 .graph_container{
     height: 16.75rem;
     width: 22.5rem;
-    position: relative;
-    top: 29%;
+    position: absolute;
+    top: 46.5%;
     display: flex;
 }
 
@@ -372,7 +466,9 @@
 
 .graph_style{
     position: absolute;
-    top: -10%;
-    width: 22rem;
-    height: 15rem;
+    top: -5%;
+    left: 5%;
+    width: 20rem;
+    height: 13rem;
 }
+
