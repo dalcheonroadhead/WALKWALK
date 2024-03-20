@@ -16,7 +16,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
-import org.ssafy.d210._common.request.oauth2Google.GoogleRequestAuthorizationInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleProfileInfo;
@@ -176,7 +175,7 @@ public class MemberService {
     // E .해당 이메일을 가진 사용자가 있는지 확인
     public Members validateMemberByEmail(String email) {
         return membersRepository.findByEmailAndDeletedAtIsNull(email)
-                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
     }
 
     // F. 닉네임 중복확인

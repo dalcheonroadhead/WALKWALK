@@ -51,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             setAuthentication(info.getSubject());   // 이메일로 사용자 정보를 얻어오고, 그 사용자 정보로 인증 객체 만든다.
 
         } catch (UsernameNotFoundException e) {
-            request.setAttribute("exception", ErrorType.NOT_FOUND_USER);
+            request.setAttribute("exception", ErrorType.NOT_FOUND_MEMBER);
         }
         // 다음 필터로 넘어간다.
         filterChain.doFilter(request, response);
