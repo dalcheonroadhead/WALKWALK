@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Struct;
 import org.ssafy.d210._common.entity.BaseTime;
+import org.ssafy.d210.walk.entity.Exercise;
+import org.ssafy.d210.walk.entity.ExerciseAcc;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 
@@ -91,6 +93,12 @@ public class Members extends BaseTime {
 
     @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
     private List<BlockAddress> blockAddresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Exercise> exercises = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private ExerciseAcc exerciseAcc;
 
 
     @Builder
