@@ -1,6 +1,7 @@
 package org.ssafy.d210.halleyGalley.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.ssafy.d210._common.entity.OnlyCreatedTime;
@@ -19,4 +20,19 @@ public class Mission extends OnlyCreatedTime {
 
     @Column(name = "period", nullable = false)
     private Integer period;
+
+    @Builder
+    private Mission(Integer exerciseMinute, Integer period){
+
+        this.exerciseMinute = exerciseMinute;
+        this.period = period;
+    }
+
+    public static Mission of(Integer exerciseMinute, Integer period){
+
+        return builder()
+                .exerciseMinute(exerciseMinute)
+                .period(period)
+                .build();
+    }
 }
