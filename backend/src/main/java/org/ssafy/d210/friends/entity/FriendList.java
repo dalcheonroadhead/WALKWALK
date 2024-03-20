@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.ssafy.d210.members.entity.Members;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class FriendList {
     @Id
