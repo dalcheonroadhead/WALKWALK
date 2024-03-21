@@ -11,6 +11,7 @@ public enum MsgType {
     SEARCH_SUCCESSFULLY("데이터 조회 성공했습니다!"),
     GENERATE_TOKEN_SUCCESSFULLY("토큰 생성 완료"),
     LAST_LOGIN_UPDATED_AT("마지막 접속일 조회 성공했습니다."),
+    GET_MY_PAGE_SUCCESSFULLY("마이 페이지를 성공적으로 조회했습니다."),
 
     // ====================== File Upload =====================
     UPLOAD_FILE_SUCCESSFULLY("파일 업로드를 성공적으로 했습니다."),
