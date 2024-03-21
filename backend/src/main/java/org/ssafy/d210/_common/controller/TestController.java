@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210._common.request.Base64URI;
 import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.response.ResponseUtils;
@@ -13,6 +14,7 @@ import org.ssafy.d210._common.service.S3Base64Uploader;
 import org.ssafy.d210._common.service.S3MultiPartUploader;
 
 import java.io.IOException;
+import java.util.Base64;
 
 // 이건 테스트용, 다른 곳에서 구현이 다 된다면 지웁니다.
 @RestController
@@ -43,9 +45,9 @@ public class TestController {
 
 
     @PostMapping(value = "/uploadBase64")
-    public ApiResponseDto<String> uploadBase64(@RequestBody String base64Data) throws IOException{
+    public ApiResponseDto<String> uploadBase64(@RequestBody Base64URI base64Data) throws IOException{
 
-        return ResponseUtils.ok(s3Base64Uploader.Base64ToHttp(base64Data), MsgType.UPLOAD_FILE_SUCCESSFULLY);
+        return ResponseUtils.ok(s3Base64Uploader.Base64ToHttp(base64Data.getFile()), MsgType.UPLOAD_FILE_SUCCESSFULLY);
 
     }
 
