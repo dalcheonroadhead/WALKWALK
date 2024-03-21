@@ -36,7 +36,7 @@ public class Members extends BaseTime {
     @Column(name = "member_email")
     private String email;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_account_id")
     private MemberAccount memberAccountId;
 
@@ -92,13 +92,12 @@ public class Members extends BaseTime {
     @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
     private List<BlockAddress> blockAddresses = new ArrayList<>();
 
-
     @Builder
     public Members(
             String email, String nickname, String profileUrl, Role role,
             GenderType gender, Long height, Long weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
-            String streakColor, String comment, String phoneNumber, Long dailyCriteria
+            String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
 
     ){
         this.email = email;
@@ -117,6 +116,7 @@ public class Members extends BaseTime {
         this.comment = comment;
         this.phoneNumber = phoneNumber;
         this.dailyCriteria = dailyCriteria;
+        this.memberAccountId = memberAccountId;
     }
 
     public static Members of(String email, String nickname, String profileUrl, Role role){
@@ -135,7 +135,7 @@ public class Members extends BaseTime {
             String email, String nickname, String profileUrl, Role role,
             GenderType gender, Long height, Long weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
-            String streakColor, String comment, String phoneNumber, Long dailyCriteria
+            String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
     ) {
 
         return builder()
@@ -155,6 +155,7 @@ public class Members extends BaseTime {
                 .comment(comment)
                 .phoneNumber(phoneNumber)
                 .dailyCriteria(dailyCriteria)
+                .memberAccountId(memberAccountId)
                 .build();
 
     }

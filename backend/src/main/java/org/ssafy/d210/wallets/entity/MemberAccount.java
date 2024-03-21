@@ -5,10 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.BaseTime;
-import org.ssafy.d210.members.entity.Members;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -33,7 +29,4 @@ public class MemberAccount extends BaseTime {
     @Column
     @ColumnDefault("0")
     private Integer money;
-
-    @OneToMany(mappedBy = "memberAccountId", cascade = CascadeType.PERSIST)
-    private List<Members> members = new ArrayList<>();
 }
