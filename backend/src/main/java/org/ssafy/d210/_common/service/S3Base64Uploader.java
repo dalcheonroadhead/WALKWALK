@@ -32,7 +32,10 @@ public class S3Base64Uploader {
             // 1-1) Base64 명세 나누기
             String [] strings = base64EncodedData.split(",");
 
+            log.info(base64EncodedData);
+
             String base64File = strings[1];
+
 
             // 1-2) if 문을 통해 확장자명을 찾음
             String extension = "";
@@ -49,7 +52,11 @@ public class S3Base64Uploader {
                 extension = "wav";
             } else if (strings[0].equals("data:audio/mp3;base64")) {
                 extension = "mp3";
+            }  else if (strings[0].equals("data:audio/3gpp;base64")) {
+                extension = "m4a";
             }
+
+            log.info(extension);
 
             // 1-3) base64를 bytes 로 변환
             byte [] fileBytes = DatatypeConverter.parseBase64Binary(base64File);
@@ -62,6 +69,8 @@ public class S3Base64Uploader {
                 // 1-5) byte 배열로 변환한 내용을 임시 파일에 써준다.
                 outputStream.write(fileBytes);
             }
+
+            log.info(tempFile.getAbsolutePath());
 
             // 1-6) 파일 이름은 유일 해야 한다.
             String originalName = UUID.randomUUID().toString();

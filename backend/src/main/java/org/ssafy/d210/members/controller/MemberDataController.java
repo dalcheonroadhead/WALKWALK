@@ -99,4 +99,9 @@ public class MemberDataController {
         return ResponseUtils.ok(rmdl, MsgType.ADD_INFO_SUCCESSFULLY);
     }
 
+    @GetMapping("/voice-mail")
+    public ApiResponseDto<?> getVoiceEmail(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseUtils.ok(memberDataService.getVoiceMailList(userDetails), MsgType.SEARCH_SUCCESSFULLY);
+    }
 }
