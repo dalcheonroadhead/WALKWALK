@@ -5,14 +5,16 @@ const Login = function () {
   const REDIRECT_URI = import.meta.env.VITE_NODE_ENV === 'production' ? import.meta.env.VITE_REDIRECT_URI_PROD : import.meta.env.VITE_REDIRECT_URI_DEV;
   const AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`
   console.log(REDIRECT_URI)
+
+  const handleLogin = () => {
+    window.location.href = AUTH_URL
+  }
   
   return (
     <div className={styles.login_container}>
       <div className={styles.login_app_name}>walk walk</div>
       <img src="/imgs/login_logo.png" alt="login logo" />
-      <a href={AUTH_URL} >
-        <img className={styles.google_login_btn} src="/imgs/google_login_btn.png" alt="google login button" />
-      </a>
+      <img className={styles.google_login_btn} onClick={handleLogin} src="/imgs/google_login_btn.png" alt="google login button" />
     </div>
   )
 }

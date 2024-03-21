@@ -1,19 +1,24 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./Layout";
 import Main from "./assets/mainPage/Main";
 import Login from "./assets/memberPage/Login";
-import Navbar from "./assets/common/navbar/Navbar";
 import LoginRedirect from "./assets/memberPage/LoginRedirect";
+import Signup from "./assets/memberPage/Signup";
 import './App.css'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* 상하단바 보이는 페이지 */}
+        <Route element={<Layout />}>
+          <Route path="/main" element={<Main />}></Route>
+        </Route>
+        {/* 상하단바 없는 페이지 */}
         <Route path="/" element={<Login />}></Route>
         <Route path="/oauth/callback/google/token" element={<LoginRedirect />}></Route>
-        <Route path="/main" element={<Main />}></Route>
+        <Route path="/signup" element={<Signup />}></Route>
       </Routes>
-      <Navbar></Navbar>
     </BrowserRouter>
   )
 }
