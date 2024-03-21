@@ -11,6 +11,9 @@ import java.util.List;
 
 public interface HalleyGalleyRepository extends JpaRepository<HalleyGalley, Long> {
 
+//    Boolean existsHalleyGalleyByHalleyId
+
+
     List<HalleyGalley> findByHalleyId(Members member);
 
     List<HalleyGalley> findByGalleyId(Members member);

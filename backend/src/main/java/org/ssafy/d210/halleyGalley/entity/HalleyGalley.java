@@ -37,17 +37,22 @@ public class HalleyGalley extends OnlyCreatedTime {
     @ColumnDefault("0")
     private Integer dayoff;
 
+    @Column(name = "is_accepted")
+    @ColumnDefault("false")
+    private Boolean isAccepted;
+
     @Builder
-    private HalleyGalley(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff){
+    private HalleyGalley(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff, Boolean isAccepted){
 
         this.galleyId = galleyId;
         this.halleyId = halleyId;
         this.missionId = missionId;
         this.reward = reward;
         this.dayoff = dayoff;
+        this.isAccepted = isAccepted;
     }
 
-    public static HalleyGalley of(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff){
+    public static HalleyGalley of(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff, Boolean isAccepted){
 
         return builder()
                 .galleyId(galleyId)
@@ -55,6 +60,11 @@ public class HalleyGalley extends OnlyCreatedTime {
                 .missionId(missionId)
                 .reward(reward)
                 .dayoff(dayoff)
+                .isAccepted(isAccepted)
                 .build();
+    }
+
+    public void updateIsAccepted(Boolean isAccepted){
+        this.isAccepted = isAccepted;
     }
 }

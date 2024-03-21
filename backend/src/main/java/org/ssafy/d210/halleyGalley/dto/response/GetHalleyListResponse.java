@@ -12,11 +12,6 @@ import java.util.List;
 
 @Getter
 public class GetHalleyListResponse {
-    @Builder
-    static class CriteriaContent{
-        LocalDateTime timeStamp;
-        Long exerciseTime;
-    }
 
     private LocalDateTime timeStamp;
     private Long exerciseTime;

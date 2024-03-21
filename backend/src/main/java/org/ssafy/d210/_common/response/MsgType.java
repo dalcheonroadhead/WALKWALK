@@ -21,6 +21,7 @@ public enum MsgType {
     // ====================== HALLEY_GALLEY ======================
     GET_HALLEY_LIST_SUCCESSFULLY("할리 목록 조회에 성공하였습니다."),
     GET_GALLEY_LIST_SUCCESSFULLY("갈리 목록 조회에 성공하였습니다."),
+    POST_GALLEY_REQUEST_SUCCESSFULLY("갈리 요청 전송에 성공하였습니다."),
 
     ;
 
