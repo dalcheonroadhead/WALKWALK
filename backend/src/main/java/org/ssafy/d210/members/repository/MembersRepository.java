@@ -19,4 +19,6 @@ public interface MembersRepository extends JpaRepository<Members, Long> {
     void updateById(@Param("id") Long id);
 
     Optional<Members> findByNicknameAndDeletedAtIsNull(String nickname);
+
+    
 }

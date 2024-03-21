@@ -112,11 +112,12 @@ public class MemberService {
             isNew = true;
         }
 
-        else if(member.getBirthYear() == null || member.getBlockAddresses() == null){
+        else if(member.getBirthYear() == null || member.getBlockAddresses() == null || member.getPhoneNumber() == null){
             isNew = true;
         }
         else{
-            member.setNew(true);
+            member.setNew(false);
+            membersRepository.updateById(member.getId());
         }
 
         membersRepository.save(member);

@@ -43,7 +43,7 @@ public class MemberOauth2Controller {
     @Operation(summary = "로컬(프)에서 배포(백)로 요청 보낼 때, URL")
     @GetMapping("/oauth/callback/google/token/l-t-d")
     public ApiResponseDto<Map<String, Boolean>> getAccessTokenLocalToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
-        return handleAccessTokenRequest(code, "http://localhost:3000/oauth/callback/google/token", response);
+        return handleAccessTokenRequest(code, "http://localhost:5173/oauth/callback/google/token", response);
     }
 
     // local -> local
@@ -51,7 +51,7 @@ public class MemberOauth2Controller {
     @Operation(summary = "로컬(프)에서 로컬(백)로 요청 보낼 때, URL")
     @GetMapping("/oauth/callback/google/token/l-t-l")
     public ApiResponseDto<Map<String, Boolean>> getAccessTokenLocalToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
-        return handleAccessTokenRequest(code, "http://localhost:3000/oauth/callback/google/token", response);
+        return handleAccessTokenRequest(code, "http://localhost:5173/oauth/callback/google/token", response);
     }
 
 
@@ -85,10 +85,9 @@ public class MemberOauth2Controller {
 
         List<String> ans = memberService.SaveUserAndGetToken(gti.getAccess_token(),response,gat,grt);
         String jwtAccessToken = ans.get(0);
-        String jwtRefreshToken = ans.get(2);
         boolean isNew = ans.get(1).equals("true");
         log.info("해당 사용자는 첫번째 가입 입니까?={}",isNew? "Yes" : "NO");
-        log.info("해당 사용자의 AccessToken: {}, RefreshToken: {}", jwtAccessToken, jwtRefreshToken);
+        log.info("해당 사용자의 AccessToken: {}", jwtAccessToken);
         Map<String, Boolean> ret = new HashMap<>();
         ret.put("isNew", isNew);
 

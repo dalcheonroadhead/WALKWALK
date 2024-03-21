@@ -57,6 +57,15 @@ public class MemberDataController {
         ans.setId(member.getId());
 
         return ResponseUtils.ok(ans, MsgType.ADD_INFO_SUCCESSFULLY);
+    }
 
+    @GetMapping("/lastlogin")
+    public ApiResponseDto<?> getLastLogin(@AuthenticationPrincipal UserDetailsImpl userDetails){
+
+
+
+
+
+        return null;
     }
 }
