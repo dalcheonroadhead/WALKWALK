@@ -89,6 +89,11 @@ public class MemberDataController {
     public ApiResponseDto<?> editMyPageDetail(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                               @RequestBody @Valid ReqMyPageDetailInfo rmdl, BindingResult bindingResult){
 
+        if (bindingResult.hasErrors()){
+            return ResponseUtils.error(ErrorResponse.of(400, "유효하지 않은 값이 있습니다.\n" + bindingResult.getFieldErrors()));
+        }
+
+
         rmdl.ToEntity(userDetails.getMember());
 
         return ResponseUtils.ok(rmdl, MsgType.ADD_INFO_SUCCESSFULLY);
