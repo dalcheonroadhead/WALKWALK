@@ -122,14 +122,14 @@ public class MemberService {
         membersRepository.save(member);
 
         String jwtAccessToken = jwtUtil.createToken(member,false,gat,grt);
-        String jwtRefreshToken = jwtUtil.createToken(member,true,gat,grt);
+
         response.addHeader("Authorization", jwtAccessToken);
-        response.addHeader("refresh_token",jwtRefreshToken);
+
 
         List<String> ans = new ArrayList<>();
         ans.add(jwtAccessToken);
         ans.add(String.valueOf(isNew));
-        ans.add(jwtRefreshToken);
+
 
         return ans;
     }

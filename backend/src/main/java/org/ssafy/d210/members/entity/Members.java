@@ -128,6 +128,9 @@ public class Members extends BaseTime {
                 .build();
     }
 
+
+
+
     public static Members of(
             String email, String nickname, String profileUrl, Role role,
             GenderType gender, Long height, Long weight, String location,
