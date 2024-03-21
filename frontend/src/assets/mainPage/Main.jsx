@@ -17,6 +17,7 @@ const Main = function(){
     const [halli, sethalli] = useState(true);
     const [isHalliOpen, setIsHalliOpen] = useState(false);
     const [isGalliOpen, setIsGalliOpen] = useState(false);
+    const [isHalliListOpen, setIsHalliListOpen] = useState(false);
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -28,6 +29,10 @@ const Main = function(){
 
     const tabClickHandler = function(index){
         settabIndex(index)
+    }
+
+    const openHalliListModal = function(){
+        setIsHalliListOpen(!isHalliListOpen);   
     }
 
     const namelist = [
@@ -49,7 +54,7 @@ const Main = function(){
         },
         {
             pimg: "/imgs/profile_img1.jpg",
-            nickname: "김모리",
+            nickname: "김모리모리대머리",
         },
     ]
 
@@ -111,11 +116,12 @@ const Main = function(){
                     <div className={styles.halli_content}>
                         <div className={styles.halli_container}>
                             <p className={styles.halli_detail}>나의 할리 목록</p> 
-                            <div className={styles.my_halli_list_container}>
+                            <div className={styles.my_halli_list_container} onClick={openHalliListModal}>
                                 <p className={styles.halli_goal_title}>목표 걷기 시간</p>
                                 <div className={styles.halli_time_progress_container}>
                                     <div className={styles.halli_time_progress_base}>
                                         <div className={styles.halli_mission_container}>
+
 
                                         </div>
                                         <div className={styles.halli_time_progress_move} style={{width: 260}}></div>
@@ -233,6 +239,36 @@ const Main = function(){
                                                     <div className={styles.galli_put_btn}>
                                                         <p className={styles.btn_txt}>신청</p>
                                                     </div>
+                                                </div>
+                                            </div>  
+                                        </>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                       
+                    </div>
+                </>
+            )}
+
+            {isHalliListOpen && (
+                <>
+                    <div className={styles.modal_background}></div>
+                    <div className={styles.my_halli_list_modal_container}>
+                        <div className={styles.my_halli_list_title_container}>
+                            <p className={styles.my_halli_list_modal_title}>나의 할리 목록</p>
+                            <img src="/imgs/x.png" alt="x" className={styles.my_halli_list_modal_x} onClick={openHalliListModal}></img>
+                        </div>
+                        <div className={styles.my_halli_list_list_container}>
+                            <div className={styles.my_halli_list_names_container}>
+                                {namelist.map((data, index) => {
+                                    return(
+                                        <>
+                                            <div key={index} className={styles.my_halli_list_name_container}>
+                                                <img src={data.pimg} alt="프로필 사진" className={styles.my_halli_list_img_container} ></img>
+                                                <p className={styles.my_halli_list_name_txt}>{data.nickname}</p>
+                                                <div className={styles.my_halli_list_btn_container}>
+                                                    <img src="/imgs/direct.png" alt="화살표" className={styles.direct_btn}></img>
                                                 </div>
                                             </div>  
                                         </>
