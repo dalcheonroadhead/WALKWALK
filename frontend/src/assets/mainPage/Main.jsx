@@ -14,7 +14,7 @@ const Main = function(){
     };
 
     const [tabIndex, settabIndex] = useState(0);
-    const [halli, sethalli] = useState(false);
+    const [halli, sethalli] = useState(true);
     const [isHalliOpen, setIsHalliOpen] = useState(false);
     const [isGalliOpen, setIsGalliOpen] = useState(false);
 
