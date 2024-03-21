@@ -1,16 +1,7 @@
-@font-face {
-  font-family: "noto_m";
-  src: url(/fonts/NotoSansKR-Medium.ttf);
-}
-
-@font-face {
-  font-family: "roboto_m";
-  src: url(/fonts/Roboto-Medium.ttf);
-}
-
 .login_container {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .login_app_name {
@@ -19,5 +10,6 @@
 }
 
 .google_login_btn {
+  width: 70%;
   margin: 2rem 0 2rem 0;
 }
