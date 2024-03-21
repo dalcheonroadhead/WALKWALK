@@ -2,13 +2,13 @@ package org.ssafy.d210.members.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.dto.request.AdditionalInfo;
+import org.ssafy.d210.members.dto.response.ResMyPageDetailInfo;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets.entity.MemberAccount;
@@ -54,5 +54,15 @@ public class MemberDataService {
 
         return member;
 
+    }
+
+    public ResMyPageDetailInfo getMyPageDetail (UserDetailsImpl userDetails) throws CustomException {
+        Members member = membersRepository.findById(userDetails.getMember().getId()).orElse(null);
+
+        if(member == null){
+            throw  new CustomException(ErrorType.NOT_FOUND_MEMBER);
+        }
+
+        return ResMyPageDetailInfo.of(member);
     }
 }
