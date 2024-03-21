@@ -18,7 +18,10 @@ public enum MsgType {
     GET_EGG_MONEY_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
 
     // ====================== ITEMS ============================
-    GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다.")
+    GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+
+    // ====================== WALK ============================
+    GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),
 
     ;
 
