@@ -35,6 +35,69 @@ const Main = function(){
         setIsHalliListOpen(!isHalliListOpen);   
     }
 
+    //===========================================================================
+    //===========================================================================
+    // 나 모달
+    const 운동데이터 = {
+        criteriaTime: 120,       // 기준 운동시간
+        currentTime: 2000,        // 오늘 운동시간
+        criteriaSteps: 6000,    // 기준 걸음수
+        currentSteps: 5000,     // 오늘 걸음수
+        
+        
+    };
+    const 프로그래스바 = {
+        calculatedTime: 운동데이터.currentTime/운동데이터.criteriaTime*320 < 70 ? 70 : 운동데이터.currentTime/운동데이터.criteriaTime*320,
+        calculatedSteps: 운동데이터.currentSteps/운동데이터.criteriaSteps*320 < 90 ? 90 : 운동데이터.currentSteps/운동데이터.criteriaSteps*320,
+    }
+
+    // 할리 모달
+    const 할리API요청결과 = {
+        data: {
+            timeStamp: "2024-12-11 21:10:10",
+            exerciseTime: 10,
+            
+            creteriaContent: { // 기준
+                timeStamp: "2024-12-11 21:10:10", // LocalDateTime
+                exerciseTime: 19, // Long(minute) (기준 할당량)
+            },
+        
+            requestContent: [ 
+                {
+                    profileUrl: "https://", 
+                    timeStamp: "2024-12-11 21:10:10",
+                    memberId: 3,
+                    nickname: "우주최강수민",
+                    requestedTime: 120,
+                },
+                {
+                    profileUrl: "https://", 
+                    timeStamp: "2024-12-11 21:20:10",
+                    memberId: 4,
+                    nickname: "우주최강지수",
+                    requestedTime: 120,
+                }
+            ]
+        },
+        msg: "할리 목록 조회 성공",
+    }
+
+    // 갈리 모달
+    const 갈리API요청결과 = {
+        data: [
+                {
+                    timeStamp: '2024-03-19 11:12:13',
+                    memberId: 1,    // 갈리 아이디
+                    nickname: '김규리', // 갈리 닉네임
+                    exerciseTime: 40,   // 실시간 운동시간
+                    requestedTime: 60,  // 할당한 운동시간
+                },
+            ],
+        msg: "갈리 목록 조회 성공",
+    }
+    //===========================================================================
+    //===========================================================================
+
     const namelist = [
         {
             pimg: "/imgs/profile_img1.jpg",
@@ -71,14 +134,14 @@ const Main = function(){
                         <p className={styles.time_txt}>오늘 내가 걸은 시간</p>
                         <div className={styles.my_time_progress_container}>
                             <div className={styles.my_time_progress_base}>
-                                <div className={styles.my_time_progress_move} style={{width: 200}}></div>
-                                <div className={styles.my_time_ori_container} style={{width: 200}}>
-                                    <p className={styles.my_time_mine} style={{left: 135}}>41분</p>
-                                    <img src="/imgs/ch1_bol_samewalk.gif" alt="제자리걸음 오리" className={styles.ch1} style={{left: 160}}></img>
+                                <div className={styles.my_time_progress_move} style={{width: 프로그래스바.calculatedTime > 320 ? 320 : 프로그래스바.calculatedTime}}></div>
+                                <div className={styles.my_time_ori_container} style={{width: 프로그래스바.calculatedTime > 320 ? 320 : 프로그래스바.calculatedTime}}>
+                                    <p className={styles.my_time_mine} style={{color: 프로그래스바.calculatedTime > 320 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
+                                    <img src={프로그래스바.calculatedTime > 320 ? "/imgs/ch1_bol_samerun.gif" : "/imgs/ch1_bol_samewalk.gif"} alt="제자리걸음 오리" className={styles.ch1_2}></img>
                                 </div>
                                 <div className={styles.my_time_number_base}>
                                     <p className={styles.my_time_min}>0분</p>
-                                    <p className={styles.my_time_min2}>60분</p>
+                                    <p className={styles.my_time_min2}>{운동데이터.criteriaTime}분</p>
                                 </div>
                             </div>
                         </div>
@@ -88,14 +151,14 @@ const Main = function(){
                         <p className={styles.foot_txt}>오늘 내가 걸은 걸음수</p>
                         <div className={styles.my_walk_progress_container}>
                             <div className={styles.my_walk_progress_base}>
-                                <div className={styles.my_walk_progress_move} style={{width: 260}}></div>
-                                <div className={styles.my_walk_ori_container} style={{width: 260}}>
-                                    <p className={styles.my_walk_mine} style={{left: 170}}>5003보</p>
-                                    <img src="/imgs/ch1_bol_samewalk.gif" alt="제자리걸음 오리" className={styles.ch1_2} style={{left: 220}}></img>
+                                <div className={styles.my_walk_progress_move} style={{width: 프로그래스바.calculatedSteps > 320 ? 320 : 프로그래스바.calculatedSteps}}></div>
+                                <div className={styles.my_walk_ori_container} style={{width: 프로그래스바.calculatedSteps > 320 ? 320 : 프로그래스바.calculatedSteps}}>
+                                    <p className={styles.my_walk_mine} style={{color: 프로그래스바.calculatedSteps > 320 ? 'red' : 'white'}}>{운동데이터.currentSteps}보</p>
+                                    <img src={프로그래스바.calculatedSteps > 320 ? "/imgs/ch1_bol_samerun.gif" : "/imgs/ch1_bol_samewalk.gif"} alt="제자리걸음 오리" className={styles.ch1_2}></img>
                                 </div>
                                 <div className={styles.my_walk_number_base}>
                                     <p className={styles.my_walk_min}>0보</p>
-                                    <p className={styles.my_walk_min2}>6000보</p>
+                                    <p className={styles.my_walk_min2}>{운동데이터.criteriaSteps}보</p>
                                 </div>
                             </div>
                         </div>

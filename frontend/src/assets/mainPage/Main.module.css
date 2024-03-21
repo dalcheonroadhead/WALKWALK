@@ -532,7 +532,7 @@
 .my_time_mine{
     position: absolute;
     top: -60%;
-    left: 0;
+    right: 1.5rem;
     font-size: 1.2rem;
     font-family: "bc_b";
     color: white;
@@ -617,6 +617,7 @@
     border-radius: 0.938rem;
 }
 
+/* 채워지는 프로그래스 바 */
 .my_walk_progress_move{
     height: 1.8rem;
     background: #FFCB23;
@@ -638,7 +639,7 @@
 .my_walk_mine{
     position: absolute;
     top: -60%;
-    left: 0;
+    right: 1.5rem;
     font-size: 1.2rem;
     font-family: "bc_b";
     color: white;
@@ -650,6 +651,7 @@
     position: absolute;
     height: 6rem;
     top: -140%;
+    right: -1.8rem;
 }
 
 .my_walk_number_base{
@@ -799,6 +801,7 @@
     text-shadow: 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black;
 }
 
+/* 오리 이미지 */
 .ch1_2{
     width: auto;
     position: absolute;
@@ -1065,4 +1068,3 @@
     width: 20rem;
     height: 13rem;
 }
-
