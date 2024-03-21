@@ -34,6 +34,6 @@ public class MemberAccount extends BaseTime {
     @ColumnDefault("0")
     private Integer money;
 
-    @OneToMany(mappedBy = "memberAccountId", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "memberAccountId", cascade = CascadeType.PERSIST)
     private List<Members> members = new ArrayList<>();
 }
