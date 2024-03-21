@@ -112,24 +112,25 @@ public class MemberService {
             isNew = true;
         }
 
-        else if(member.getBirthYear() == null || member.getBlockAddresses() == null){
+        else if(member.getBirthYear() == null || member.getBlockAddresses() == null || member.getPhoneNumber() == null){
             isNew = true;
         }
         else{
-            member.setNew(true);
+            member.setNew(false);
+            membersRepository.updateById(member.getId());
         }
 
         membersRepository.save(member);
 
         String jwtAccessToken = jwtUtil.createToken(member,false,gat,grt);
-        String jwtRefreshToken = jwtUtil.createToken(member,true,gat,grt);
+
         response.addHeader("Authorization", jwtAccessToken);
-        response.addHeader("refresh_token",jwtRefreshToken);
+
 
         List<String> ans = new ArrayList<>();
         ans.add(jwtAccessToken);
         ans.add(String.valueOf(isNew));
-        ans.add(jwtRefreshToken);
+
 
         return ans;
     }
