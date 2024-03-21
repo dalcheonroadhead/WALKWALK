@@ -14,11 +14,44 @@ const Main = function(){
     };
 
     const [tabIndex, settabIndex] = useState(0);
-    const [halli, sethalli] = useState(0);
+    const [halli, sethalli] = useState(true);
+    const [isHalliOpen, setIsHalliOpen] = useState(false);
+    const [isGalliOpen, setIsGalliOpen] = useState(false);
+
+    const openHalliModal = function() {
+        setIsHalliOpen(!isHalliOpen);
+    }
+
+    const openGalliModal = function(){
+        setIsGalliOpen(!isGalliOpen);
+    }
 
     const tabClickHandler = function(index){
         settabIndex(index)
     }
+
+    const namelist = [
+        {
+            pimg: "/imgs/profile_img1.jpg",
+            nickname: "김도리",
+        },
+        {
+            pimg: "/imgs/profile_img1.jpg",
+            nickname: "김고리",
+        },
+        {
+            pimg: "/imgs/profile_img1.jpg",
+            nickname: "김노리",
+        },
+        {
+            pimg: "/imgs/profile_img1.jpg",
+            nickname: "김로리",
+        },
+        {
+            pimg: "/imgs/profile_img1.jpg",
+            nickname: "김모리",
+        },
+    ]
 
     const tabArr=[{
         tabTitle:(
@@ -81,16 +114,31 @@ const Main = function(){
             </div>
         ),
         tabCont:(
-            <div className={styles.no_halli_content}>
-                <div className={styles.no_halli_container}>
-                    <p className={styles.no_halli_detail}> 등록된 <br></br> 나의 할리가 <br></br> 없습니다.</p> 
-                    <img src="/imgs/ch2_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
-                </div>
-                <div className={styles.no_halli_btn}>
-                    <p className={styles.no_halli_btn_txt}>요청 목록 보러가기</p>
-                </div>
+            <>
+                {halli ? (
+                    <div className={styles.halli_content}>
+                        <div className={styles.halli_container}>
+                            <p className={styles.halli_detail}>나의 할리 목록</p> 
+                            <div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className={styles.no_halli_content}>
+                        <div className={styles.no_halli_container}>
+                            <p className={styles.no_halli_detail}> 등록된 <br></br> 나의 할리가 <br></br> 없습니다.</p> 
+                            <img src="/imgs/ch2_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
+                        </div>
+                        <div className={styles.no_halli_btn}>
+                            <p className={styles.no_halli_btn_txt} onClick={openHalliModal}>요청 목록 보러가기</p>
+                        </div>
 
-            </div>
+                    </div>
+                )}
+            </>
+            
+            
         )
     },
     {
@@ -100,8 +148,14 @@ const Main = function(){
             </div>
         ),
         tabCont:(
-            <div className={styles.galli_content}>
-                <h1>갈리하이</h1>
+            <div className={styles.no_galli_content}>
+                <div className={styles.no_galli_container}>
+                    <p className={styles.no_galli_detail}> 등록된 <br></br> 나의 갈리가 <br></br> 없습니다.</p> 
+                    <img src="/imgs/ch1_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
+                </div>
+                <div className={styles.no_galli_btn}>
+                    <p className={styles.no_galli_btn_txt} onClick={openGalliModal}>나의 갈리 등록하기</p>
+                </div>
             </div>
         )
     }
@@ -109,6 +163,80 @@ const Main = function(){
     ]
     return(
         <div>
+            {isHalliOpen && (
+                <>
+                    <div className={styles.modal_background}></div>
+                    <div className={styles.halli_modal_container}>
+                        <div className={styles.halli_title_container}>
+                            <p className={styles.halli_modal_title}>할리 요청 목록</p>
+                            <img src="/imgs/x.png" alt="x" className={styles.halli_modal_x} onClick={openHalliModal}></img>
+                        </div>
+                        <div className={styles.halli_list_container}>
+                            <div className={styles.halli_names_container}>
+                                {namelist.map((data, index) => {
+                                    return(
+                                        <>
+                                            <div key={index} className={styles.halli_name_container}>
+                                                <img src={data.pimg} alt="프로필 사진" className={styles.halli_img_container} ></img>
+                                                <p className={styles.halli_name_txt}>{data.nickname}</p>
+                                                <div className={styles.halli_btn_container}>
+                                                    <div className={styles.halli_ok_btn}>
+                                                        <p className={styles.btn_txt}>수락</p>
+                                                    </div>
+                                                    <div className={styles.halli_no_btn}>
+                                                        <p className={styles.btn_txt}>거절</p>
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                       
+                    </div>
+                </>
+            )}
+
+            {isGalliOpen && (
+                <>
+                    <div className={styles.modal_background}></div>
+                    <div className={styles.galli_modal_container}>
+                        <div className={styles.galli_title_container}>
+                            <p className={styles.galli_modal_title}>갈리 요청하기</p>
+                            <img src="/imgs/x.png" alt="x" className={styles.galli_modal_x} onClick={openGalliModal}></img>
+                        </div>                                
+                        
+                        <div className={styles.galli_search_container}>
+                            <input className={styles.galli_search_box}></input>
+                            <img className={styles.galli_search_icon} src="/imgs/search.png" alt="찾기 아이콘"></img>
+                        </div>
+
+                        <div className={styles.galli_list_container}>
+                            <div className={styles.galli_names_container}>
+
+                                {namelist.map((data, index) => {
+                                    return(
+                                        <>
+                                            <div key={index} className={styles.galli_name_container}>
+                                                <img src={data.pimg} alt="프로필 사진" className={styles.galli_img_container} ></img>
+                                                <p className={styles.galli_name_txt}>{data.nickname}</p>
+                                                <div className={styles.galli_btn_container}>
+                                                    <div className={styles.galli_put_btn}>
+                                                        <p className={styles.btn_txt}>신청</p>
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                        </>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                       
+                    </div>
+                </>
+            )}
+
             <div className={styles.main_container}>
                 <div className={styles.tab_container}>
                     <div className={styles.mode_tabs}>
@@ -182,6 +310,7 @@ const Main = function(){
                                 type: 'patternDots',
                                 background: 'inherit',
                                 color: '#38bcb2',
+                                fontFamily: 'bc_b',
                                 size: 4,
                                 padding: 1,
                                 stagger: true
@@ -235,6 +364,23 @@ const Main = function(){
                                     fontSize: 12,
                                     fontFamily: "bc_b",
                                     fill: '#000000',
+                                },
+                            },
+
+                            tooltip: {
+                                container: {
+                                    background: '#FFF3CE',
+                                    color: '#00000',
+                                    fontFamily: 'bc_b', // 원하는 글꼴로 변경
+                                    fontSize: '1rem', // 원하는 크기로 변경
+                                    borderRadius: '1.2rem',
+                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
+                                },
+                                basic: {
+                                    fontFamily: 'bc_b', // 원하는 글꼴로 변경
+                                    fontSize: '1rem', // 원하는 크기로 변경
+                                    lineHeight: '1.4',
+                                    textAlign: 'center',
                                 },
                             },
                             axis: {
