@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import styles from "./LoginRedirect.module.css";
 
 const LoginRedirect = function () {
   useEffect(() => {
@@ -12,8 +13,8 @@ const LoginRedirect = function () {
   })
   
   return (
-    <div>
-      <img src="/imgs/ch1_bol_walk.gif" alt="loading" />
+    <div className={styles.login_redirect_container}>
+      <img className={styles.login_redirect_container} src="/imgs/ch1_bol_walk.gif" alt="loading" />
       <p>로그인 중입니다...</p>
     </div>
   )
