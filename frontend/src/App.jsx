@@ -1,17 +1,16 @@
-import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./assets/mainPage/Main";
 import Login from "./assets/memberPage/Login";
+import LoginRedirect from "./assets/memberPage/LoginRedirect";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/oauth/callback/google/token" element={<LoginRedirect />}></Route>
         <Route path="/main" element={<Main />}></Route>
-        <Route path="/login" element={<Login />}></Route>
       </Routes>
     </BrowserRouter>
   )
