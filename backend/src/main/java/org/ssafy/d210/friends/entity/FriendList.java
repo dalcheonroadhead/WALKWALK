@@ -17,11 +17,11 @@ public class FriendList {
     @Column(name = "friend_list_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
     private Members senderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
     private Members receiverId;
 

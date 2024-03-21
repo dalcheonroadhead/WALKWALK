@@ -21,9 +21,15 @@ public enum MsgType {
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+    
+    // ====================== HALLEY_GALLEY ======================
+    GET_HALLEY_LIST_SUCCESSFULLY("할리 목록 조회에 성공하였습니다."),
+    GET_GALLEY_LIST_SUCCESSFULLY("갈리 목록 조회에 성공하였습니다."),
+    POST_GALLEY_REQUEST_SUCCESSFULLY("갈리 요청 전송에 성공하였습니다."),
 
     // ====================== WALK ============================
     GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),
+
 
     ;
 

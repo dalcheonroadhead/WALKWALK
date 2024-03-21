@@ -19,6 +19,10 @@ public enum ErrorType {
 
     //----------------------------WALLETS-----------------------------
     NOT_FOUND_MEMBER_ACCOUNT(401, "해당 멤버 계좌가 존재하지 않습니다."),
+
+    //----------------------------HALLEY_GALLEY-----------------------
+    NOT_FOUND_HALLEY(401, "할리가 존재하지 않습니다."),
+    NOT_FOUND_GALLEY(401, "갈리가 존재하지 않습니다."),
     ;
 
     private int code;
