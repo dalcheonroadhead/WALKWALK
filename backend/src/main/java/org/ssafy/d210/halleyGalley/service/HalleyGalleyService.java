@@ -28,7 +28,11 @@ public class HalleyGalleyService {
 //        if(!halleyGalleyRepository.existsById)
         halleyGalleyRepository.save(HalleyGalley.builder()
                 .halleyId(member)
-                .galleyId(membersRepository.findById(postGalleyRequest.getGalleyId()).orElse(null))
+                .galleyId(membersRepository.findById(postGalleyRequest.getMemberId()).orElse(null))
+                .reward(0)
+                .missionId(null)
+                .dayoff(0)
+                .isAccepted(false)
                 .build());
         return "";
     }

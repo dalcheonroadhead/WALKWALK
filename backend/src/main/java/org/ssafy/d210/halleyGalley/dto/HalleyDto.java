@@ -29,7 +29,7 @@ public class HalleyDto {
                 .timeStamp(halleyGalley.getCreatedAt())
                 .memberId(halleyGalley.getHalleyId().getId())
                 .nickname(halleyGalley.getHalleyId().getNickname())
-                .requestedTime(halleyGalley.getMissionId().getExerciseMinute())
+                .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())
                 .build();
     }
 }
