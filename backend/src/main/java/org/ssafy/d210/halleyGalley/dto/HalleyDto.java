@@ -1,37 +1,35 @@
-package org.ssafy.d210.halleyGalley.dto.response;
+package org.ssafy.d210.halleyGalley.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
-import java.time.LocalDateTime;
 import org.ssafy.d210.halleyGalley.entity.HalleyGalley;
 
-@ToString
+import java.time.LocalDateTime;
+
 @Getter
-public class GetGalleyListResponse {
+public class HalleyDto {
+    private String profileUrl;
     private LocalDateTime timeStamp;
     private Long memberId;
     private String nickname;
-    private Long exerciseTime;
     private Long requestedTime;
 
     @Builder
-    private GetGalleyListResponse(LocalDateTime timeStamp, Long memberId, String nickname, Long exerciseTime, Long requestedTime){
+    private HalleyDto(String profileUrl, LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime){
+        this.profileUrl = profileUrl;
         this.timeStamp = timeStamp;
         this.memberId = memberId;
         this.nickname = nickname;
-        this.exerciseTime = exerciseTime;
         this.requestedTime = requestedTime;
     }
 
-    public static GetGalleyListResponse of(HalleyGalley halleyGalley){
+    public static HalleyDto of(HalleyGalley halleyGalley){
         return builder()
+                .profileUrl(halleyGalley.getHalleyId().getProfileUrl())
                 .timeStamp(halleyGalley.getCreatedAt())
-                .memberId(halleyGalley.getGalleyId().getId())
-                .nickname(halleyGalley.getGalleyId().getNickname())
-                .exerciseTime(100L)
+                .memberId(halleyGalley.getHalleyId().getId())
+                .nickname(halleyGalley.getHalleyId().getNickname())
                 .requestedTime(halleyGalley.getMissionId().getExerciseMinute())
                 .build();
     }
-
 }

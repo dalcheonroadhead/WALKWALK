@@ -11,10 +11,7 @@ import java.util.List;
 
 public interface HalleyGalleyRepository extends JpaRepository<HalleyGalley, Long> {
 
-    public interface HalleyGalleyProjection{
-        LocalDateTime getCreatedAt();
-        Members getGalleyId();
-        Mission getMissionId();
-    }
-    List<HalleyGalleyProjection> findHalleyGalleysByHalleyId(@Param("member") Members member);
+    List<HalleyGalley> findByHalleyId(Members member);
+
+    List<HalleyGalley> findByGalleyId(Members member);
 }

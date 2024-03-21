@@ -24,4 +24,8 @@ public class HalleyGalleyController {
         return ApiResponseDto.of(MsgType.GET_GALLEY_LIST_SUCCESSFULLY, halleyGalleyService.getGalleyList(userDetails.getMember()));
     }
 
+    @GetMapping("/galley-to-halley")
+    public ApiResponseDto<?> getHalleyList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return ApiResponseDto.of(MsgType.GET_HALLEY_LIST_SUCCESSFULLY, halleyGalleyService.getHalleyList(userDetails.getMember()));
+    }
 }
