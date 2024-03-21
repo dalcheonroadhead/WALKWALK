@@ -19,4 +19,10 @@ public class LastLoginInfo {
         this.updatedAt = updatedAt;
     }
 
+    public static LastLoginInfo of(LocalDateTime updatedAt){
+        return builder()
+                .updatedAt(updatedAt)
+                .build();
+    }
+
 }

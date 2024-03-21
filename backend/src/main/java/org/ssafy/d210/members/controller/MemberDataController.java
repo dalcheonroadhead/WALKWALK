@@ -13,6 +13,7 @@ import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.response.ResponseUtils;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.dto.request.AdditionalInfo;
+import org.ssafy.d210.members.dto.request.LastLoginInfo;
 import org.ssafy.d210.members.dto.response.ResAdditionalInfo;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.service.MemberDataService;
@@ -66,6 +67,6 @@ public class MemberDataController {
 
 
 
-        return null;
+        return ResponseUtils.ok(LastLoginInfo.of(userDetails.getMember().getUpdatedAt()),MsgType.LAST_LOGIN_UPDATED_AT);
     }
 }
