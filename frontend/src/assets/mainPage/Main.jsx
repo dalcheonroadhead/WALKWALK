@@ -75,10 +75,6 @@ const Main = function(){
                                     <p className={styles.my_time_min}>0분</p>
                                     <p className={styles.my_time_min2}>60분</p>
                                 </div>
-
-                            </div>
-                            <div>
-
                             </div>
                         </div>
                     </div>
@@ -96,10 +92,6 @@ const Main = function(){
                                     <p className={styles.my_walk_min}>0보</p>
                                     <p className={styles.my_walk_min2}>6000보</p>
                                 </div>
-
-                            </div>
-                            <div>
-
                             </div>
                         </div>
                     </div>
@@ -119,8 +111,24 @@ const Main = function(){
                     <div className={styles.halli_content}>
                         <div className={styles.halli_container}>
                             <p className={styles.halli_detail}>나의 할리 목록</p> 
-                            <div>
-                                
+                            <div className={styles.my_halli_list_container}>
+                                <p className={styles.halli_goal_title}>목표 걷기 시간</p>
+                                <div className={styles.halli_time_progress_container}>
+                                    <div className={styles.halli_time_progress_base}>
+                                        <div className={styles.halli_mission_container}>
+
+                                        </div>
+                                        <div className={styles.halli_time_progress_move} style={{width: 260}}></div>
+                                        <div className={styles.halli_time_ori_container} style={{width: 260}}>
+                                            <p className={styles.halli_time_mine} style={{left: 195}}>51분</p>
+                                            <img src="/imgs/ch1_bol_samewalk.gif" alt="제자리걸음 오리" className={styles.ch1_2} style={{left: 220}}></img>
+                                        </div>
+                                        <div className={styles.halli_time_number_base}>
+                                            <p className={styles.halli_time_min}>0분</p>
+                                            <p className={styles.halli_time_min2}>60분</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
