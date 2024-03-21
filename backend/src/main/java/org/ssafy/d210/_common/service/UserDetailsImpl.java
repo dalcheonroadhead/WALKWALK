@@ -1,5 +1,6 @@
 package org.ssafy.d210._common.service;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.Collection;
  * 따라서 해당 [UserDetailsImpl]를 사용하면 인증된 객체를 서버 전역에서 쓸 수 있다.
  * */
 
+@Getter
 public class UserDetailsImpl implements UserDetails {
 
     private final Members member;
@@ -42,7 +44,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return googleEmail;
+        return member.getEmail();
     }
 
     @Override

@@ -72,13 +72,13 @@ public class JwtUtil {
 
         Date now = new Date();
 
-        // [Google Access Token]을 담아서 WALK_WALK Access Token 에 넣기
+        // [Google Access Token] 명세서
         Claims googleAccessToken = Jwts.claims();
         googleAccessToken.put("gat_iss", gat.getIssued_at());
         googleAccessToken.put("gat_exp", gat.getExpires_in());
         googleAccessToken.put("gat", gat.getAccess_token());
 
-        // [Google Refresh Token]을 담아서 WALK_WALK Refresh Token 에 넣기
+        // [Google Refresh Token] 명세서
         Claims googleRefreshToken = Jwts.claims();
         googleRefreshToken.put("grt_iss",grt.getRefresh_token_issued_at());
         googleRefreshToken.put("grt_exp",grt.getRefresh_token_expires_in());
@@ -90,8 +90,13 @@ public class JwtUtil {
                         .setSubject(member.getEmail())  // 이메일로 token의 주인을 찾고 정보 얻어올 것이다.
                         .setIssuedAt(new Date(now.getTime()))
                         .setExpiration(new Date(now.getTime() + TOKEN_TIME))
-                        .setClaims(googleAccessToken)
-                        .setClaims(googleRefreshToken)
+                        .claim("gat_iss", gat.getIssued_at())
+                        .claim("gat_exp",gat.getExpires_in())
+                        .claim("gat",gat.getAccess_token())
+                        .claim("grt_iss",grt.getRefresh_token_issued_at())
+                        .claim("grt_exp",grt.getRefresh_token_expires_in())
+                        .claim("grt", grt.getRefresh_token())
+                        .claim("grt_cnt", grt.getRefresh_count())
                         .signWith(key, signatureAlgorithm)  // 전자 서명
                         .compact();
     }

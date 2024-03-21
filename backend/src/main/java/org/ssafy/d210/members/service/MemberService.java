@@ -16,7 +16,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
-import org.ssafy.d210._common.request.oauth2Google.GoogleRequestAuthorizationInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleProfileInfo;
@@ -46,9 +45,6 @@ public class MemberService {
 
     // A. 명세와 구현의 분리
     public GoogleOauthTokenInfo getAccessToken(String code, String redirectUri) {
-
-        System.out.println(client_id);
-        System.out.println(client_secret);
 
         return requestAccessToken(code, redirectUri);
     }
@@ -109,7 +105,7 @@ public class MemberService {
         if(member == null){
             member = Members.of(
                     googleProfileInfo.getEmail(),
-                    googleProfileInfo.getName(),
+                    googleProfileInfo.getName() == null? "없음" : googleProfileInfo.getName(),
                     googleProfileInfo.getPicture(),
                     Role.USER
             );
@@ -126,14 +122,14 @@ public class MemberService {
         membersRepository.save(member);
 
         String jwtAccessToken = jwtUtil.createToken(member,false,gat,grt);
-        String jwtRefreshToken = jwtUtil.createToken(member,true,gat,grt);
+
         response.addHeader("Authorization", jwtAccessToken);
-        response.addHeader("refresh_token",jwtRefreshToken);
+
 
         List<String> ans = new ArrayList<>();
         ans.add(jwtAccessToken);
         ans.add(String.valueOf(isNew));
-        ans.add(jwtRefreshToken);
+
 
         return ans;
     }
@@ -176,9 +172,15 @@ public class MemberService {
     }
 
 
+    // E .해당 이메일을 가진 사용자가 있는지 확인
     public Members validateMemberByEmail(String email) {
         return membersRepository.findByEmailAndDeletedAtIsNull(email)
-                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_USER));
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
+    }
+
+    // F. 닉네임 중복확인
+    public boolean isDuplicatedID(String nickname){
+        return membersRepository.findByNicknameAndDeletedAtIsNull(nickname).isPresent();
     }
 
 }
