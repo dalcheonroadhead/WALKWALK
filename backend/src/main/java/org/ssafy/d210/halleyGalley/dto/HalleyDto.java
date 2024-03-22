@@ -23,13 +23,13 @@ public class HalleyDto {
         this.requestedTime = requestedTime;
     }
 
-    public static HalleyDto of(HalleyGalley halleyGalley){
+    public static HalleyDto from(HalleyGalley halleyGalley){
         return builder()
                 .profileUrl(halleyGalley.getHalleyId().getProfileUrl())
                 .timeStamp(halleyGalley.getCreatedAt())
                 .memberId(halleyGalley.getHalleyId().getId())
                 .nickname(halleyGalley.getHalleyId().getNickname())
-                .requestedTime(halleyGalley.getMissionId().getExerciseMinute())
+                .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())
                 .build();
     }
 }

@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostGalleyRequest {
+public class PutGalleyResponseRequest {
     private Long memberId;
+    private Boolean isAccept;
 }
