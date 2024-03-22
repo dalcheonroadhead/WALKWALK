@@ -30,7 +30,7 @@ public class GetGalleyListResponse {
                 .memberId(halleyGalley.getGalleyId().getId())
                 .nickname(halleyGalley.getGalleyId().getNickname())
                 .exerciseTime(100L)
-                .requestedTime(halleyGalley.getMissionId().getExerciseMinute())
+                .requestedTime(null)
                 .build();
     }
 

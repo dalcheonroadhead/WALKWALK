@@ -10,5 +10,5 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostGalleyRequest {
-    private Long galleyId;
+    private Long memberId;
 }

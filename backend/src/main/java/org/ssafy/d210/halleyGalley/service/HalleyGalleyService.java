@@ -25,11 +25,20 @@ public class HalleyGalleyService {
     private final MembersRepository membersRepository;
 
     public String postGalleyRequest(Members member, PostGalleyRequest postGalleyRequest){
-//        if(!halleyGalleyRepository.existsById)
-        halleyGalleyRepository.save(HalleyGalley.builder()
-                .halleyId(member)
-                .galleyId(membersRepository.findById(postGalleyRequest.getGalleyId()).orElse(null))
-                .build());
+        Long galleyId = postGalleyRequest.getMemberId();
+        if(!halleyGalleyRepository.existsHalleyGalleyByHalleyIdAndGalleyId(member, membersRepository.findById(galleyId).orElse(null))) {
+            halleyGalleyRepository.save(HalleyGalley.builder()
+                    .halleyId(member)
+                    .galleyId(membersRepository.findById(postGalleyRequest.getMemberId()).orElse(null))
+                    .reward(0)
+                    .missionId(null)
+                    .dayoff(0)
+                    .isAccepted(false)
+                    .build());
+        }
+        else{
+            throw new CustomException(ErrorType.ALREADY_SEND_REQUEST);
+        }
         return "";
     }
 
