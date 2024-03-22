@@ -1,15 +1,22 @@
 import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./LoginRedirect.module.css";
-import { getGoogleToken } from "../../apis/memberApi"
+import { getGoogleToken } from "../../apis/member"
 
 const LoginRedirect = function () {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
     console.log('code : ', code)
 
     if (code) {
       // TODO : 서버에 code 전송
-      getGoogleToken(code)
+      if (getGoogleToken(code)) {
+        navigate('/signup')
+      } else {
+        navigate('/main')
+      }
     }
   })
   
