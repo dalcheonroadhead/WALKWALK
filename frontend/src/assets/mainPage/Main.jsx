@@ -14,7 +14,8 @@ const Main = function(){
     };
 
     const [tabIndex, settabIndex] = useState(0);
-    const [halli, sethalli] = useState(true);
+    const [halli, setHalli] = useState(true);
+    const [galli, setGalli] = useState(true);
     const [isHalliOpen, setIsHalliOpen] = useState(false);
     const [isGalliOpen, setIsGalliOpen] = useState(false);
     const [isHalliListOpen, setIsHalliListOpen] = useState(false);
@@ -225,15 +226,23 @@ const Main = function(){
             </div>
         ),
         tabCont:(
-            <div className={styles.no_galli_content}>
-                <div className={styles.no_galli_container}>
-                    <p className={styles.no_galli_detail}> 등록된 <br></br> 나의 갈리가 <br></br> 없습니다.</p> 
-                    <img src="/imgs/ch1_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
+            <>
+            {galli ? (
+                <div className={styles.halli_content}>
+
                 </div>
-                <div className={styles.no_galli_btn}>
-                    <p className={styles.no_galli_btn_txt} onClick={openGalliModal}>나의 갈리 등록하기</p>
+            ) : (
+                <div className={styles.no_galli_content}>
+                    <div className={styles.no_galli_container}>
+                        <p className={styles.no_galli_detail}> 등록된 <br></br> 나의 갈리가 <br></br> 없습니다.</p> 
+                        <img src="/imgs/ch1_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
+                    </div>
+                    <div className={styles.no_galli_btn}>
+                        <p className={styles.no_galli_btn_txt} onClick={openGalliModal}>나의 갈리 등록하기</p>
+                    </div>
                 </div>
-            </div>
+                )}
+            </>
         )
     }
         
@@ -343,7 +352,6 @@ const Main = function(){
                     </div>
                 </>
             )}
-
             <div className={styles.main_container}>
                 <div className={styles.tab_container}>
                     <div className={styles.mode_tabs}>
