@@ -67,7 +67,7 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Arrays.asList("*"));
+                        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
                         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Arrays.asList("*"));
@@ -121,7 +121,7 @@ public class SecurityConfig {
         cors.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("*", cors);  // 모든 경로에 대해 CORS 설정 적용
+        source.registerCorsConfiguration("/**", cors);  // 모든 경로에 대해 CORS 설정 적용
 
         return source;
     }
