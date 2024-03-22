@@ -16,8 +16,8 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     Date findLastDate();
 
     // 이번주(어제까지) 운동 데이터(걸음 수) 조회
-    @Query("SELECT e.exerciseDay, e.steps FROM Exercise e WHERE e.exerciseDay >= :startOfWeek AND e.exerciseDay < :today AND e.member.id = :memberId")
-    List<ThisWeekExerciseResponseDto> findExercisesFromStartOfWeekToYesterday(LocalDate startOfWeek, LocalDate today, Long memberId);
+    @Query("SELECT e FROM Exercise e WHERE e.exerciseDay >= :startOfWeek AND e.exerciseDay < :today AND e.member.id = :memberId")
+    List<Exercise> findExercisesFromStartOfWeekToYesterday(LocalDate startOfWeek, LocalDate today, Long memberId);
 
 
 }
