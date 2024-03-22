@@ -9,10 +9,6 @@
     height: 4rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid red;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-name: anim1;
 }
 
 .rank_item{
