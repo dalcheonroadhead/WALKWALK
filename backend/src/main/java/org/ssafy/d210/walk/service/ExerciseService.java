@@ -11,7 +11,9 @@ import org.ssafy.d210.walk.repository.ExerciseRepository;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -23,28 +25,40 @@ public class ExerciseService {
 
     // 오늘 날짜만 받으면 이번주 월요일부터 어제까지 데이터를 조회하고 나머지 날은 디폴트로
     @Transactional
-    public List<ThisWeekExerciseResponseDto> findWeeklyExerciseRecords(LocalDate today, Long memberId) {
-//        LocalDate today = LocalDate.now();
+    public Map<String, Object> findWeeklyExerciseRecords(LocalDate today, Long memberId) {
         LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
 
-        List<ThisWeekExerciseResponseDto> exercises = exerciseRepository.findExercisesFromStartOfWeekToYesterday(startOfWeek, today, memberId);
+        Map<String, Object> data = new HashMap<>();
+        System.out.println(exerciseRepository.findExercisesFromStartOfWeekToYesterday(startOfWeek, today, memberId));
+        List<Exercise> exercises = exerciseRepository.findExercisesFromStartOfWeekToYesterday(startOfWeek, today, memberId);
         List<ThisWeekExerciseResponseDto> weeklyExercises = new ArrayList<>();
+        int summ = 0;
+        int supp = 0;
 
         for (LocalDate date = startOfWeek; date.isBefore(today); date = date.plusDays(1)) {
             LocalDate finalDate = date;
             ThisWeekExerciseResponseDto exercise = exercises.stream()
-                    .filter(e -> e.getTimeStamp().equals(finalDate))
+                    .filter(e -> e.getExerciseDay().equals(finalDate))
                     .findFirst()
-                    .orElseGet(() -> ThisWeekExerciseResponseDto.builder().timeStamp(finalDate).steps(0).build());
+                    .map(e -> ThisWeekExerciseResponseDto.builder().timeStamp(finalDate).steps(e.getSteps()).build())
+                    .orElseGet(() -> ThisWeekExerciseResponseDto.builder().timeStamp(finalDate).steps(0L).build());
 
             weeklyExercises.add(exercise);
+            summ += exercise.getSteps();
+            supp++;
         }
+
+        Integer avgValue = 0;
+        if (supp != 0) avgValue = (int) Math.round((double) summ / supp);
 
         // 여기서 나머지 요일에 대해 기본값을 설정
         for (LocalDate date = today; date.isBefore(startOfWeek.plusWeeks(1)); date = date.plusDays(1)) {
-            weeklyExercises.add(ThisWeekExerciseResponseDto.builder().timeStamp(date).steps(0).build());
+            weeklyExercises.add(ThisWeekExerciseResponseDto.builder().timeStamp(date).steps(0L).build());
         }
 
-        return weeklyExercises;
+        data.put("content", weeklyExercises);
+        data.put("avg", avgValue);
+
+        return data;
     }
 }
