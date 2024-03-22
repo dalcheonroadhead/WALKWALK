@@ -13,7 +13,7 @@ const Login = function () {
   return (
     <div className={styles.login_container}>
       <div className={styles.login_app_name}>walk walk</div>
-      <img src="/imgs/login_logo.png" alt="login logo" />
+      <img className={styles.login_img} src="/imgs/login_logo.png" alt="login logo" />
       <img className={styles.google_login_btn} onClick={handleLogin} src="/imgs/google_login_btn.png" alt="google login button" />
     </div>
   )
