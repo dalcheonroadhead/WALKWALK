@@ -5,7 +5,7 @@ import { getGoogleToken } from "../../apis/memberApi"
 const LoginRedirect = function () {
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
-    console.log(code)
+    console.log('code : ', code)
 
     if (code) {
       // TODO : 서버에 code 전송
