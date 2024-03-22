@@ -16,6 +16,7 @@ public interface HalleyGalleyRepository extends JpaRepository<HalleyGalley, Long
 
     HalleyGalley findHalleyGalleyByGalleyIdAndHalleyId(Members member, Members halleyId);
 
+
     List<HalleyGalley> findByHalleyId(Members member);
 
     List<HalleyGalley> findByGalleyId(Members member);
