@@ -4,14 +4,13 @@ import { getGoogleToken } from "../../apis/memberApi"
 
 const LoginRedirect = function () {
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-    const codeParam = queryParams.get('code')
-    console.log(codeParam)
+    const code = new URLSearchParams(window.location.search).get('code')
+    console.log(code)
 
-    // if (codeParam) {
-    //   // TODO : 서버에 code 전송
-    //   getGoogleToken(codeParam)
-    // }
+    if (code) {
+      // TODO : 서버에 code 전송
+      getGoogleToken(code)
+    }
   })
   
   return (
