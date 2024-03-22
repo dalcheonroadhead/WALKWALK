@@ -12,7 +12,9 @@ public class PutGalleyResponseResponse {
         this.isHalleyGalley = isHalleyGalley;
     }
 
-    public static PutGalleyResponseResponse from(){
-        return builder().build();
+    public static PutGalleyResponseResponse of(Boolean isAccept){
+        return builder()
+                .isHalleyGalley(isAccept)
+                .build();
     }
 }

@@ -24,7 +24,7 @@ public class GetGalleyListResponse {
         this.requestedTime = requestedTime;
     }
 
-    public static GetGalleyListResponse of(HalleyGalley halleyGalley){
+    public static GetGalleyListResponse from(HalleyGalley halleyGalley){
         return builder()
                 .timeStamp(halleyGalley.getCreatedAt())
                 .memberId(halleyGalley.getGalleyId().getId())

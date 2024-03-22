@@ -23,7 +23,7 @@ public class HalleyDto {
         this.requestedTime = requestedTime;
     }
 
-    public static HalleyDto of(HalleyGalley halleyGalley){
+    public static HalleyDto from(HalleyGalley halleyGalley){
         return builder()
                 .profileUrl(halleyGalley.getHalleyId().getProfileUrl())
                 .timeStamp(halleyGalley.getCreatedAt())

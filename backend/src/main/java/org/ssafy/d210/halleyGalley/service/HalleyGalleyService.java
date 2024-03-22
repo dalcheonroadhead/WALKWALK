@@ -11,6 +11,7 @@ import org.ssafy.d210.halleyGalley.dto.request.PostGalleyRequest;
 import org.ssafy.d210.halleyGalley.dto.request.PutGalleyResponseRequest;
 import org.ssafy.d210.halleyGalley.dto.response.GetGalleyListResponse;
 import org.ssafy.d210.halleyGalley.dto.response.GetHalleyListResponse;
+import org.ssafy.d210.halleyGalley.dto.response.GetHalleyRequestListResponse;
 import org.ssafy.d210.halleyGalley.dto.response.PutGalleyResponseResponse;
 import org.ssafy.d210.halleyGalley.entity.HalleyGalley;
 import org.ssafy.d210.halleyGalley.repository.HalleyGalleyRepository;
@@ -55,7 +56,7 @@ public class HalleyGalleyService {
         halleyGalley.updateIsAccepted(isAccept);
         halleyGalleyRepository.save(halleyGalley);
 
-        return PutGalleyResponseResponse.builder().isHalleyGalley(isAccept).build();
+        return PutGalleyResponseResponse.of(isAccept);
     }
 
     public List<GetGalleyListResponse> getGalleyList(Members member){
@@ -63,7 +64,7 @@ public class HalleyGalleyService {
         if(galleyList.isEmpty()){
             throw new CustomException(ErrorType.NOT_FOUND_GALLEY);
         }
-        return galleyList.stream().map(GetGalleyListResponse::of).collect(Collectors.toList());
+        return galleyList.stream().map(GetGalleyListResponse::from).collect(Collectors.toList());
     }
 
     public GetHalleyListResponse getHalleyList(Members member){
@@ -71,10 +72,19 @@ public class HalleyGalleyService {
         if(halleyList.isEmpty()){
             throw new CustomException(ErrorType.NOT_FOUND_HALLEY);
         }
-        List<HalleyDto> halleyInfoList = halleyList.stream().map(HalleyDto::of).toList();
+        List<HalleyDto> halleyInfoList = halleyList.stream().map(HalleyDto::from).toList();
 
         return GetHalleyListResponse.from(member, halleyInfoList);
     }
 
+    public GetHalleyRequestListResponse getHalleyRequestList(Members member){
+        List<HalleyGalley> halleyRequestList = halleyGalleyRepository.findByHalleyIdAndIsAcceptedIsFalse(member);
+        if(halleyRequestList.isEmpty()){
+            throw new CustomException(ErrorType.NOT_FOUND_HALLEY_REQUEST_LIST);
+        }
+        List<HalleyDto> halleyInfoList = halleyRequestList.stream().map(HalleyDto::from).toList();
+
+        return GetHalleyRequestListResponse.of(halleyInfoList);
+    }
 
 }
