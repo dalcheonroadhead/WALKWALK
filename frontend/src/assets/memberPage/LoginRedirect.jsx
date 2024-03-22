@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import styles from "./LoginRedirect.module.css";
+import styles from "./Login.module.css";
 import { getGoogleToken } from "../../apis/member"
 
 const LoginRedirect = function () {
