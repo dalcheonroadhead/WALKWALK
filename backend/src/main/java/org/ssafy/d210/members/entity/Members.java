@@ -42,7 +42,7 @@ public class Members extends BaseTime {
     @JoinColumn(name = "member_account_id")
     private MemberAccount memberAccountId;
 
-    @Column(name = "nickname", nullable = false, length = 15)
+    @Column(name = "nickname", nullable = false, length = 100)
     private String nickname;
 
     @Column(name = "profile_url", nullable = false, length = 500)
