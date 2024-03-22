@@ -3,7 +3,10 @@ package org.ssafy.d210.walk.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto;
 import org.ssafy.d210.walk.dto.response.ThisWeekExerciseResponseDto;
 import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.repository.ExerciseRepository;
@@ -22,6 +25,9 @@ import java.util.Map;
 public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+
+    // db에 저장된 마지막 날짜
+    public LocalDate findLastSavedDate() { return exerciseRepository.findLastDate(); }
 
     // 오늘 날짜만 받으면 이번주 월요일부터 어제까지 데이터를 조회하고 나머지 날은 디폴트로
     @Transactional
@@ -60,5 +66,9 @@ public class ExerciseService {
         data.put("avg", avgValue);
 
         return data;
+    }
+
+    public Page<StreakRankingResopnseDto> getRankingWithFriends(Long memberId, Pageable pageable) {
+        return exerciseRepository.findRankingByPage(memberId, pageable);
     }
 }

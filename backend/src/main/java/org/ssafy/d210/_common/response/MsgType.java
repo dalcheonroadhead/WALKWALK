@@ -22,6 +22,7 @@ public enum MsgType {
 
     // ====================== WALK ============================
     GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),
+    GET_LAST_SAVED_DATE("마지막으로 저장된 날짜 조회에 성공하였습니다.")
 
     ;
 
