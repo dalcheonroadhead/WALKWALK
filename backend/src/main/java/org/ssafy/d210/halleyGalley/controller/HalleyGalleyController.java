@@ -8,6 +8,7 @@ import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.halleyGalley.dto.request.PostGalleyRequest;
+import org.ssafy.d210.halleyGalley.dto.request.PutGalleyResponseRequest;
 import org.ssafy.d210.halleyGalley.service.HalleyGalleyService;
 
 @Slf4j
@@ -23,6 +24,11 @@ public class HalleyGalleyController {
         return ApiResponseDto.of(MsgType.POST_GALLEY_REQUEST_SUCCESSFULLY, halleyGalleyService.postGalleyRequest(userDetails.getMember(), postGalleyRequest));
     }
 
+    @PutMapping("/galley-response")
+    public ApiResponseDto<?> putGalleyResponse(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PutGalleyResponseRequest putGalleyResponseRequest){
+        return ApiResponseDto.of(MsgType.PUT_GALLEY_RESPONSE_SUCCESSFULLY, halleyGalleyService.putGalleyResponse(userDetails.getMember(), putGalleyResponseRequest));
+    }
+
     @GetMapping("/halley-to-galley")
     public ApiResponseDto<?> getGalleyList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ApiResponseDto.of(MsgType.GET_GALLEY_LIST_SUCCESSFULLY, halleyGalleyService.getGalleyList(userDetails.getMember()));
@@ -32,4 +38,5 @@ public class HalleyGalleyController {
     public ApiResponseDto<?> getHalleyList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ApiResponseDto.of(MsgType.GET_HALLEY_LIST_SUCCESSFULLY, halleyGalleyService.getHalleyList(userDetails.getMember()));
     }
+
 }

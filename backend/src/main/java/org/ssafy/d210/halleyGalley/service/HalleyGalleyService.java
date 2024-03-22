@@ -1,5 +1,6 @@
 package org.ssafy.d210.halleyGalley.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -7,8 +8,10 @@ import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
 import org.ssafy.d210.halleyGalley.dto.HalleyDto;
 import org.ssafy.d210.halleyGalley.dto.request.PostGalleyRequest;
+import org.ssafy.d210.halleyGalley.dto.request.PutGalleyResponseRequest;
 import org.ssafy.d210.halleyGalley.dto.response.GetGalleyListResponse;
 import org.ssafy.d210.halleyGalley.dto.response.GetHalleyListResponse;
+import org.ssafy.d210.halleyGalley.dto.response.PutGalleyResponseResponse;
 import org.ssafy.d210.halleyGalley.entity.HalleyGalley;
 import org.ssafy.d210.halleyGalley.repository.HalleyGalleyRepository;
 import org.ssafy.d210.members.entity.Members;
@@ -24,6 +27,7 @@ public class HalleyGalleyService {
     private final HalleyGalleyRepository halleyGalleyRepository;
     private final MembersRepository membersRepository;
 
+    @Transactional
     public String postGalleyRequest(Members member, PostGalleyRequest postGalleyRequest){
         Long galleyId = postGalleyRequest.getMemberId();
         if(!halleyGalleyRepository.existsHalleyGalleyByHalleyIdAndGalleyId(member, membersRepository.findById(galleyId).orElse(null))) {
@@ -40,6 +44,18 @@ public class HalleyGalleyService {
             throw new CustomException(ErrorType.ALREADY_SEND_REQUEST);
         }
         return "";
+    }
+
+    @Transactional
+    public PutGalleyResponseResponse putGalleyResponse(Members member, PutGalleyResponseRequest putGalleyResponseRequest){
+        Long galleyId = putGalleyResponseRequest.getMemberId();
+        Boolean isAccept = putGalleyResponseRequest.getIsAccept();
+
+        HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, membersRepository.findById(galleyId).orElse(null));
+        halleyGalley.updateIsAccepted(isAccept);
+        halleyGalleyRepository.save(halleyGalley);
+
+        return PutGalleyResponseResponse.builder().isHalleyGalley(isAccept).build();
     }
 
     public List<GetGalleyListResponse> getGalleyList(Members member){
@@ -59,4 +75,6 @@ public class HalleyGalleyService {
 
         return GetHalleyListResponse.from(member, halleyInfoList);
     }
+
+
 }
