@@ -14,8 +14,8 @@ import axios from "axios";
 // }
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8081/api',
-  // baseURL: 'https://j10d210.p.ssafy.io/api',
+  // baseURL: 'http://localhost:8081/api',
+  baseURL: 'https://j10d210.p.ssafy.io/api',
   // headers: {
   //   'Authorization': token
   // },
