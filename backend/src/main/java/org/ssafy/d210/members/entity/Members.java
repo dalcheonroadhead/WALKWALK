@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Struct;
 import org.ssafy.d210._common.entity.BaseTime;
+import org.ssafy.d210.wallets._payment.dto.Payment;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 
@@ -89,8 +90,11 @@ public class Members extends BaseTime {
     @Column(name = "daily_criteria")
     private Long dailyCriteria;
 
-    @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<BlockAddress> blockAddresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Payment> payments = new ArrayList<>();
 
     @Builder
     public Members(

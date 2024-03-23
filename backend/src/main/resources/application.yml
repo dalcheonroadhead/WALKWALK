@@ -81,3 +81,6 @@ springdoc:
   model-and-view-allowed: true
   paths-to-match:
     - /api/**
+
+pay:
+  secret-key: ${PAY_SECRET_KEY}

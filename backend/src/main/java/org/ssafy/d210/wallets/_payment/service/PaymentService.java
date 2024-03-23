@@ -1,0 +1,117 @@
+package org.ssafy.d210.wallets._payment.service;
+
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.ssafy.d210._common.exception.CustomException;
+import org.ssafy.d210._common.service.UserDetailsImpl;
+import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210.members.repository.MembersRepository;
+import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
+import org.ssafy.d210.wallets._payment.dto.Payment;
+import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequestDto;
+import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequestDto;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveDto;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyDto;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
+
+@Slf4j
+@Service
+@Transactional
+public class PaymentService {
+
+    @Value("${pay.secret-key}")
+    private String secretKey;
+    private final RestTemplate restTemplate;
+    private final PaymentRepository paymentRepository;
+    private final MembersRepository membersRepository;
+
+    private final String kakaoPayReadyUrl = "https://open-api.kakaopay.com/online/v1/payment/ready";
+    private final String kakaoPayApproveUrl = "https://open-api.kakaopay.com/online/v1/payment/approve";
+
+    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository) {
+        this.restTemplate = restTemplateBuilder.build();
+        this.paymentRepository = paymentRepository;
+        this.membersRepository = membersRepository;
+    }
+
+    public Members findMembersByMembers(String email) {
+        return membersRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
+    }
+
+    // 결제 준비
+    // 모바일 혹은 pc로 카톡 결제 후 DB에 결제 내역 저장
+    public PaymentReadyDto preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequestDto requestDto) {
+
+        // 사용자 정보 가져오기(Token 유효성 검사)
+        Members member = findMembersByMembers(userDetails.getMember().getEmail());
+
+        // 결제 정보 생성 및 DB 저장
+        Payment payment = new Payment();
+        payment.setCid("TC0ONETIME");
+        payment.setPartner_order_id(requestDto.getPartner_order_id());
+        payment.setPartner_user_id(requestDto.getPartner_user_id());
+        payment.setTotal_amount(Math.toIntExact(requestDto.getTotal_amount()));
+        payment.setMember(member);
+        paymentRepository.save(payment);
+
+        // 카카오페이 결제를 시작하기 위해 결제정보를 카카오페이 서버에 전달하고 결제 고유번호(TID)와 URL을 응답받는 단계
+        // Secret key를 헤더에 담아 파라미터 값들과 함께 POST로 요청
+        // 요청이 성공하면 응답 바디에 JSON 객체로 다음 단계 진행을 위한 값들 받기
+        // 서버는 tid를 저장하고, 클라이언트는 사용자 환경에 맞는 URL로 리다이렉트
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "SECRET_KEY " + secretKey);
+
+        HttpEntity<PaymentReadyRequestDto> request = new HttpEntity<>(requestDto, headers);
+        ResponseEntity<PaymentReadyDto> response = restTemplate.postForEntity(kakaoPayReadyUrl, request, PaymentReadyDto.class);
+
+        log.info("======================KakaoPay Payment Response: Status Code = {}, Body = {}", response.getStatusCode(), response.getBody());
+
+        return response.getBody();
+    }
+
+    // 결제 승인
+    // member의 카카오톡으로 결제 완료 카톡 보내기
+    public PaymentApproveDto approvePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentApproveRequestDto requestDto) {
+
+        // 사용자 정보 가져오기(Token 유효성 검사)
+        Members member = findMembersByMembers(userDetails.getMember().getEmail());
+
+        log.info(requestDto.getPg_token());
+
+        // 결제 승인 요청에 필요한 정보를 설정
+        Map<String, String> requestMap = new HashMap<>();
+        requestMap.put("cid", requestDto.getCid()); // 가맹점 코드, 테스트 코드 또는 실제 발급받은 코드 사용
+        requestMap.put("tid", requestDto.getTid()); // 결제 준비 응답에서 받은 tid
+        requestMap.put("partner_order_id", requestDto.getPartner_order_id()); // 가맹점 주문번호
+        requestMap.put("partner_user_id", requestDto.getPartner_user_id()); // 가맹점 회원 id
+        requestMap.put("pg_token", requestDto.getPg_token()); // 사용자 결제 수단 선택 후 받은 pg_token
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "SECRET_KEY " + secretKey);
+
+        // 사용자가 결제 수단을 선택하고 비밀번호를 입력해 결제 인증을 완료한 뒤, 최종적으로 결제 완료 처리를 하는 단계
+        // 인증완료시, 응답받은 pg_token과 tid로 최종 승인요청
+        // 결제 승인 API를 호출하면, 결제 준비 단계에서 시작된 결제건이 승인으로 완료 처리
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(requestMap, headers);
+        ResponseEntity<PaymentApproveDto> response = restTemplate.postForEntity(kakaoPayApproveUrl, request, PaymentApproveDto.class);
+        System.out.println(response);
+        return response.getBody();
+
+    }
+}
