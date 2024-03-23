@@ -33,6 +33,7 @@ dependencies {
 
     //⭐ Redis 설정
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson:3.16.4'
 
     //⭐ DB 설정
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'

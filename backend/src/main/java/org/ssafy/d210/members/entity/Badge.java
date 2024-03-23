@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "badge")
 @NoArgsConstructor
@@ -18,7 +21,8 @@ public class Badge {
     private Long badgeId;
 
     @Column(nullable = false, length = 15)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private BadgeType type;
 
     @Column (length = 500)
     private String icon;
@@ -31,4 +35,7 @@ public class Badge {
 
     @Column
     private Long criteria;
+
+    @OneToMany(mappedBy = "badge", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberBadge> memberBadges = new ArrayList<>();
 }

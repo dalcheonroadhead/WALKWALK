@@ -100,6 +100,10 @@ public class Members extends BaseTime {
     @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private ExerciseAcc exerciseAcc;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberBadge> memberBadges = new ArrayList<>();
+
+
 
     @Builder
     public Members(

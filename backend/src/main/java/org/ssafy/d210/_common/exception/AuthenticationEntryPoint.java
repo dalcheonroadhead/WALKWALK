@@ -25,26 +25,26 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
 
         log.error("시큐리티 인증 과정에서 오류가 발생하였습니다! ＼(´◓Д◔`)／{}", authException.getMessage());
 
-//        ErrorType exception = (ErrorType) request.getAttribute("exception");
-//
-//        if(exception != null) {
-//            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
-//                exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
-//                return;
-//            }
-//
-//            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
-//                exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
-//                return;
-//            }
-//
-//            if (exception.equals(ErrorType.NOT_FOUND_USER)) {
-//                exceptionHandler(response, ErrorType.NOT_FOUND_USER);
-//
-//            }
-//        }else {
-//            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
-//        }
+        ErrorType exception = (ErrorType) request.getAttribute("exception");
+
+        if(exception != null) {
+            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
+                exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
+                return;
+            }
+
+            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
+                exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
+                return;
+            }
+
+            if (exception.equals(ErrorType.NOT_FOUND_MEMBER)) {
+                exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
+
+            }
+        }else {
+            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
+        }
     }
 
 

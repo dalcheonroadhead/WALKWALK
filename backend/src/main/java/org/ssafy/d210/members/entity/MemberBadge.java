@@ -17,15 +17,15 @@ public class MemberBadge extends CreatedAndUpdatedTime {
     @Column(name = "member_badge_id")
     private Long memberBadgeId;
 
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "badge_id", referencedColumnName = "badge_id")
-//    private Badge badge;
-//
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name ="member_id", referencedColumnName = "id")
-//    private Members members;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "badge_id", referencedColumnName = "badge_id")
+    private Badge badge;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="member_id", referencedColumnName = "member_id")
+    private Members member;
 
 
 }

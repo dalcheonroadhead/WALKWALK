@@ -19,7 +19,7 @@ spring:
           max-active: 10
           max-idle: 10
           min-idle: 2
-      host: localhost
+      host: ${REDIS_URL}
       port: 6379
       password: ${REDIS_PASSWORD}
 
@@ -60,8 +60,7 @@ jwt:
       #접근토큰시간: 5시간  #60*60*5*1000 =18000000    #샘플테스트 :30초 ==>30*1000=30000
       access-expiration-time: 604800000
     #갱신토큰시간: 7일  #60*60*24*7*1000=604800000  #샘플테스트: 1분 ===>60000
-      refresh-expiration-time: 604800000
-
+      refresh-expiration-time: 60480000
 springdoc:
   swagger-ui:
     groups-order: desc

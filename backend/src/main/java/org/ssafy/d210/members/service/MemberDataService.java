@@ -10,8 +10,11 @@ import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.dto.request.AdditionalInfo;
 import org.ssafy.d210.members.dto.request.VoiceMessageInfo;
 import org.ssafy.d210.members.dto.response.ResMyPageDetailInfo;
+import org.ssafy.d210.members.entity.Badge;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.entity.VoiceMessage;
+import org.ssafy.d210.members.repository.BadgeRepository;
+import org.ssafy.d210.members.repository.MemberBadgeRepository;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.repository.VoiceMessageRepository;
 import org.ssafy.d210.wallets.entity.MemberAccount;
@@ -28,6 +31,8 @@ public class MemberDataService {
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final VoiceMessageRepository voiceMessageRepository;
+    private final BadgeRepository badgeRepository;
+    private final MemberBadgeRepository memberBadgeRepository;
     @Transactional
     public Members addAdditionalInfo (AdditionalInfo addInfo,  UserDetailsImpl userDetails) {
 
@@ -81,4 +86,13 @@ public class MemberDataService {
                 .map(voiceMessage -> VoiceMessageInfo.of(voiceMessage.getVoiceAddr(), voiceMessage.getCreatedAt(), voiceMessage.isOpened()))
                 .collect(Collectors.toList());
     }
+
+    public List<Badge> getBadgeList(UserDetailsImpl userDetails) throws CustomException {
+
+
+        return null;
+    }
+
+
+
 }
