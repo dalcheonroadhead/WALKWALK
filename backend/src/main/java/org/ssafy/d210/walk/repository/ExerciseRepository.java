@@ -2,6 +2,7 @@ package org.ssafy.d210.walk.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto;
@@ -23,13 +24,10 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     List<Exercise> findExercisesFromStartOfWeekToYesterday(LocalDate startOfWeek, LocalDate today, Long myId);
 
     // 스트릭 랭킹 조회 기능 중 1. 페이지네이션
-    @Query("select new org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto(RANK() OVER(ORDER BY e.streak DESC), e.member.id, e.member.nickname, e.member.profileUrl, e.streak)" +
-            " from Exercise e where e.member.id = :myId or e.member.id in (select f.receiverId from FriendList f where f.senderId = :myId) order by e.streak desc")
-    Page<StreakRankingResopnseDto> findRankingByPage(Long myId, Pageable pageable);
+    @Query("select new org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto(m.id, m.nickname, m.profileUrl, e.streak)" +
+            " from Exercise e join Members m on e.member.id = m.id" +
+            " where m.id = :myId or m.id in (select f.receiverId.id from FriendList f where f.senderId.id = :myId)" +
+            " order by e.streak desc")
+    Slice<StreakRankingResopnseDto> findRankingByPage(Long myId, Pageable pageable);
 
-
-    @Query(value = "SELECT e.member_id, MAX(e.streak) AS max_streak FROM Exercise e GROUP BY e.member_id ORDER BY max_streak DESC",
-            countQuery = "SELECT COUNT(DISTINCT e.member_id) FROM Exercise e",
-            nativeQuery = true)
-    Page<Object[]> findRankedMembers(Pageable pageable);
 }

@@ -4,8 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210.members.repository.MembersRepository;
+import org.ssafy.d210.walk.dto.response.SliceResponseDto;
 import org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto;
 import org.ssafy.d210.walk.dto.response.ThisWeekExerciseResponseDto;
 import org.ssafy.d210.walk.entity.Exercise;
@@ -25,6 +30,7 @@ import java.util.Map;
 public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+    private final MembersRepository membersRepository;
 
     // db에 저장된 마지막 날짜
     public LocalDate findLastSavedDate() { return exerciseRepository.findLastDate(); }
@@ -68,7 +74,18 @@ public class ExerciseService {
         return data;
     }
 
-    public Page<StreakRankingResopnseDto> getRankingWithFriends(Long memberId, Pageable pageable) {
-        return exerciseRepository.findRankingByPage(memberId, pageable);
+    public SliceResponseDto getRankingWithFriends(Members member, Pageable pageable) {
+//        Members member = membersRepository.findById(memberId).orElseThrow();
+        Long myId = member.getId();
+        Slice<StreakRankingResopnseDto> exercises = exerciseRepository.findRankingByPage(myId, pageable);
+
+        // 시작 순위 계산
+        int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
+
+        for (StreakRankingResopnseDto exercise : exercises) {
+            exercise.setRank((long) startRank++);
+        }
+
+        return new SliceResponseDto(exercises);
     }
 }
