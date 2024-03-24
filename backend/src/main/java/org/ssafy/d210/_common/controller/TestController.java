@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.ssafy.d210._common.entity.RedisTestEntity;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210._common.repository.RedisTestRepository;
 import org.ssafy.d210._common.request.Base64URI;
 import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
@@ -19,11 +21,12 @@ import java.util.Base64;
 // 이건 테스트용, 다른 곳에서 구현이 다 된다면 지웁니다.
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/test")
 public class TestController {
 
     private final S3MultiPartUploader s3MultiPartUploader;
     private final S3Base64Uploader s3Base64Uploader;
+    private final RedisTestRepository redisTestRepository;
 
     // consume == 들어오는 데이터의 타입을 정한다.
     // consume를 쓰는 컨트롤러로 클라이언트가 요청을 보낸다면, 클라이언트는 무조건 consume가 제시한 데이터 타입 중 적어도 하나 이상을
@@ -49,6 +52,15 @@ public class TestController {
 
         return ResponseUtils.ok(s3Base64Uploader.Base64ToHttp(base64Data.getFile()), MsgType.UPLOAD_FILE_SUCCESSFULLY);
 
+    }
+
+    @GetMapping(value = "/writeRedis")
+    public ApiResponseDto<?> writeRedis(){
+
+        redisTestRepository.save(new RedisTestEntity("1", "2", "3"));
+
+
+        return ResponseUtils.ok("OK", MsgType.ADD_INFO_SUCCESSFULLY);
     }
 
 }

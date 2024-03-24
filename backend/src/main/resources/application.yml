@@ -11,17 +11,20 @@ spring:
     ansi:
       enabled: always
 
+  cache:
+    type: redis
   data:
     # redis 설정
     redis:
       lettuce:
         pool:
-          max-active: 10
-          max-idle: 10
+          max-active: 5 # pool에 할당될 수 있는 커넥션 최대수
+          max-idle: 5 # pool의 'idle' 커넥션 최대수
           min-idle: 2
-      host: localhost
+      host: ${REDIS_HOST}
       port: 6379
       password: ${REDIS_PASSWORD}
+
 
 
 google:
@@ -57,11 +60,10 @@ jwt:
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
   secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
   token:
-      #접근토큰시간: 5시간  #60*60*5*1000 =18000000    #샘플테스트 :30초 ==>30*1000=30000
-      access-expiration-time: 604800000
-    #갱신토큰시간: 7일  #60*60*24*7*1000=604800000  #샘플테스트: 1분 ===>60000
-      refresh-expiration-time: 604800000
-
+      #접근토큰시간: 5시간  #60*60*5*1000 =18000000
+      access-expiration-time: 18000000
+    #갱신토큰시간: 3일  #60*60*24*3*1000=259200000
+      refresh-expiration-time: 259200000
 springdoc:
   swagger-ui:
     groups-order: desc

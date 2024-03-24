@@ -2,6 +2,7 @@ package org.ssafy.d210.walk.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.ssafy.d210.walk.dto.response.ThisWeekExerciseResponseDto;
 import org.ssafy.d210.walk.entity.Exercise;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     // DB에 하루 치 운동이 저장된 마지막 날짜

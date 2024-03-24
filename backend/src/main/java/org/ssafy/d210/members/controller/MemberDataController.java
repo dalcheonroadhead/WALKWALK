@@ -104,4 +104,12 @@ public class MemberDataController {
 
         return ResponseUtils.ok(memberDataService.getVoiceMailList(userDetails), MsgType.SEARCH_SUCCESSFULLY);
     }
+
+    @GetMapping("/badge")
+    public ApiResponseDto<?> getBadge(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        memberDataService.getBadgeList(userDetails);
+
+        return null;
+    }
 }
