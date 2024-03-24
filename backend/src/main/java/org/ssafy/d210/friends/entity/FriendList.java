@@ -45,4 +45,7 @@ public class FriendList {
                 .build();
     }
 
+    public void updateIsAccepted(Boolean isAccepted){
+        this.isAccepted = isAccepted;
+    }
 }

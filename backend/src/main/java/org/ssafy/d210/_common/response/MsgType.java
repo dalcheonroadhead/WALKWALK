@@ -34,6 +34,13 @@ public enum MsgType {
 
     // ====================== MISSION ==========================
     POST_MISSION_SUCCESSFULLY("미션 등록에 성공하였습니다."),
+
+    // ====================== FRIENDS ==========================
+    GET_MEMBER_INFO_SUCCESSFULLY("프로필 조회에 성공하였습니다."),
+    GET_FRIEND_LIST_SUCCESSFULLY("친구 목록 조회에 성공하였습니다."),
+    POST_FRIEND_REQUEST_SUCCESSFULLY("친구 요청 전송에 성공하였습니다."),
+    PUT_FRIEND_REQUEST_SUCCESSFULLY("친구 요청 수락/거절에 성공하였습니다."),
+
     ;
 
     private final String msg;
