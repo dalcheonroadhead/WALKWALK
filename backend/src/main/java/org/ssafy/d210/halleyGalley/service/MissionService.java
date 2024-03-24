@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.ssafy.d210._common.exception.CustomException;
+import org.ssafy.d210._common.exception.ErrorType;
 import org.ssafy.d210.halleyGalley.dto.request.PostMissionRequest;
 import org.ssafy.d210.halleyGalley.entity.HalleyGalley;
 import org.ssafy.d210.halleyGalley.entity.Mission;
@@ -11,6 +13,7 @@ import org.ssafy.d210.halleyGalley.repository.HalleyGalleyRepository;
 import org.ssafy.d210.halleyGalley.repository.MissionRepository;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
+import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 import org.ssafy.d210.wallets.service.WalletsService;
 
@@ -32,8 +35,14 @@ public class MissionService {
         Long exerciseMinute = postMissionRequest.getExerciseMinute();
         Integer period = postMissionRequest.getPeriod();
 
+        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId()).orElse(null);
+        if(memberAccount == null || memberAccount.getMoney() < reward){
+            throw new CustomException(ErrorType.NOT_ENOUGH_MONEY);
+        }
+
         HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, membersRepository.findById(memberId).orElse(null));
         Mission mission = missionRepository.findById(halleyGalley.getMissionId().getId()).orElse(null);
+
         if(mission == null || mission.getCreatedAt().getMonthValue()+1 < LocalDate.now().getMonthValue()){
             Mission newMission = Mission
                     .builder()
@@ -49,8 +58,9 @@ public class MissionService {
             halleyGalley1.updateMissionId(mission);
             halleyGalleyRepository.save(halleyGalley1);
         }
-
-
+        else{
+            throw new CustomException(ErrorType.CANT_ADD_MISSION);
+        }
 
         return "";
     }
