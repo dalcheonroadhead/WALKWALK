@@ -31,6 +31,8 @@ public class SwaggerConfig {
 
         String securityJwtName = "JWT";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityJwtName);
+
+        // 인가가 필요한 모든 요청을 위해서 미리 JWT 토큰을 받아놓는 서비스를 [swagger]에 구성
         Components components = new Components()
                 .addSecuritySchemes(securityJwtName, new SecurityScheme()
                         .name(securityJwtName)

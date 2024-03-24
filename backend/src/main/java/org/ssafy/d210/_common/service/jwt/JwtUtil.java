@@ -60,11 +60,12 @@ public class JwtUtil {
     *  Google Access Token, Google Refresh Token, 각 토큰의 정보가 들어간다.
     *  우리는 해당 토큰을 다시 분해해서 각 사용자의 AT, RT 남은 시각을 계산해, 미리 AT를 재발급 받아도 된다.
     * */
-    public String createToken (Members member, boolean isRT , GoogleAccessTokenInfo gat, GoogleRefreshTokenInfo grt){
+    public String createToken (Members member, boolean isRT ){
 
         int TOKEN_TIME = 0;
 
-        if(isRT){
+        // 해당 값으로 [AccessToken]을 만들 것인지, [RefreshToken]을 만들 것인지 확인한다.
+        if(!isRT){
             TOKEN_TIME = Integer.parseInt(Objects.requireNonNull(env.getProperty("jwt.token.access-expiration-time")));
         }else{
             TOKEN_TIME = Integer.parseInt(Objects.requireNonNull(env.getProperty("jwt.token.refresh-expiration-time")));
@@ -72,31 +73,24 @@ public class JwtUtil {
 
         Date now = new Date();
 
-        // [Google Access Token] 명세서
-        Claims googleAccessToken = Jwts.claims();
-        googleAccessToken.put("gat_iss", gat.getIssued_at());
-        googleAccessToken.put("gat_exp", gat.getExpires_in());
-        googleAccessToken.put("gat", gat.getAccess_token());
-
-        // [Google Refresh Token] 명세서
-        Claims googleRefreshToken = Jwts.claims();
-        googleRefreshToken.put("grt_iss",grt.getRefresh_token_issued_at());
-        googleRefreshToken.put("grt_exp",grt.getRefresh_token_expires_in());
-        googleRefreshToken.put("grt", grt.getRefresh_token());
-        googleRefreshToken.put("grt_cnt", grt.getRefresh_count());
+//        // [Google Access Token] 명세서
+//        Claims googleAccessToken = Jwts.claims();
+//        googleAccessToken.put("gat_iss", gat.getIssued_at());
+//        googleAccessToken.put("gat_exp", gat.getExpires_in());
+//        googleAccessToken.put("gat", gat.getAccess_token());
+//
+//        // [Google Refresh Token] 명세서
+//        Claims googleRefreshToken = Jwts.claims();
+//        googleRefreshToken.put("grt_iss",grt.getRefresh_token_issued_at());
+//        googleRefreshToken.put("grt_exp",grt.getRefresh_token_expires_in());
+//        googleRefreshToken.put("grt", grt.getRefresh_token());
+//        googleRefreshToken.put("grt_cnt", grt.getRefresh_count());
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(member.getEmail())  // 이메일로 token의 주인을 찾고 정보 얻어올 것이다.
                         .setIssuedAt(new Date(now.getTime()))
                         .setExpiration(new Date(now.getTime() + TOKEN_TIME))
-                        .claim("gat_iss", gat.getIssued_at())
-                        .claim("gat_exp",gat.getExpires_in())
-                        .claim("gat",gat.getAccess_token())
-                        .claim("grt_iss",grt.getRefresh_token_issued_at())
-                        .claim("grt_exp",grt.getRefresh_token_expires_in())
-                        .claim("grt", grt.getRefresh_token())
-                        .claim("grt_cnt", grt.getRefresh_count())
                         .signWith(key, signatureAlgorithm)  // 전자 서명
                         .compact();
     }
