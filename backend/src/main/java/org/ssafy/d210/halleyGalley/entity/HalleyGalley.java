@@ -67,4 +67,16 @@ public class HalleyGalley extends OnlyCreatedTime {
     public void updateIsAccepted(Boolean isAccepted){
         this.isAccepted = isAccepted;
     }
+
+    public void updateMissionId(Mission missionId){
+        this.missionId = missionId;
+    }
+
+    public void updateReward(Integer reward){
+        this.reward = reward;
+    }
+
+    public void updateDayoff(Integer dayoff){
+        this.dayoff = dayoff;
+    }
 }
