@@ -80,6 +80,8 @@ public class MemberOauth2Controller {
         log.info("들어온 인가코드는 다음과 같습니다.={}",code);
         GoogleOauthTokenInfo gti = memberService.getAccessToken(code, redirectUri);
 
+        log.info("Google에서 준 토큰 내용은 다음과 같습니다={}", gti);
+
         GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getIssued_at(), gti.getAccess_token(), gti.getExpires_in());
         GoogleRefreshTokenInfo grt = new GoogleRefreshTokenInfo(gti.getRefresh_token(), gti.getRefresh_token_issued_at(), gti.getRefresh_token_expires_in(), gti.getRefresh_count());
 

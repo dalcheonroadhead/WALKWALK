@@ -37,8 +37,8 @@ import java.util.List;
 public class MemberService {
 
     private final MembersRepository membersRepository;
+    private final RefreshTokenInRedisRepository refreshTokenInRedisRepository;
     private final JwtUtil jwtUtil;
-    private RefreshTokenInRedisRepository refreshTokenInRedisRepository;
 
     @Value("${google.client-id}")
     String client_id;
@@ -79,6 +79,7 @@ public class MemberService {
         try {
             // B-4) 직렬화된 JSON을 진짜 객체 형태로 역직렬화, 실패시 FAIL_ON_UNKNOWN_PROPERTIES 에러가 나고, 이는 DTO 명세를 맞추지 못한 것이다.
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            log.info("성공적으로 GOOGLE과 통신했습니다={}",responseEntity.getBody());
             return objectMapper.readValue(responseEntity.getBody(), GoogleOauthTokenInfo.class);
         } catch (JsonProcessingException e) {
             // B-5) 에러 내역 참고
