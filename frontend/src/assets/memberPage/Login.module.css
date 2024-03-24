@@ -7,13 +7,12 @@
 }
 
 .login_app_name {
-  font-family: "bc_b";
   font-size: 4.5rem;
 }
 
-.login_img {
+/* .login_img {
   width: 80dvw;
-}
+} */
 
 .google_login_btn {
   width: 75%;
@@ -43,60 +42,48 @@
 }
 
 /* SignUp.css */
-.signup_container {
+.signup_form {
+  display: flex;
+  flex-direction: column;
+  width: 100dvw;
+  /* height: 100dvh; */
+  /* justify-content: space-between; */
+  transition: all 0.5s ease;
+  font-size: 1rem;
+}
+
+.signup_title {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 100dvw;
-  height: 100dvh;
+  margin: 1rem;
+  font-size: 1.2rem;
 }
 
-/* .container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: all 1s ease;  부드러운 전환 효과 적용 
-  overflow: hidden; 컨테이너의 크기 변화에 따라 내용이 잘리지 않도록 
-} */
-
-/* input[type="text"],
-select,
-input[type="radio"] + label {
+.signup_input {
   display: block;
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  width: 80dvw;
+  padding: 1rem;
+  margin: 1rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 0.8rem;
 }
 
-input[type="radio"] {
-  margin-right: 5px;
+.signup_input::placeholder {
+  font-size: 1rem;
 }
 
-button {
-  padding: 10px 20px;
+.signup_btn {
+  background-color: #FFCB23;
+  width: 80dvw;
+  padding: 0.7rem 1rem;
   border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: black;
+  border-radius: 2rem;
   cursor: pointer;
-  margin-top: 10px;
+  margin: 1rem auto;
 }
 
-button:disabled {
+.signup_btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
-
-.label-inline {
-  display: flex;
-  align-items: center;
-  margin-left: 5px;
-}
-
-.hidden {
-  display: none;
-} */
-

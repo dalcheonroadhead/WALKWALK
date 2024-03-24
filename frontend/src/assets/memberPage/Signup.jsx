@@ -2,26 +2,75 @@ import { useState } from 'react';
 import styles from "./Login.module.css";
 
 const Signup = function () {
-  const [page, setPage] = useState(1);
+  const [step, setStep] = useState(0);
   const [userInfo, setUserInfo] = useState({
     nickname: '',
-    birthYear: '',
     gender: '',
-    height: '',
-    weight: '',
+    height: 0,
+    weight: 0,
     location: '',
-    longitude: '',
-    latitude: '',
+    longitude: 0,
+    latitude: 0,
+    birthYear: 0,
+    comment: '',
     eoa: '',
+    phoneNumber: '',
     publicKey: '',
   });
+  
+  // 지역정보 입력 여부 변수
+  const [isLocationVisible, setisLocationVisible] = useState(false);
+
+  // 현재 연도를 기준으로 상태 설정
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
+  // 연도 목록 생성: 현재 연도부터 100년 전까지
+  const years = Array.from(new Array(101), (val, index) => currentYear - index);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
     setUserInfo((prevInfo) => ({
       ...prevInfo,
-      [name]: value,
+      [e.target.name]: e.target.value,
     }));
+  };
+
+  // Button 클릭 이벤트 핸들러
+  const handleClick = () => {
+    switch (step) {
+      case 0:
+        // 닉네임 중복 검사 등의 로직...
+        setStep(step + 1);
+        break;
+      case 1:
+        // 출생연도 선택 후 처리 로직...
+        setStep(step + 1);
+        break;
+      case 2:
+        // 성별 선택 후 처리 로직...
+        setStep(step + 1);
+        break;
+      // 추가적인 단계별 처리 로직...
+      default:
+        console.log("회원가입 완료 또는 마지막 단계 이후의 처리");
+        // 회원가입완료 API 호출 등의 로직...
+        break;
+    }
+  };
+
+  // Button 텍스트 결정
+  const buttonText = () => {
+    switch (step) {
+      case 0:
+        return "닉네임 중복 체크";
+      case 1:
+        return "출생연도 확인";
+      case 2:
+        return "성별 확인";
+      // 추가적인 단계별 버튼 텍스트...
+      default:
+        return "회원가입 완료";
+    }
   };
 
   // 닉네임중복검사 API
@@ -31,254 +80,52 @@ const Signup = function () {
   // 회원가입완료 API
 
   return(
-    <div className={styles.signup_container}>
-      { page === 1 && (
+    <div>
+      {isLocationVisible === true && (
         <div>
-          <h2>닉네임을 만들어볼까요?</h2>
-          <input type="text" name="nickname_input" 
-            value={userInfo.nickname} onChange={handleInputChange} />
-          <button onClick={() => setPage(2)}>다음</button>
+          지역정보
         </div>
       )}
-      { page === 2 && (
+      {step >= 4 && (
         <div>
-          <h2>인적 사항을 알려주세요</h2>
-          <h3>출생연도</h3>
-          <input type="text" name="birthYear_input" placeholder='YYYY'
-            value={userInfo.birthYear} onChange={handleInputChange} />
-          <h3>성별</h3>
-          <input type="radio" id="male" name="gender_input1"
-            value="male" checked={userInfo.gender === 'male'} onChange={handleInputChange} />
-          <label htmlFor="male">남성</label>
-          <input type="radio" id="female" name="gender_input2"
-            value="female" checked={userInfo.gender === 'female'} onChange={handleInputChange} />
-          <label htmlFor="female">여성</label>
-          <button onClick={() => setPage(3)}>다음</button>
+          전화번호
         </div>
       )}
-      { page === 3 && (
+      {step >= 3 && (
         <div>
-          <h2>신체정보를 알려주세요</h2>
-          <h3>키</h3>
-          <input type="text" name="birthYear_input" placeholder='YYYY'
-            value={userInfo.birthYear} onChange={handleInputChange} />
-          <h3>체중</h3>
-          <input type="radio" id="male" name="gender_input1"
-            value="male" checked={userInfo.gender === 'male'} onChange={handleInputChange} />
-          <button onClick={() => setPage(4)}>다음</button>
+          키 & 몸무게
         </div>
       )}
-      { page === 4 && (
+      {step >= 2 && (
         <div>
-          <h2>지역을 선택해주세요</h2>
-          
-          <button onClick={() => setPage(3)}>다음</button>
+          성별
         </div>
       )}
+      {step >= 1 && (
+        <div className={styles.signup_form}>
+          <div>
+            <div className={styles.signup_title}>출생연도</div>
+            <select className={styles.signup_input} value={selectedYear} onChange={handleInputChange}>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
+      {step >= 0 && (
+        <div className={styles.signup_form}>
+          <div>
+            <div className={styles.signup_title}>닉네임</div>
+            <input className={styles.signup_input} type="text" placeholder='닉네임을 입력해주세요'  onChange={handleInputChange}/>
+          </div>
+        </div>
+      )}
+      <button className={styles.signup_btn} onClick={handleClick}>{buttonText()}</button>
     </div>
   )
 }
-
-// const Signup = function () {
-//   const [page, setPage] = useState(1);
-//   const [userInfo, setUserInfo] = useState({
-//     nickname: '',
-//     birthYear: '',
-//     gender: '',
-//     height: '',
-//     weight: '',
-//     address: '',
-//   });
-//   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setUserInfo((prevInfo) => ({
-//       ...prevInfo,
-//       [name]: value,
-//     }));
-//   };
-
-//   const checkNicknameAvailability = () => {
-//     // API 호출을 통한 닉네임 중복 검사 후 결과에 따라 setIsNicknameChecked 업데이트
-//     setIsNicknameChecked(true);
-//   };
-
-//   const years = Array.from(new Array(100), (val, index) => new Date().getFullYear() - index);
-
-//   const canProceed = userInfo.nickname && isNicknameChecked && userInfo.birthYear && userInfo.gender && userInfo.height && userInfo.weight;
-
-//   return (
-//     <div className={styles.container}>
-//       {page === 1 && (
-//         <div>
-//           <h1>회원 정보 입력</h1>
-//           <input
-//             type="text"
-//             name="nickname"
-//             placeholder="닉네임"
-//             value={userInfo.nickname}
-//             onChange={handleInputChange}
-//           />
-//           <button onClick={checkNicknameAvailability}>닉네임 중복 체크</button>
-//           {isNicknameChecked && (
-//             <>
-//               <select name="birthYear" value={userInfo.birthYear} onChange={handleInputChange}>
-//                 <option value="">출생연도</option>
-//                 {years.map((year, index) => (
-//                   <option key={index} value={year}>
-//                     {year}
-//                   </option>
-//                 ))}
-//               </select>
-//               {userInfo.birthYear && (
-//                 <>
-//                   <div>
-//                     <input
-//                       type="radio"
-//                       id="male"
-//                       name="gender"
-//                       value="male"
-//                       checked={userInfo.gender === 'male'}
-//                       onChange={handleInputChange}
-//                     />
-//                     <label htmlFor="male">남성</label>
-//                     <input
-//                       type="radio"
-//                       id="female"
-//                       name="gender"
-//                       value="female"
-//                       checked={userInfo.gender === 'female'}
-//                       onChange={handleInputChange}
-//                     />
-//                     <label htmlFor="female">여성</label>
-//                   </div>
-//                   {userInfo.gender && (
-//                     <>
-//                       <input
-//                         type="text"
-//                         name="height"
-//                         placeholder="키 (cm)"
-//                         value={userInfo.height}
-//                         onChange={handleInputChange}
-//                       />
-//                       <input
-//                         type="text"
-//                         name="weight"
-//                         placeholder="몸무게 (kg)"
-//                         value={userInfo.weight}
-//                         onChange={handleInputChange}
-//                       />
-//                     </>
-//                   )}
-//                 </>
-//               )}
-//             </>
-//           )}
-//           <button disabled={!canProceed} onClick={() => setPage(2)}>다음 페이지</button>
-//         </div>
-//       )}
-//       {page === 2 && (
-//         <div>
-//           <h1>지역 정보 입력</h1>
-//           <input
-//             type="text"
-//             name="address"
-//             placeholder="주소"
-//             value={userInfo.address}
-//             onChange={handleInputChange}
-//           />
-//           {/* 여기에서 지역 정보 API 연동 및 저장 로직을 추가 */}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// const Signup = function () {
-//   const [userInfo, setUserInfo] = useState({
-//     nickname: '',
-//     birthYear: '',
-//     gender: '',
-//     height: '',
-//     weight: '',
-//     address: '',
-//   });
-//   const [step, setStep] = useState(1);
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setUserInfo(prev => ({ ...prev, [name]: value }));
-//   };
-
-//   const goToNextStep = () => setStep(prevStep => prevStep + 1);
-
-//   return (
-//     <div className={styles.container}>
-//       <div className={`input-field ${step >= 4 ? "visible" : ""}`}>
-//         {step >= 4 && (
-//           <>
-//             <input
-//               type="text"
-//               name="height"
-//               placeholder="키 (cm)"
-//               value={userInfo.height}
-//               onChange={handleInputChange}
-//             />
-//             <input
-//               type="text"
-//               name="weight"
-//               placeholder="몸무게 (kg)"
-//               value={userInfo.weight}
-//               onChange={handleInputChange}
-//             />
-//           </>
-//         )}
-//         </div>
-//         <div className={`input-field ${step >= 3 ? "visible" : ""}`}>
-//         {step >= 3 && (
-//           <div>
-//             <input
-//               type="radio"
-//               id="male"
-//               name="gender"
-//               value="male"
-//               checked={userInfo.gender === 'male'}
-//               onChange={handleInputChange}
-//             />
-//             <label htmlFor="male">남성</label>
-//             <input
-//               type="radio"
-//               id="female"
-//               name="gender"
-//               value="female"
-//               checked={userInfo.gender === 'female'}
-//               onChange={handleInputChange}
-//             />
-//             <label htmlFor="female">여성</label>
-//           </div>
-//         )}
-//         </div>
-//         <div className={`input-field ${step >= 2 ? "visible" : ""}`}>
-//         {step >= 2 && (
-//           <select name="birthYear" value={userInfo.birthYear} onChange={handleInputChange}>
-//             <option value="">출생연도</option>
-//             {/* 연도 옵션 생성 로직 */}
-//           </select>
-//         )}
-//         </div>
-//         <div className={`input-field ${step >= 1 ? "visible" : ""}`}>
-//         <input
-//           type="text"
-//           name="nickname"
-//           placeholder="닉네임"
-//           value={userInfo.nickname}
-//           onChange={handleInputChange}
-//         />
-//         </div>
-//       {step < 4 && <button onClick={goToNextStep}>다음</button>}
-//     </div>
-//   );
-// }
 
 export default Signup;
