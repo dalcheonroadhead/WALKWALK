@@ -10,8 +10,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
-import org.ssafy.d210.wallets._payment.dto.response.PaymentApprove;
-import org.ssafy.d210.wallets._payment.dto.response.PaymentReady;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
 import org.ssafy.d210.wallets._payment.service.PaymentService;
 
 import java.net.URI;
@@ -26,21 +26,21 @@ public class PaymentController {
 
 
     @PostMapping("/kakaoPayReady")
-    public ResponseEntity<PaymentReady> kakaoPayReady(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PaymentReadyRequest paymentReadyRequest) {
-        PaymentReady paymentReady = paymentService.preparePayment(userDetails, paymentReadyRequest);
+    public ResponseEntity<PaymentReadyResponse> kakaoPayReady(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PaymentReadyRequest paymentReadyRequest) {
+        PaymentReadyResponse paymentReadyResponse = paymentService.preparePayment(userDetails, paymentReadyRequest);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(paymentReady.getTid())
+                .buildAndExpand(paymentReadyResponse.getTid())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(paymentReady);
+        return ResponseEntity.created(uri).body(paymentReadyResponse);
     }
 
     @PostMapping("/kakaoPayApprove")
-    public ResponseEntity<PaymentApprove> kakaoPayApprove(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PaymentApproveRequest paymentApproveRequest) {
-        PaymentApprove paymentApproveResponseDto = paymentService.approvePayment(userDetails, paymentApproveRequest);
-        return ResponseEntity.ok(paymentApproveResponseDto);
+    public ResponseEntity<PaymentApproveResponse> kakaoPayApprove(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PaymentApproveRequest paymentApproveRequest) {
+        PaymentApproveResponse paymentApproveResponse = paymentService.approvePayment(userDetails, paymentApproveRequest);
+        return ResponseEntity.ok(paymentApproveResponse);
     }
 
     @GetMapping("/approval")

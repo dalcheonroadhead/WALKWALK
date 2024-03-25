@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentApprove {
+public class PaymentApproveResponse {
     private String aid;
     private String tid;
     private String cid;

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentReady {
+public class PaymentReadyResponse {
     private String tid;                     // 결제 고유 번호
     private String next_redirect_mobile_url;
     private String next_redirect_pc_url;    // 요청한 클라이언트가 PC 웹일 경우

@@ -19,8 +19,8 @@ import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
 import org.ssafy.d210.wallets._payment.dto.Payment;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
-import org.ssafy.d210.wallets._payment.dto.response.PaymentApprove;
-import org.ssafy.d210.wallets._payment.dto.response.PaymentReady;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class PaymentService {
 
     // 결제 준비
     // 모바일 혹은 pc로 카톡 결제 후 DB에 결제 내역 저장
-    public PaymentReady preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequest paymentReadyRequest) {
+    public PaymentReadyResponse preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequest paymentReadyRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
@@ -77,7 +77,7 @@ public class PaymentService {
         headers.set("Authorization", "SECRET_KEY " + secretKey);
 
         HttpEntity<PaymentReadyRequest> request = new HttpEntity<>(paymentReadyRequest, headers);
-        ResponseEntity<PaymentReady> response = restTemplate.postForEntity(kakaoPayReadyUrl, request, PaymentReady.class);
+        ResponseEntity<PaymentReadyResponse> response = restTemplate.postForEntity(kakaoPayReadyUrl, request, PaymentReadyResponse.class);
 
         log.info("======================KakaoPay Payment Response: Status Code = {}, Body = {}", response.getStatusCode(), response.getBody());
 
@@ -86,7 +86,7 @@ public class PaymentService {
 
     // 결제 승인
     // member의 카카오톡으로 결제 완료 카톡 보내기
-    public PaymentApprove approvePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentApproveRequest paymentApproveRequest) {
+    public PaymentApproveResponse approvePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentApproveRequest paymentApproveRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
@@ -107,7 +107,7 @@ public class PaymentService {
         // 인증완료시, 응답받은 pg_token과 tid로 최종 승인요청
         // 결제 승인 API를 호출하면, 결제 준비 단계에서 시작된 결제건이 승인으로 완료 처리
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestMap, headers);
-        ResponseEntity<PaymentApprove> response = restTemplate.postForEntity(kakaoPayApproveUrl, request, PaymentApprove.class);
+        ResponseEntity<PaymentApproveResponse> response = restTemplate.postForEntity(kakaoPayApproveUrl, request, PaymentApproveResponse.class);
         System.out.println(response);
         return response.getBody();
 
