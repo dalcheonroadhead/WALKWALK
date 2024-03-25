@@ -18,11 +18,12 @@ import org.ssafy.d210.walk.service.ExerciseCriteriaService;
 @Slf4j
 public class ExerciseCriteriaController {
 
-    private ExerciseCriteriaService exerciseCriteriaService;
+    private final ExerciseCriteriaService exerciseCriteriaService;
 
     @Operation(summary = "연령대별 디폴트 운동 기준 세팅")
     @GetMapping("/default")
     public ApiResponseDto<?> setDefaultCriteria(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("야!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println(userDetails.getMember().getId());
         return ResponseUtils.ok(exerciseCriteriaService.setDefaultExerciseCriteria(userDetails.getMember()), MsgType.SET_DEFAULT_CRITERIA);
     }

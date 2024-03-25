@@ -77,7 +77,7 @@ public class ExerciseService {
     public SliceResponseDto getRankingWithFriends(Members member, Pageable pageable) {
 //        Members member = membersRepository.findById(memberId).orElseThrow();
         Long myId = member.getId();
-        Slice<StreakRankingResopnseDto> exercises = exerciseRepository.findRankingByPage(myId, pageable);
+        Slice<StreakRankingResopnseDto> exercises = exerciseRepository.findRankingByPage(myId, pageable, LocalDate.now().minusDays(1));
 
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;

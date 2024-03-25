@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface ExerciseCriteriaRepository extends JpaRepository<ExerciseCriteria, Long> {
 
-    ExerciseCriteria findExerciseCriteriaByMemberAndIsCustomIsFalse(Members member);
+    Optional<ExerciseCriteria> findExerciseCriteriaByMemberAndIsCustomIsFalse(Members member);
     Optional<ExerciseCriteria> findExerciseCriteriaByMemberAndIsCustomIsTrue(Members member);
 }

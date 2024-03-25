@@ -24,10 +24,11 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     List<Exercise> findExercisesFromStartOfWeekToYesterday(LocalDate startOfWeek, LocalDate today, Long myId);
 
     // 스트릭 랭킹 조회 기능 중 1. 페이지네이션
-    @Query("select new org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto(m.id, m.nickname, m.profileUrl, e.streak)" +
+    @Query("select distinct new org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto(m.id, m.nickname, m.profileUrl, e.streak)" +
             " from Exercise e join Members m on e.member.id = m.id" +
-            " where m.id = :myId or m.id in (select f.receiverId.id from FriendList f where f.senderId.id = :myId)" +
+            " where (m.id = :myId or m.id in (select f.receiverId.id from FriendList f where f.senderId.id = :myId))" +
+            " and e.exerciseDay = :yesterday" +
             " order by e.streak desc")
-    Slice<StreakRankingResopnseDto> findRankingByPage(Long myId, Pageable pageable);
+    Slice<StreakRankingResopnseDto> findRankingByPage(Long myId, Pageable pageable, LocalDate yesterday);
 
 }

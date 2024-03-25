@@ -19,10 +19,20 @@ import java.util.Optional;
 @Slf4j
 public class ExerciseCriteriaService {
 
-    private ExerciseCriteriaRepository exerciseCriteriaRepository;
+    private final ExerciseCriteriaRepository exerciseCriteriaRepository;
 
     public ExerciseCriteria setDefaultExerciseCriteria(Members member) {
-        ExerciseCriteria criteria = ExerciseCriteria.createDefaultCriteria(member);
+        Optional<ExerciseCriteria> exerciseCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
+
+        ExerciseCriteria criteria;
+
+        if (exerciseCriteria.isPresent()) {
+            criteria = exerciseCriteria.get();
+            criteria.updateDefaultCriteria(member);
+        } else {
+            criteria = ExerciseCriteria.createDefaultCriteria(member);
+        }
+
         return exerciseCriteriaRepository.save(criteria);
     }
 
@@ -60,10 +70,10 @@ public class ExerciseCriteriaService {
                     .exerciseMinute(existingCriteria.get().getExerciseMinute())
                     .build();
         } else {
-            ExerciseCriteria defaultCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
+            Optional<ExerciseCriteria> defaultCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
             responseDto = MainCriteriaResponseDto.builder()
-                    .steps(defaultCriteria.getSteps())
-                    .exerciseMinute(defaultCriteria.getExerciseMinute())
+                    .steps(defaultCriteria.get().getSteps())
+                    .exerciseMinute(defaultCriteria.get().getExerciseMinute())
                     .build();
         }
         return responseDto;

@@ -1,5 +1,6 @@
 package org.ssafy.d210.walk.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +20,10 @@ public class ExerciseCriteria { // 운동 기준
     @Column(name = "criteria_id")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Members member;
-
-    @Column(name = "age_group")
-    private Integer ageGroup;
 
     @Column(name = "is_custom")
     @ColumnDefault("false")
@@ -44,13 +43,6 @@ public class ExerciseCriteria { // 운동 기준
     @ColumnDefault("0")
     private Long heartRate;
 
-    @Column(name = "exercise_distance")
-    @ColumnDefault("0")
-    private Long exerciseDistance;
-
-    @ColumnDefault("0")
-    private Long calorie;
-
     @Builder
     public ExerciseCriteria(Members member, Boolean isCustom, Long steps, Long exerciseMinute, Long heartRate) {
         this.member = member;
@@ -64,6 +56,17 @@ public class ExerciseCriteria { // 운동 기준
         int age = (int) (LocalDate.now().getYear() - member.getBirthYear());
         ExerciseCriteriaBuilder builder = determineDefaultCriteriaByAge(age).member(member);
         return builder.build();
+    }
+
+    public ExerciseCriteria updateDefaultCriteria(Members member) {
+        int age = (int) (LocalDate.now().getYear() - member.getBirthYear());
+        ExerciseCriteriaBuilder builder = determineDefaultCriteriaByAge(age);
+        this.isCustom = false;
+        this.steps = builder.steps;
+        this.exerciseMinute = builder.exerciseMinute;
+        this.heartRate = builder.heartRate;
+
+        return this;
     }
 
     private static ExerciseCriteriaBuilder determineDefaultCriteriaByAge(int age) {
@@ -87,14 +90,4 @@ public class ExerciseCriteria { // 운동 기준
                     .heartRate(90L);
         }
     }
-
-    //    @Builder
-//    public ExerciseCriteria(Boolean isCustom, Long steps, Long exerciseMinute, Long heartRate, Long exerciseDistance, Long calorie) {
-//        this.isCustom = isCustom;
-//        this.steps = steps;
-//        this.exerciseMinute = exerciseMinute;
-//        this.heartRate = heartRate;
-//        this.exerciseDistance = exerciseDistance;
-//        this.calorie = calorie;
-//    }
 }
