@@ -4,6 +4,7 @@ import Main from "./assets/mainPage/Main";
 import Login from "./assets/memberPage/Login";
 import LoginRedirect from "./assets/memberPage/LoginRedirect";
 import Signup from "./assets/memberPage/Signup";
+import HalliGalli from "./assets/halligalliPage/HalliGalli";
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Login />}></Route>
         <Route path="/oauth/callback/google/token" element={<LoginRedirect />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/halligalli" element={<HalliGalli />}></Route>
       </Routes>
     </BrowserRouter>
   )

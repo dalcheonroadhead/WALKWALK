@@ -1,31 +1,14 @@
 import axios from "axios";
 
-// Axios 인스턴스 생성
-// const createAxiosInstance = function () {
-//   // const token = localStorage.getItem('token');
-//   const axiosInstance = axios.create({
-//     baseURL: 'https://j10d210.p.ssafy.io/api',
-//     // headers: {
-//     //   'Authorization': token
-//     // },
-//   });
-
-//   return axiosInstance
-// }
-
 const instance = axios.create({
-  // baseURL: 'http://localhost:8081/api',
   baseURL: 'https://j10d210.p.ssafy.io/api',
-  // headers: {
-  //   'Authorization': token
-  // },
+  // baseURL: 'http://localhost:8081/api',
 });
 
 // 요청 인터셉터: 요청을 보내기 전에 실행됩니다.
 instance.interceptors.request.use(
   (config) => {
     // 요청을 보내기 전에 실행할 코드를 여기에 작성하세요.
-    // 예: 토큰을 헤더에 추가.
     const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;

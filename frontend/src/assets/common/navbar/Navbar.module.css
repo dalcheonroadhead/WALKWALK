@@ -1,7 +1,7 @@
 .nav_container{
     position: fixed;
     display: flex;
-    top: 96%;
+    top: 96.5%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 4;
