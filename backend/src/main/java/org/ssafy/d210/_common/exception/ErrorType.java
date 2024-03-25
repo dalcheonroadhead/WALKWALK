@@ -30,6 +30,9 @@ public enum ErrorType {
     //----------------------------MISSION-----------------------------
     CANT_ADD_MISSION(401, "미션을 등록할 수 없습니다."),
     NOT_ENOUGH_MONEY(401, "머니가 부족합니다."),
+
+    //----------------------------FRIENDS-----------------------------
+    ALREADY_SEND_FRIEND_REQUEST(401, "이미 요청을 보냈습니다."),
     ;
 
     private int code;
