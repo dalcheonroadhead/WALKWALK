@@ -9,8 +9,10 @@ import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
+import org.ssafy.d210.wallets.dto.request.PutEggMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
 import org.ssafy.d210.wallets.dto.response.GetEggMoneyResponse;
+import org.ssafy.d210.wallets.dto.response.PutEggMoneyResponse;
 import org.ssafy.d210.wallets.dto.response.PutEggResponse;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
@@ -46,6 +48,13 @@ public class WalletsService {
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest, false));
+    }
+
+    public PutEggMoneyResponse putEggMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, PutEggMoneyRequest putEggMoneyRequest) {
+        Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
+        MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
+
+        return memberAccount.putEggMoney(putEggMoneyRequest, true);
     }
 
     public Members findByEmailAndDeletedAtIsNull(String email) {

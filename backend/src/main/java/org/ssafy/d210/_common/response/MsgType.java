@@ -20,6 +20,7 @@ public enum MsgType {
     GET_EGG_MONEY_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
     PUT_EGG_ADD_SUCCESS("에그 획득에 성공하였습니다."),
     PUT_EGG_SUB_SUCCESS("에그 차감에 성공하였습니다."),
+    PUT_EGG_MONEY_ADD_SUCCESS("에그, 머니 획득에 성공하였습니다."),
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),

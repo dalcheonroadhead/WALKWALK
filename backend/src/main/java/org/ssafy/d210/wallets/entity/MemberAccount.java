@@ -1,4 +1,5 @@
 package org.ssafy.d210.wallets.entity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,7 +7,9 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.BaseTime;
 import org.ssafy.d210._common.exception.CustomException;
+import org.ssafy.d210.wallets.dto.request.PutEggMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
+import org.ssafy.d210.wallets.dto.response.PutEggMoneyResponse;
 
 import static org.ssafy.d210._common.exception.ErrorType.NOT_ENOUGH_EGG;
 
@@ -38,9 +41,8 @@ public class MemberAccount extends BaseTime {
         // operation true(1): 획득, operation false(0): 차감
         if (operation) {
             this.egg += putEggRequest.getPutEggValue();
-        }
-        else {
-            if(this.egg < putEggRequest.getPutEggValue()) {
+        } else {
+            if (this.egg < putEggRequest.getPutEggValue()) {
                 throw new CustomException(NOT_ENOUGH_EGG);
             }
 
@@ -48,5 +50,15 @@ public class MemberAccount extends BaseTime {
         }
 
         return egg;
+    }
+
+    public PutEggMoneyResponse putEggMoney(PutEggMoneyRequest putEggMoneyRequest, boolean operation) {
+        // operation true(1): 획득
+        if (operation) {
+            this.egg += putEggMoneyRequest.getPutEggValue();
+            this.money += putEggMoneyRequest.getPutMoneyValue();
+        }
+
+        return PutEggMoneyResponse.of(egg, money);
     }
 }
