@@ -15,10 +15,8 @@ import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
-import org.ssafy.d210.wallets.service.WalletsService;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @Service
@@ -35,15 +33,23 @@ public class MissionService {
         Long exerciseMinute = postMissionRequest.getExerciseMinute();
         Integer period = postMissionRequest.getPeriod();
 
-        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId()).orElse(null);
-        if(memberAccount == null || memberAccount.getMoney() < reward){
+        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER_ACCOUNT));
+
+        if(memberAccount.getMoney() < reward){
             throw new CustomException(ErrorType.NOT_ENOUGH_MONEY);
         }
 
-        HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, membersRepository.findById(memberId).orElse(null));
-        Mission mission = missionRepository.findById(halleyGalley.getMissionId().getId()).orElse(null);
+        Members halley = membersRepository.findById(memberId)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
 
-        if(mission == null || mission.getCreatedAt().getMonthValue()+1 < LocalDate.now().getMonthValue()){
+        HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, halley)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY_GALLEY));
+
+        Mission mission = missionRepository.findById(halleyGalley.getMissionId().getId())
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MISSION));
+
+        if(mission.getCreatedAt().getMonthValue()+1 < LocalDate.now().getMonthValue()){
             Mission newMission = Mission
                     .builder()
                     .exerciseMinute(exerciseMinute)
@@ -53,7 +59,9 @@ public class MissionService {
             // 미션 저장
             missionRepository.save(newMission);
             // 할리갈리 보상 세팅
-            HalleyGalley halleyGalley1 = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, membersRepository.findById(memberId).orElse(null));
+            HalleyGalley halleyGalley1 = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, halley)
+                    .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY_GALLEY));
+
             halleyGalley1.updateReward(reward);
             halleyGalley1.updateMissionId(mission);
             halleyGalleyRepository.save(halleyGalley1);
