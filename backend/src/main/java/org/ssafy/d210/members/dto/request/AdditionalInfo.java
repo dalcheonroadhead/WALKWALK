@@ -17,7 +17,7 @@ import org.ssafy.d210.wallets.entity.MemberAccount;
 public class AdditionalInfo {
 
     @NotNull
-    @Size(min = 1, max = 12)
+    @Size(min = 1, max = 35)
     String nickname;
 
     @NotNull

@@ -5,10 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Struct;
 import org.ssafy.d210._common.entity.BaseTime;
+import org.ssafy.d210.walk.entity.Exercise;
+import org.ssafy.d210.walk.entity.ExerciseAcc;
 import org.ssafy.d210.wallets._payment.dto.Payment;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
@@ -41,7 +41,7 @@ public class Members extends BaseTime {
     @JoinColumn(name = "member_account_id")
     private MemberAccount memberAccountId;
 
-    @Column(name = "nickname", nullable = false, length = 15)
+    @Column(name = "nickname", nullable = false, length = 100)
     private String nickname;
 
     @Column(name = "profile_url", nullable = false, length = 500)
@@ -96,6 +96,15 @@ public class Members extends BaseTime {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Exercise> exercises = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private ExerciseAcc exerciseAcc;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberBadge> memberBadges = new ArrayList<>();
+
     @Builder
     public Members(
             String email, String nickname, String profileUrl, Role role,
@@ -103,7 +112,7 @@ public class Members extends BaseTime {
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
 
-    ){
+    ) {
         this.email = email;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
@@ -123,7 +132,7 @@ public class Members extends BaseTime {
         this.memberAccountId = memberAccountId;
     }
 
-    public static Members of(String email, String nickname, String profileUrl, Role role){
+    public static Members of(String email, String nickname, String profileUrl, Role role) {
         return builder()
                 .email(email)
                 .nickname(nickname)
@@ -131,8 +140,6 @@ public class Members extends BaseTime {
                 .role(role)
                 .build();
     }
-
-
 
 
     public static Members of(
@@ -164,7 +171,7 @@ public class Members extends BaseTime {
 
     }
 
-    public Members update (String nickname, String profileUrl) {
+    public Members update(String nickname, String profileUrl) {
         this.nickname = nickname;
         this.profileUrl = profileUrl;
 
