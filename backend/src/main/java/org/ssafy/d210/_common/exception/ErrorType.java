@@ -33,6 +33,7 @@ public enum ErrorType {
 
     //----------------------------FRIENDS-----------------------------
     ALREADY_SEND_FRIEND_REQUEST(401, "이미 요청을 보냈습니다."),
+    NOT_FOUND_FRIEND(401, "친구가 존재하지 않습니다."),
     ;
 
     private int code;
