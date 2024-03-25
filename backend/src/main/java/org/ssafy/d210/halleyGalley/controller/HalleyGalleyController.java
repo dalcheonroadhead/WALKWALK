@@ -49,4 +49,14 @@ public class HalleyGalleyController {
     public ApiResponseDto<?> postMission(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostMissionRequest request){
         return ApiResponseDto.of(MsgType.POST_MISSION_SUCCESSFULLY, missionService.postMission(userDetails.getMember(), request));
     }
+
+    @GetMapping("/halley")
+    public ApiResponseDto<?> getGalley(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Long memberId){
+        return ApiResponseDto.of(MsgType.GET_GALLEY_SUCCESSFULLY, halleyGalleyService.getHalley(userDetails.getMember(), memberId));
+    }
+
+    @GetMapping("/galley")
+    public ApiResponseDto<?> getHalley(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Long memberId){
+        return ApiResponseDto.of(MsgType.GET_HALLEY_SUCCESSFULLY, halleyGalleyService.getGalley(userDetails.getMember(), memberId));
+    }
 }

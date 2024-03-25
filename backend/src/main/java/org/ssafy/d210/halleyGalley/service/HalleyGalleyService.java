@@ -8,10 +8,7 @@ import org.ssafy.d210._common.exception.ErrorType;
 import org.ssafy.d210.halleyGalley.dto.HalleyDto;
 import org.ssafy.d210.halleyGalley.dto.request.PostGalleyRequest;
 import org.ssafy.d210.halleyGalley.dto.request.PutGalleyResponseRequest;
-import org.ssafy.d210.halleyGalley.dto.response.GetGalleyListResponse;
-import org.ssafy.d210.halleyGalley.dto.response.GetHalleyListResponse;
-import org.ssafy.d210.halleyGalley.dto.response.GetHalleyRequestListResponse;
-import org.ssafy.d210.halleyGalley.dto.response.PutGalleyResponseResponse;
+import org.ssafy.d210.halleyGalley.dto.response.*;
 import org.ssafy.d210.halleyGalley.entity.HalleyGalley;
 import org.ssafy.d210.halleyGalley.repository.HalleyGalleyRepository;
 import org.ssafy.d210.halleyGalley.repository.MissionRepository;
@@ -89,4 +86,17 @@ public class HalleyGalleyService {
         return GetHalleyRequestListResponse.of(halleyInfoList);
     }
 
+    public GetHalleyResponse getHalley(Members member, Long halleyId){
+        Members members = membersRepository.findById(halleyId).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
+        HalleyGalley halley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(members, member).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY));
+
+        return GetHalleyResponse.from(halley, halley.getMissionId());
+    }
+
+    public GetGalleyResponse getGalley(Members member, Long galleyId){
+        Members members = membersRepository.findById(galleyId).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
+        HalleyGalley galley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, members).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_GALLEY));
+
+        return GetGalleyResponse.from(galley, galley.getMissionId());
+    }
 }
