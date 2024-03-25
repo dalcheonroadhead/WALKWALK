@@ -1,0 +1,162 @@
+@font-face {
+    font-family: "bc_b";
+    src: url(/public/fonts/BCcardB.ttf);
+}
+
+@font-face {
+    font-family: "bc_l";
+    src: url(/public/fonts/BCcardL.ttf);
+}
+
+.main_container {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.find_friend_btn_container{
+    width: 22.5rem;
+    height: 8rem;
+}
+
+.find_friend_btn{
+    margin-top: 5%;
+    width: 22.5rem;
+    height: 7rem;
+    border-radius: 1.5rem;
+    background: #FFCB23;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
+}
+
+.btn_txt{
+    font-family: "bc_b";
+    font-size: 2rem;
+}
+
+.mode_choose{
+    width: 7.5rem;
+    height: 3.125rem;
+    background: #FFFEFC;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+.tab_container{
+    width: fit-content;
+    height: fit-content;
+    margin-top: 6%;
+}
+
+.mode_tabs{
+    display: flex;
+    width: 22.5rem;
+    height: 3.125rem;
+}
+
+.mode_friend_list{
+    width: 7.5rem;
+    height: 3.125rem;
+    background: #E4DDC6;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+.mode_friend_list_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.friend_list_content{
+    width: 22.5rem;
+    height: 35rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+}
+
+
+.mode_send_list{
+    width: 7.5rem;
+    height: 3.125rem;
+    background: #E4DDC6;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+.mode_send_list_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.send_list_content{
+    width: 22.5rem;
+    height: 35rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+}
+
+
+.mode_receive_list{
+    width: 7.5rem;
+    height: 3.125rem;
+    background: #E4DDC6;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: -0.113rem -0.225rem 0.2rem rgba(0, 0, 0, 0.1);
+}
+
+.mode_receive_list_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.receive_list_content{
+    width: 22.5rem;
+    height: 35rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+}
