@@ -1,11 +1,35 @@
 import styles from "./Navbar.module.css";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useStore } from "../../../stores/nav";
 
 const Navbar = function(){
-    const [activeIcon, setActiveIcon] = useState("home"); 
+    const {activeIcon, setActiveIcon} = useStore(); 
+
+    const navigate = useNavigate();
 
     const handleClick = (icon) => {
         setActiveIcon(icon); // 클릭된 아이콘으로 상태를 업데이트
+
+        switch (icon) {
+            case "rank":
+                navigate("/rank")
+                break;
+            case "run":
+                navigate("/walking")
+                break;
+            case "home":
+                navigate("/main")
+                break;
+            case "friend":
+                navigate("/friend")
+                break;
+            case "my":
+                navigate("/mypage")
+                break;
+            default:
+                break;
+        }
     };
     return(
         <>
