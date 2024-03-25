@@ -1,5 +1,15 @@
+@font-face {
+  font-family: "bc_b";
+  src: url(/fonts/BCcardB.ttf);
+}
+
+@font-face {
+  font-family: "bc_l";
+  src: url(/fonts/BCcardL.ttf);
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "bc_l", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -56,7 +66,7 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #3B3934;
     background-color: #ffffff;
   }
   a:hover {

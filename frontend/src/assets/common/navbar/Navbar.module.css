@@ -1,0 +1,53 @@
+.nav_container{
+    position: fixed;
+    display: flex;
+    top: 96.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    width: 100vw;
+    height: 4rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.rank_item{
+    width: auto;
+    height: 2.3rem;
+    z-index: 5; 
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.run_item{
+    width: auto;
+    height: 2.3rem;
+    z-index: 5; 
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.home_item{
+    width: auto;
+    height: 2.2rem;
+    z-index: 5; 
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.friend_item{
+    width: auto;
+    margin-top: 1%;
+    height: 2.6rem;
+    z-index: 5;
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.my_item{
+    width: auto;
+    height: 2.2rem;
+    z-index: 5; 
+    margin-right: 5%;
+    margin-left: 5%;
+}

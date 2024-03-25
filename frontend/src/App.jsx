@@ -1,34 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./Layout";
+import Main from "./assets/mainPage/Main";
+import Login from "./assets/memberPage/Login";
+import LoginRedirect from "./assets/memberPage/LoginRedirect";
+import Signup from "./assets/memberPage/Signup";
+import HalliGalli from "./assets/halligalliPage/HalliGalli";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <Routes>
+        {/* 상하단바 보이는 페이지 */}
+        <Route element={<Layout />}>
+          <Route path="/main" element={<Main />}></Route>
+        </Route>
+        {/* 상하단바 없는 페이지 */}
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/oauth/callback/google/token" element={<LoginRedirect />}></Route>
+        <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/halligalli" element={<HalliGalli />}></Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
