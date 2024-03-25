@@ -9,6 +9,7 @@ public enum ErrorType {
     //-------------------로그인 & 회원 가입-----------------------------
     TOKEN_DOESNT_EXIST(401, "[HEADER]에 [TOKEN]이 존재하지 않습니다."),
     NOT_VALID_TOKEN(401, "[Token]이 유효하지 않습니다."),
+    EXPIRED_TOKEN(401, "[TOKEN]의 유효기간이 끝났습니다."),
 
     //----------------------------MEMBERS----------------------------
     NOT_FOUND_MEMBER(401, "해당 멤버가 존재하지 않습니다."),

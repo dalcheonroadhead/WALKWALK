@@ -33,11 +33,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // C. 토큰이 유효하지 않으면 다음 필터로 넘어간다
-        if (!jwtUtil.validateToken(token)) {
-            request.setAttribute("exception", ErrorType.NOT_VALID_TOKEN);
-            filterChain.doFilter(request, response);
-            return;
+        // C. 토큰이 유효하지 않으면 Exception 체크하고 다음 필터로 넘어간다
+
+        int validationCheck = jwtUtil.validateToken(token);
+
+        if (validationCheck < 0) {
+            if(validationCheck == -1) {
+                request.setAttribute("exception", ErrorType.NOT_VALID_TOKEN);
+                filterChain.doFilter(request, response);
+                return;
+            }else if (validationCheck == -2){
+                request.setAttribute("exception", ErrorType.EXPIRED_TOKEN);
+            }
         }
 
         // D. 유효한 토큰이라면, 토큰으로부터 사용자 정보를 가져온다.

@@ -33,6 +33,8 @@ public class JwtUtil {
 
     private final UserDetailsServiceImpl userDetailsService;
     public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    public static final String REFRESH_TOKEN = "Refresh_token";
     private static final String BEARER_PREFIX = "Bearer ";
 
     @Value("${jwt.secret}")
@@ -73,18 +75,6 @@ public class JwtUtil {
 
         Date now = new Date();
 
-//        // [Google Access Token] 명세서
-//        Claims googleAccessToken = Jwts.claims();
-//        googleAccessToken.put("gat_iss", gat.getIssued_at());
-//        googleAccessToken.put("gat_exp", gat.getExpires_in());
-//        googleAccessToken.put("gat", gat.getAccess_token());
-//
-//        // [Google Refresh Token] 명세서
-//        Claims googleRefreshToken = Jwts.claims();
-//        googleRefreshToken.put("grt_iss",grt.getRefresh_token_issued_at());
-//        googleRefreshToken.put("grt_exp",grt.getRefresh_token_expires_in());
-//        googleRefreshToken.put("grt", grt.getRefresh_token());
-//        googleRefreshToken.put("grt_cnt", grt.getRefresh_count());
 
         return BEARER_PREFIX +
                 Jwts.builder()
@@ -96,23 +86,23 @@ public class JwtUtil {
     }
 
     // E. 토큰 검증하기
-    public boolean validateToken(String token) {
+    public int validateToken(String token) {
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
+            return 1;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-            return false;
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token, 만료된 JWT token 입니다.");
-            return false;
+            return -1;
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-            return false;
+            return -1;
         } catch (IllegalArgumentException e) {
             log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-            return false;
+            return -1;
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            return -2;
         }
     }
 

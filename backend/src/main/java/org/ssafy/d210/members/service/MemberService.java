@@ -14,9 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.ssafy.d210._common.entity.GatRedis;
+import org.ssafy.d210._common.entity.GrtRedis;
 import org.ssafy.d210._common.entity.RefreshTokenInRedis;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210._common.repository.GatRepository;
+import org.ssafy.d210._common.repository.GrtRepository;
 import org.ssafy.d210._common.repository.RefreshTokenInRedisRepository;
 import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
@@ -38,6 +42,8 @@ public class MemberService {
 
     private final MembersRepository membersRepository;
     private final RefreshTokenInRedisRepository refreshTokenInRedisRepository;
+    private final GrtRepository grtRepository;
+    private final GatRepository gatRepository;
     private final JwtUtil jwtUtil;
 
     @Value("${google.client-id}")
@@ -101,7 +107,7 @@ public class MemberService {
         // C-2) 해당 정보를 가진 유저가 있는지 찾는다.
         Members member = membersRepository.findByEmailAndDeletedAtIsNull(googleProfileInfo.getEmail()).orElse(null);
 
-        // C-3) user가 Null이면 response에 Error를 띄워보내야 해서 이렇게 씀
+        // C-3) user가 Null이면 response에 신규 유저임을 해서 이렇게 씀
         boolean isNew = false;
 
         // C-4) 아예 처음 가입한 사람인 경우 다 비어있을 것이다. 그러면 신규 유저다.
@@ -125,6 +131,7 @@ public class MemberService {
         //      save 를 해도 updated_at 이 바뀌지 않는다. 따라서 억지로 수정일자를 변경 해줘야 한다.
         else{
             member.setNew(false);
+
             membersRepository.updateById(member.getId());
         }
 
@@ -141,10 +148,11 @@ public class MemberService {
         List<String> ans = new ArrayList<>();
         ans.add(jwtAccessToken);
         ans.add(String.valueOf(isNew));
-
+        ans.add(jwtRefreshToken);
         // C-10) [REDIS]에 Member 의 PK(식별자), RefreshToken, AccessToken 을 저장
         refreshTokenInRedisRepository.save(new RefreshTokenInRedis(String.valueOf(member.getId()),jwtRefreshToken, jwtAccessToken));
-
+        gatRepository.save(new GatRedis(member.getId(),gat.getAccess_token()));
+        grtRepository.save(new GrtRedis(member.getId(), grt.getRefresh_token(), gat.getAccess_token()));
 
         return ans;
     }

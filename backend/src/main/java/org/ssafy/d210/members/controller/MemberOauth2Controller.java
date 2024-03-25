@@ -36,6 +36,7 @@ public class MemberOauth2Controller {
 
     private final MemberService memberService;
 
+
     // A. 프론트에서 인가코드 다시 주는 주소.
     // B. 백에서 해야할 일: 인가코드로 Google AccessToken, RefreshToken 받아 놓기
     //      -> 해당 사용자의 기본 정보(추가로 [WALK_WALK]에서 받아야 할 것을 뺀 정보)를 DB에 저장 -> jwtAccessToken, jwtRefreshToken 발급 -> 프론트에 토큰 전달
@@ -82,17 +83,21 @@ public class MemberOauth2Controller {
 
         log.info("Google에서 준 토큰 내용은 다음과 같습니다={}", gti);
 
-        GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getIssued_at(), gti.getAccess_token(), gti.getExpires_in());
-        GoogleRefreshTokenInfo grt = new GoogleRefreshTokenInfo(gti.getRefresh_token(), gti.getRefresh_token_issued_at(), gti.getRefresh_token_expires_in(), gti.getRefresh_count());
+        GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getToken_type(), gti.getAccess_token(), gti.getExpires_in());
+        GoogleRefreshTokenInfo grt = new GoogleRefreshTokenInfo(gti.getRefresh_token(), gti.getToken_type());
 
         List<String> ans = memberService.SaveUserAndGetToken(gti.getAccess_token(),response,gat,grt);
         String jwtAccessToken = ans.get(0);
+        String jwtRefreshToken = ans.get(2);
         boolean isNew = ans.get(1).equals("true");
         log.info("해당 사용자는 첫번째 가입 입니까?={}",isNew? "Yes" : "NO");
         log.info("해당 사용자의 AccessToken: {}", jwtAccessToken);
         Map<String, String> ret = new HashMap<>();
         ret.put("isNew", isNew? "true" : "false");
         ret.put("Authorization", jwtAccessToken);
+        ret.put("Refresh_Token", jwtRefreshToken);
+        ret.put("Google_access_token", gti.getAccess_token());
+        ret.put("Google_refresh_token",gti.getRefresh_token());
 
         return ResponseUtils.ok(ret, MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }
