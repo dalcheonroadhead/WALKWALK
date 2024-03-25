@@ -86,7 +86,6 @@
     height: 19rem;
     position: relative;
     border-radius: 30px;
-    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -352,7 +351,6 @@
     height: 14.9rem;
     position: relative;
     border-radius: 30px;
-    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -554,7 +552,7 @@
     height: 1.8rem;
     position: absolute;
     display: flex;
-    top: 90%;
+    top: 111%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -564,7 +562,7 @@
     font-size: 1rem;
     font-family: "bc_b";
     top: 0;
-    left: 0;
+    left: 1%;
 }
 
 .my_time_min2{
@@ -662,7 +660,7 @@
     height: 1.8rem;
     position: absolute;
     display: flex;
-    top: 90%;
+    top: 111%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -672,7 +670,7 @@
     font-size: 1rem;
     font-family: "bc_b";
     top: 0;
-    left: 0;
+    left: 1%;
 }
 
 .my_walk_min2{
@@ -750,30 +748,26 @@
     margin-top: 3%;
 }
 
+
 .halli_time_progress_container{
     position: relative;
-    top: 35%;
-    left: 1.1%;
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 20.5rem;
     height: 3.125rem;
+    margin-top: 30%;
 }
 
 .halli_time_progress_base{
-    width: 20rem;
+    width: 18.75rem;
     height: 1.8rem;
     background: #E4DDC6;
     position: absolute;
     top: 20%;
-    left: 50%;
+    left: 50.5%;
     transform: translate(-50%, -50%);
     border-radius: 0.938rem;
-}
-
-.halli_mission_container{
-    width: 5rem;
 }
 
 .halli_time_progress_move{
@@ -797,19 +791,11 @@
 .halli_time_mine{
     position: absolute;
     top: -60%;
-    left: 0;
+    right: 1.5rem;
     font-size: 1.2rem;
     font-family: "bc_b";
     color: white;
     text-shadow: 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black;
-}
-
-/* 오리 이미지 */
-.ch1_2{
-    width: auto;
-    position: absolute;
-    height: 6rem;
-    top: -140%;
 }
 
 .halli_time_number_base{
@@ -817,7 +803,7 @@
     height: 1.8rem;
     position: absolute;
     display: flex;
-    top: 90%;
+    top: 111%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -827,7 +813,7 @@
     font-size: 1rem;
     font-family: "bc_b";
     top: 0;
-    left: 0;
+    left: 1%;
 }
 
 .halli_time_min2{
@@ -838,7 +824,13 @@
     right: 0;
 }
 
-
+/* 오리 이미지 */
+.ch1_2{
+    width: auto;
+    position: absolute;
+    height: 6rem;
+    top: -140%;
+}
 
 .no_halli_content{
     width: 22.5rem;
@@ -916,6 +908,179 @@
 .mode_galli_txt{
     font-size: 1.3rem;
     font-family: "bc_b";
+}
+
+.galli_content{
+    width: 22.5rem;
+    height: 18rem;
+    border-top-right-radius: 0.938rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    background: #FFFEFC;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
+}
+
+.galli_expanded{
+    width: 22.5rem;
+    height: 60rem;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 0.938rem;
+    border-bottom-left-radius: 0.938rem;
+    border-bottom-right-radius: 0.938rem;
+    top: 5%;
+    flex-direction: column; /* 세로로 배치 */
+    background-color: white;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1); /* 하단 그림자 추가 */;
+}
+
+.galli_container{
+    width: 22.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    top: 5%;
+    z-index: 5;
+    flex-direction: column; /* 세로로 배치 */
+}
+
+.galli_list_title_container{
+    display: flex;
+    width: 22.5rem;
+    height: 2.7rem;
+    align-items: center;
+    margin-top: -0.4%;
+}
+
+.galli_detail{
+    margin-left: 6%;
+    font-family: "bc_b";
+    font-size: 1.4rem;
+}
+
+.galli_direct_btn{
+    width: auto;
+    margin-left: 40%;
+    height: 1.8rem;
+    transform: rotate(90deg);
+}
+
+.galli_direct_btn2{
+    width: auto;
+    margin-left: 40%;
+    height: 1.8rem;
+    transform: rotate(270deg);
+}
+
+.my_galli_list_container{
+    width: 21rem;
+    height: 12.4rem;
+    margin-top: 5%;
+    border-radius: 0.938rem;
+    background: #FFF7DE;
+    box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.galli_goal_title{
+    font-family: "bc_b";
+    font-size: 1.5rem;
+    margin-top: 3%;
+}
+
+.galli_time_progress_container{
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 20.5rem;
+    height: 6.125rem;
+    margin-top: 10%;
+}
+
+.galli_time_progress_base{
+    width: 18.75rem;
+    height: 1.8rem;
+    background: #E4DDC6;
+    position: absolute;
+    top: 20%;
+    left: 50.5%;
+    transform: translate(-50%, -50%);
+    border-radius: 0.938rem;
+}
+
+.galli_time_progress_move{
+    height: 1.8rem;
+    background: #FFCB23;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0.938rem;
+}
+
+.galli_time_ori_container{
+    height: 1.8rem;
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    border-radius: 0.938rem;
+}
+
+.galli_time_mine{
+    position: absolute;
+    top: -60%;
+    right: 1.5rem;
+    font-size: 1.2rem;
+    font-family: "bc_b";
+    color: white;
+    text-shadow: 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black, 0px 0px 1px black;
+}
+
+.galli_time_number_base{
+    width: 20rem;
+    height: 1.8rem;
+    position: absolute;
+    display: flex;
+    top: 111%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.galli_time_min{
+    position: absolute;
+    font-size: 1rem;
+    font-family: "bc_b";
+    top: 0;
+    left: 1%;
+}
+
+.galli_time_min2{
+    position: absolute;
+    font-size: 1rem;
+    font-family: "bc_b";
+    top: 0;
+    right: 0;
+}
+
+.galli_btn{
+    background: #FFCB23;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    width:12rem;
+    height:8rem;
+    border-radius: 0.938rem;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+}
+
+.galli_btn_txt{
+    line-height: 3rem;
+    font-family: "bc_b";
+    font-size: 1.2rem;
+    border-radius: 0.938rem;
 }
 
 .no_galli_content{
