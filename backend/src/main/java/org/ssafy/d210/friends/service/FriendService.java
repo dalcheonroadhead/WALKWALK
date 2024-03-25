@@ -27,12 +27,14 @@ public class FriendService {
     private final MembersRepository membersRepository;
 
     public GetMemberInfoResponse getMemberInfo(Members member, Long memberId){
-        Members members = membersRepository.findById(memberId).orElse(null);
-        return null;
+        Members members = membersRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
+        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(member, members).orElse(null);
+        boolean isFriend = friendList != null && friendList.getIsFriend();
+        return GetMemberInfoResponse.from(members, isFriend);
     }
 
     public List<GetFriendListResponse> getMemberList(Members member){
-        List<FriendList> friendList = friendListRepository.findFriendListsBySenderIdAndIsAcceptedIsTrue(member);
+        List<FriendList> friendList = friendListRepository.findFriendListsBySenderIdAndIsFriendIsTrue(member);
         return friendList.stream().map(GetFriendListResponse::from).collect(Collectors.toList());
     }
 
@@ -46,7 +48,8 @@ public class FriendService {
                     FriendList.builder()
                             .senderId(member)
                             .receiverId(receiver)
-                            .isAccepted(false)
+                            .isAccepted(true)
+                            .isFriend(false)
                             .build()
             );
             friendListRepository.save(
@@ -54,6 +57,7 @@ public class FriendService {
                             .senderId(receiver)
                             .receiverId(member)
                             .isAccepted(false)
+                            .isFriend(false)
                             .build()
             );
         }
@@ -70,11 +74,18 @@ public class FriendService {
 
         FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverId(member, friend);
         FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverId(friend, member);
-        friendList1.updateIsAccepted(isAccepted);
-        friendList2.updateIsAccepted(isAccepted);
+        if(isAccepted) {
+            friendList1.updateIsAccepted(isAccepted);
+            friendList1.updateIsFriend(isAccepted);
+            friendList2.updateIsFriend(isAccepted);
 
-        friendListRepository.save(friendList1);
-        friendListRepository.save(friendList2);
+            friendListRepository.save(friendList1);
+            friendListRepository.save(friendList2);
+        }
+        else{
+            friendListRepository.delete(friendList1);
+            friendListRepository.delete(friendList2);
+        }
 
         return PutFriendResponse.builder().isFriend(isAccepted).build();
     }

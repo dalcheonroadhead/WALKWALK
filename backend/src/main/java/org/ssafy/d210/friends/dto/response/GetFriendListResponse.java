@@ -9,12 +9,14 @@ public class GetFriendListResponse {
     private String profileUrl;
     private String nickname;
     private Long memberId;
+    private Boolean isFriend;
 
     @Builder
-    private GetFriendListResponse(String profileUrl, String nickname, Long memberId){
+    private GetFriendListResponse(String profileUrl, String nickname, Long memberId, Boolean isFriend){
         this.profileUrl = profileUrl;
         this.nickname = nickname;
         this.memberId = memberId;
+        this.isFriend = isFriend;
     }
 
     public static GetFriendListResponse from(FriendList friendList){
@@ -22,6 +24,7 @@ public class GetFriendListResponse {
                 .profileUrl(friendList.getReceiverId().getProfileUrl())
                 .nickname(friendList.getReceiverId().getNickname())
                 .memberId(friendList.getReceiverId().getId())
+                .isFriend(friendList.getIsFriend())
                 .build();
     }
 }
