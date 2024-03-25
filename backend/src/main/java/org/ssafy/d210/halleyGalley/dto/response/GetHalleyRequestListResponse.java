@@ -3,7 +3,6 @@ package org.ssafy.d210.halleyGalley.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import org.ssafy.d210.halleyGalley.dto.HalleyDto;
-import org.ssafy.d210.members.entity.Members;
 
 import java.util.List;
 

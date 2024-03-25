@@ -48,6 +48,8 @@ public class MemberDataService {
         else{
             if(member.getMemberAccountId() == null){
                 MemberAccount memberAccount = new MemberAccount();
+                memberAccount.setEgg(0);
+                memberAccount.setMoney(0);
                 memberAccount.setEoa(addInfo.getEoa());
                 memberAccount.setPublicKey(addInfo.getPublicKey());
                 memberAccountRepository.save(memberAccount);

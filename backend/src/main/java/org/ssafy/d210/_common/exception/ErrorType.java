@@ -12,6 +12,7 @@ public enum ErrorType {
     //-------------------로그인 & 회원 가입-----------------------------
     TOKEN_DOESNT_EXIST(401, "[HEADER]에 [TOKEN]이 존재하지 않습니다."),
     NOT_VALID_TOKEN(401, "[Token]이 유효하지 않습니다."),
+    EXPIRED_TOKEN(401, "[TOKEN]의 유효기간이 끝났습니다."),
 
     //----------------------------MEMBERS----------------------------
     NOT_FOUND_MEMBER(404, "해당 멤버가 존재하지 않습니다."),
@@ -27,13 +28,19 @@ public enum ErrorType {
     NOT_ENOUGH_MONEY(401, "머니가 부족합니다."),
 
     //----------------------------HALLEY_GALLEY-----------------------
-    NOT_FOUND_HALLEY(404, "할리가 존재하지 않습니다."),
-    NOT_FOUND_GALLEY(404, "갈리가 존재하지 않습니다."),
-    ALREADY_SEND_REQUEST(404, "이미 요청을 보냈습니다."),
-    NOT_FOUND_HALLEY_REQUEST_LIST(404, "요청받은 할리 목록이 존재하지 않습니다."),
+    NOT_FOUND_HALLEY(401, "할리가 존재하지 않습니다."),
+    NOT_FOUND_GALLEY(401, "갈리가 존재하지 않습니다."),
+    NOT_FOUND_HALLEY_GALLEY(401, "할리/갈리 관계가 존재하지 않습니다."),
+    ALREADY_SEND_REQUEST(401, "이미 요청을 보냈습니다."),
+    NOT_FOUND_HALLEY_REQUEST_LIST(401, "요청받은 할리 목록이 존재하지 않습니다."),
 
     //----------------------------MISSION-----------------------------
     CANT_ADD_MISSION(401, "미션을 등록할 수 없습니다."),
+    NOT_FOUND_MISSION(401, "미션이 존재하지 않습니다."),
+
+    //----------------------------FRIENDS-----------------------------
+    ALREADY_SEND_FRIEND_REQUEST(401, "이미 요청을 보냈습니다."),
+    NOT_FOUND_FRIEND(401, "친구가 존재하지 않습니다."),
     ;
 
     private int code;
@@ -44,5 +51,3 @@ public enum ErrorType {
         this.msg =msg;
     }
 }
-
-

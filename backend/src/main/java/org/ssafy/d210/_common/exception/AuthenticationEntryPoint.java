@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+import org.ssafy.d210._common.entity.GrtRedis;
+import org.ssafy.d210._common.repository.GrtRepository;
 import org.ssafy.d210._common.response.ResponseUtils;
+import org.ssafy.d210._common.service.jwt.JwtUtil;
 
 import java.io.IOException;
 
@@ -20,6 +23,8 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class AuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint {
+
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
@@ -37,10 +42,16 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
                 return;
             }
 
+            if(exception.equals(ErrorType.EXPIRED_TOKEN)) {
+
+                exceptionHandler(response, ErrorType.EXPIRED_TOKEN);
+                return;
+            }
+
             if (exception.equals(ErrorType.NOT_FOUND_MEMBER)) {
                 exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
-
             }
+
         }else {
             exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
         }
