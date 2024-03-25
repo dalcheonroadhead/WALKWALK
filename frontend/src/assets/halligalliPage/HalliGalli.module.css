@@ -31,7 +31,7 @@
 
 .back_btn{
     position: absolute;
-    left: 0%;
+    left: 3%;
     top: 19%;
     height: 2.1rem;
     width: auto;
@@ -39,7 +39,6 @@
 }
 
 .title_txt{
-    margin-left: 7%;
     font-family: "bc_b";
     font-size: 1.5rem;
 }
@@ -179,37 +178,37 @@
     font-family: "bc_b";
     font-size: 1.3rem;
 }
+.calendar-wrapper {
+    text-align: center;
+}
 
 .calendar_container {
-    width: 100%;
-    height: 50rem; /* 달력의 높이 설정 */
+    border: 1px solid #ccc;
+    max-width: 300px;
+    margin: auto;
+}
+
+.calendar_header {
+    padding: 10px;
+}
+
+.calendar_day_name {
+    display: inline-block;
+    width: 14.28%; /* 100% / 7 */
+    padding: 10px;
+}
+
+.calendar_row {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem; /* 셀 사이의 간격 설정 */
-    margin-top: 2rem; /* 위쪽 여백 설정 */
 }
 
-.calendar_cell {
-    width: calc(100% / 7 - 1rem); /* 셀 너비 설정 (7일 기준) */
-    height: 5rem; /* 셀 높이 설정 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0.5rem;
-    background-color: #f0f0f0; /* 셀 배경색 설정 */
+.calendar_day {
+    width: 14.28%; /* 100% / 7 */
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
 }
 
-.calendar_cell:hover {
-    background-color: #e0e0e0; /* 호버 시 배경색 변경 */
-}
-
-.calendar_date {
-    font-size: 1.5rem; /* 날짜 텍스트 크기 설정 */
-}
-
-.calendar_event {
-    font-size: 1rem; /* 이벤트 텍스트 크기 설정 */
-    color: #666; /* 이벤트 텍스트 색상 설정 */
+.calendar_day_selected {
+    background-color: #f0f0f0;
 }
