@@ -4,12 +4,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100dvh;
 }
 
 .login_app_name {
-  font-family: "bc_b";
   font-size: 4.5rem;
 }
+
+/* .login_img {
+  width: 80dvw;
+} */
 
 .google_login_btn {
   width: 75%;
@@ -36,4 +40,51 @@
   font-family: "bc_b";
   font-size: xx-large;
   transform: translateY(-3rem);
+}
+
+/* SignUp.css */
+.signup_form {
+  display: flex;
+  flex-direction: column;
+  /* width: 100dvw; */
+  /* height: 100dvh; */
+  /* justify-content: space-between; */
+  transition: all 1s ease;
+  font-size: 1rem;
+}
+
+.signup_title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 1rem;
+  font-size: 1.2rem;
+}
+
+.signup_input {
+  display: block;
+  width: 80dvw;
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.8rem;
+}
+
+.signup_input::placeholder {
+  font-size: 1rem;
+}
+
+.signup_btn {
+  background-color: #FFCB23;
+  width: 80dvw;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin: 1rem auto;
+}
+
+.signup_btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
