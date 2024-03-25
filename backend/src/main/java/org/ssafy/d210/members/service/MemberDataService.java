@@ -9,6 +9,7 @@ import org.ssafy.d210._common.exception.ErrorType;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.dto.request.AdditionalInfo;
 import org.ssafy.d210.members.dto.request.VoiceMessageInfo;
+import org.ssafy.d210.members.dto.response.MemberBadgeInfo;
 import org.ssafy.d210.members.dto.response.ResMyPageDetailInfo;
 import org.ssafy.d210.members.entity.Badge;
 import org.ssafy.d210.members.entity.Members;
@@ -31,6 +32,7 @@ public class MemberDataService {
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final VoiceMessageRepository voiceMessageRepository;
+    private final BadgeRepository badgeRepository;
     @Transactional
     public Members addAdditionalInfo (AdditionalInfo addInfo,  UserDetailsImpl userDetails) {
 
@@ -87,10 +89,12 @@ public class MemberDataService {
                 .collect(Collectors.toList());
     }
 
-    public List<Badge> getBadgeList(UserDetailsImpl userDetails) throws CustomException {
+    public List<MemberBadgeInfo> getBadgeList(UserDetailsImpl userDetails) throws CustomException {
 
+        List<MemberBadgeInfo> mb = badgeRepository.getMembersBadge(userDetails.getMember().getId())
+                .stream().map(x -> MemberBadgeInfo.of(x.getIcon(), x.getName())).collect(Collectors.toList());
 
-        return null;
+        return mb;
     }
 
 

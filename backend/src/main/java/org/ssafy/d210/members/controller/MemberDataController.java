@@ -107,9 +107,10 @@ public class MemberDataController {
 
     @GetMapping("/badge")
     public ApiResponseDto<?> getBadge(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        memberDataService.getBadgeList(userDetails);
-
-        return null;
+        return ResponseUtils.ok(memberDataService.getBadgeList(userDetails),MsgType.SEARCH_SUCCESSFULLY);
     }
+
+
+
+
 }
