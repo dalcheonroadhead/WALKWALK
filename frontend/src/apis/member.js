@@ -18,3 +18,14 @@ export const getGoogleToken = async (token) => {
         })
         .catch((err) => {console.log(err)})
 }
+
+export const submitUserInfo = async (userInfo) => {
+    const url = '/members/'
+
+    return await instance.post(url, userInfo)
+        .then((res) => {
+            console.log(res)
+            return true
+        })
+        .catch((err) => {console.log(err)})
+}
