@@ -3,7 +3,6 @@ package org.ssafy.d210.friends.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.ssafy.d210.friends.entity.FriendList;
 import org.ssafy.d210.members.entity.Members;
 
 @ToString
