@@ -17,10 +17,10 @@ import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
 import org.ssafy.d210.wallets._payment.dto.Payment;
-import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequestDto;
-import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequestDto;
-import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveDto;
-import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyDto;
+import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
+import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentApprove;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentReady;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class PaymentService {
 
     // 결제 준비
     // 모바일 혹은 pc로 카톡 결제 후 DB에 결제 내역 저장
-    public PaymentReadyDto preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequestDto requestDto) {
+    public PaymentReady preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequest paymentReadyRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
@@ -62,9 +62,9 @@ public class PaymentService {
         // 결제 정보 생성 및 DB 저장
         Payment payment = new Payment();
         payment.setCid("TC0ONETIME");
-        payment.setPartner_order_id(requestDto.getPartner_order_id());
-        payment.setPartner_user_id(requestDto.getPartner_user_id());
-        payment.setTotal_amount(Math.toIntExact(requestDto.getTotal_amount()));
+        payment.setPartner_order_id(paymentReadyRequest.getPartner_order_id());
+        payment.setPartner_user_id(paymentReadyRequest.getPartner_user_id());
+        payment.setTotal_amount(Math.toIntExact(paymentReadyRequest.getTotal_amount()));
         payment.setMember(member);
         paymentRepository.save(payment);
 
@@ -76,8 +76,8 @@ public class PaymentService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "SECRET_KEY " + secretKey);
 
-        HttpEntity<PaymentReadyRequestDto> request = new HttpEntity<>(requestDto, headers);
-        ResponseEntity<PaymentReadyDto> response = restTemplate.postForEntity(kakaoPayReadyUrl, request, PaymentReadyDto.class);
+        HttpEntity<PaymentReadyRequest> request = new HttpEntity<>(paymentReadyRequest, headers);
+        ResponseEntity<PaymentReady> response = restTemplate.postForEntity(kakaoPayReadyUrl, request, PaymentReady.class);
 
         log.info("======================KakaoPay Payment Response: Status Code = {}, Body = {}", response.getStatusCode(), response.getBody());
 
@@ -86,20 +86,18 @@ public class PaymentService {
 
     // 결제 승인
     // member의 카카오톡으로 결제 완료 카톡 보내기
-    public PaymentApproveDto approvePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentApproveRequestDto requestDto) {
+    public PaymentApprove approvePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentApproveRequest paymentApproveRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
 
-        log.info(requestDto.getPg_token());
-
         // 결제 승인 요청에 필요한 정보를 설정
         Map<String, String> requestMap = new HashMap<>();
-        requestMap.put("cid", requestDto.getCid()); // 가맹점 코드, 테스트 코드 또는 실제 발급받은 코드 사용
-        requestMap.put("tid", requestDto.getTid()); // 결제 준비 응답에서 받은 tid
-        requestMap.put("partner_order_id", requestDto.getPartner_order_id()); // 가맹점 주문번호
-        requestMap.put("partner_user_id", requestDto.getPartner_user_id()); // 가맹점 회원 id
-        requestMap.put("pg_token", requestDto.getPg_token()); // 사용자 결제 수단 선택 후 받은 pg_token
+        requestMap.put("cid", paymentApproveRequest.getCid()); // 가맹점 코드, 테스트 코드 또는 실제 발급받은 코드 사용
+        requestMap.put("tid", paymentApproveRequest.getTid()); // 결제 준비 응답에서 받은 tid
+        requestMap.put("partner_order_id", paymentApproveRequest.getPartner_order_id()); // 가맹점 주문번호
+        requestMap.put("partner_user_id", paymentApproveRequest.getPartner_user_id()); // 가맹점 회원 id
+        requestMap.put("pg_token", paymentApproveRequest.getPg_token()); // 사용자 결제 수단 선택 후 받은 pg_token
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -109,7 +107,7 @@ public class PaymentService {
         // 인증완료시, 응답받은 pg_token과 tid로 최종 승인요청
         // 결제 승인 API를 호출하면, 결제 준비 단계에서 시작된 결제건이 승인으로 완료 처리
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestMap, headers);
-        ResponseEntity<PaymentApproveDto> response = restTemplate.postForEntity(kakaoPayApproveUrl, request, PaymentApproveDto.class);
+        ResponseEntity<PaymentApprove> response = restTemplate.postForEntity(kakaoPayApproveUrl, request, PaymentApprove.class);
         System.out.println(response);
         return response.getBody();
 

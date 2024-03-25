@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentReadyRequestDto {
+public class PaymentReadyRequest {
     private String cid;                 // 가맹점 코드
     private String partner_order_id;    // 가맹점 주문 번호
     private String partner_user_id;     // 가맹점 회원 id

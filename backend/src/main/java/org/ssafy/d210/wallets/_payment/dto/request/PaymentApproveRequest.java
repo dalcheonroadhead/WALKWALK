@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentApproveRequestDto {
+public class PaymentApproveRequest {
     private String cid;                // 가맹점 코드
     private String tid;                 // 결제 고유 번호
     private String partner_order_id;    // 가맹점 주문 번호
