@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 
 const Main = function(){
+
+    const navigate = useNavigate();
+    
     const handle = {
         barClick: (data) => {
             console.log(data);
@@ -13,6 +17,11 @@ const Main = function(){
             console.log(data);
         },
     };
+
+    const moveToHalliGalliPage = function () {
+        navigate("/halligalli")
+    }
+
 
     const [tabIndex, settabIndex] = useState(0);
     const [halli, setHalli] = useState(true);
@@ -409,7 +418,7 @@ const Main = function(){
                                 {namelist.map((data, index) => {
                                     return(
                                         <>
-                                            <div key={index} className={styles.my_halli_list_name_container}>
+                                            <div key={index} className={styles.my_halli_list_name_container} onClick={moveToHalliGalliPage}>
                                                 <img src={data.pimg} alt="프로필 사진" className={styles.my_halli_list_img_container} ></img>
                                                 <p className={styles.my_halli_list_name_txt}>{data.nickname}</p>
                                                 <div className={styles.my_halli_list_btn_container}>
