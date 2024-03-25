@@ -23,8 +23,6 @@ public class ExerciseCriteriaController {
     @Operation(summary = "연령대별 디폴트 운동 기준 세팅")
     @GetMapping("/default")
     public ApiResponseDto<?> setDefaultCriteria(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("야!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(userDetails.getMember().getId());
         return ResponseUtils.ok(exerciseCriteriaService.setDefaultExerciseCriteria(userDetails.getMember()), MsgType.SET_DEFAULT_CRITERIA);
     }
 
@@ -38,5 +36,12 @@ public class ExerciseCriteriaController {
     @GetMapping()
     public ApiResponseDto<?> getCriteria(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(exerciseCriteriaService.findMyCriteria(userDetails.getMember()), MsgType.GET_EXERCISE_CRITERIA);
+    }
+
+    @Operation(summary = "운동 기준 디폴트로 초기화(커스텀 기준 삭제)")
+    @DeleteMapping("/init")
+    public ApiResponseDto<?> initCriteria(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        exerciseCriteriaService.deleteCustomCriteria(userDetails.getMember());
+        return ResponseUtils.ok("", MsgType.INIT_CRITERIA);
     }
 }

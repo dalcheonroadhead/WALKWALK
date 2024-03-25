@@ -25,6 +25,10 @@ spring:
       port: 6379
       password: ${REDIS_PASSWORD}
 
+  batch:
+    job:
+      enabled: false # 키자마자 자동 실행 방지
+
 
 
 google:

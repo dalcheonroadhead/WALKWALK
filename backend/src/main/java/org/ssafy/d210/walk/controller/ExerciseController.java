@@ -1,5 +1,6 @@
 package org.ssafy.d210.walk.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,4 +51,9 @@ public class ExerciseController {
     public ApiResponseDto<SliceResponseDto> getMemberRankingWithFriends(@PageableDefault(size = 10, sort = "streak", direction = Sort.Direction.DESC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(exerciseService.getRankingWithFriends(userDetails.getMember(), pageable), MsgType.GET_LAST_SAVED_DATE);
     }
+
+//    @Operation(summary = "걸음 수 랭킹")
+//    public ApiResponseDto<SliceResponseDto> getStepsRankingWithFriends(@PageableDefault(size = 10, sort = "steps", direction = Sort.Direction.DESC), @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return ResponseUtils.ok(exerciseService.)
+//    }
 }
