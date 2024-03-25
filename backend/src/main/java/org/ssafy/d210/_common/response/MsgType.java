@@ -18,10 +18,12 @@ public enum MsgType {
 
     // ====================== WALLETS ============================
     GET_EGG_MONEY_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+    PUT_EGG_ADD_SUCCESS("에그 획득에 성공하였습니다."),
+    PUT_EGG_SUB_SUCCESS("에그 차감에 성공하였습니다."),
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
-    
+
     // ====================== HALLEY_GALLEY ======================
     GET_HALLEY_LIST_SUCCESSFULLY("할리 목록 조회에 성공하였습니다."),
     GET_GALLEY_LIST_SUCCESSFULLY("갈리 목록 조회에 성공하였습니다."),
@@ -39,6 +41,6 @@ public enum MsgType {
     private final String msg;
 
     MsgType(String msg) {
-        this.msg =msg;
+        this.msg = msg;
     }
 }
