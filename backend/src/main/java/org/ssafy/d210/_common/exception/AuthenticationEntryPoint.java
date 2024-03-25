@@ -53,7 +53,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
             }
 
         }else {
-            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
+            exceptionHandler(response, ErrorType.ANOTHER_ERROR);
         }
     }
 
@@ -71,7 +71,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
             response.getWriter().write(json);
 
             //      에러 내용 로그 확인
-            log.error("인증 과정에서 오류가 났습니다! ＼(´◓Д◔`)／ 에러 내용은 다음과 같습니다.={}", error.getMsg());
+            log.error(" 에러 내용은 다음과 같습니다.={}", error.getMsg());
         } catch (Exception e){
             // B-3 Response 작성 과정에서 에러가 났을 경우 알려준다.
             log.error(e.getMessage());

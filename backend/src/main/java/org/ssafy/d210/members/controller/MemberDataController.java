@@ -110,6 +110,11 @@ public class MemberDataController {
         return ResponseUtils.ok(memberDataService.getBadgeList(userDetails),MsgType.SEARCH_SUCCESSFULLY);
     }
 
+    @GetMapping("/google-refresh-token")
+    public ApiResponseDto<?> getAccessToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseUtils.ok(memberDataService.refreshAccessToken(userDetails), MsgType.GENERATE_TOKEN_SUCCESSFULLY);
+    }
 
 
 
