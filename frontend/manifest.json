@@ -1,6 +1,12 @@
 {
   "short_name": "WalkWalk",
   "name": "WalkWalk",
+  "start_url": "/",
+  "scope": ".",
+  "orientation": "portrait",
+  "display": "standalone",
+  "theme_color": "#FFCB23",
+  "background_color": "#FAFAFA",
   "icons": [
     {
       "src": "/imgs/favicon.ico",
@@ -22,11 +28,5 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
-  "start_url": "/",
-  "scope": ".",
-  "orientation": "portrait",
-  "display": "standalone",
-  "theme_color": "#FFCB23",
-  "background_color": "#FAFAFA"
+  ]
 }

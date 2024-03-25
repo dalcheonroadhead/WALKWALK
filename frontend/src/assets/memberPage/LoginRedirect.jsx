@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import styles from "./Login.module.css";
 import { getGoogleToken } from "../../apis/member"
-import { useUserStore } from "../../stores/member";
+import { useMemberStore } from "../../stores/member";
 
 const LoginRedirect = function () {
   const navigate = useNavigate();
-  const {tokens, setToken} = useUserStore();
+  const {tokens, setToken} = useMemberStore();
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
