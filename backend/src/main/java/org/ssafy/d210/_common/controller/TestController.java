@@ -55,9 +55,9 @@ public class TestController {
     }
 
     @GetMapping(value = "/writeRedis")
-    public ApiResponseDto<?> writeRedis(){
+    public ApiResponseDto<?> writeRedis(@RequestBody RedisTestEntity test){
 
-        redisTestRepository.save(new RedisTestEntity("1", "2", "3"));
+        redisTestRepository.save(new RedisTestEntity(test.idx, test.getUserId(), test.content));
 
 
         return ResponseUtils.ok("OK", MsgType.ADD_INFO_SUCCESSFULLY);

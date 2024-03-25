@@ -26,6 +26,10 @@ public enum ErrorType {
     NOT_FOUND_GALLEY(401, "갈리가 존재하지 않습니다."),
     ALREADY_SEND_REQUEST(401, "이미 요청을 보냈습니다."),
     NOT_FOUND_HALLEY_REQUEST_LIST(401, "요청받은 할리 목록이 존재하지 않습니다."),
+
+    //----------------------------MISSION-----------------------------
+    CANT_ADD_MISSION(401, "미션을 등록할 수 없습니다."),
+    NOT_ENOUGH_MONEY(401, "머니가 부족합니다."),
     ;
 
     private int code;

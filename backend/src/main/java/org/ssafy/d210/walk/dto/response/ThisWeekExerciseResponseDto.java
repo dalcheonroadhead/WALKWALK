@@ -9,5 +9,5 @@ import java.time.LocalDate;
 @Builder
 public class ThisWeekExerciseResponseDto {
     private LocalDate timeStamp;
-    private Integer steps;
+    private Long steps;
 }

@@ -31,8 +31,6 @@ public class MemberDataService {
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final VoiceMessageRepository voiceMessageRepository;
-    private final BadgeRepository badgeRepository;
-    private final MemberBadgeRepository memberBadgeRepository;
     @Transactional
     public Members addAdditionalInfo (AdditionalInfo addInfo,  UserDetailsImpl userDetails) {
 
