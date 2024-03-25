@@ -42,7 +42,7 @@ public class MemberOauth2Controller {
 
     @Operation(summary = "로컬(프)에서 배포(백)로 요청 보낼 때, URL")
     @GetMapping("/oauth/callback/google/token/l-t-d")
-    public ApiResponseDto<Map<String, Boolean>> getAccessTokenLocalToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+    public ApiResponseDto<Map<String, String>> getAccessTokenLocalToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
         return handleAccessTokenRequest(code, "http://localhost:5173/oauth/callback/google/token", response);
     }
 
@@ -50,20 +50,20 @@ public class MemberOauth2Controller {
 
     @Operation(summary = "로컬(프)에서 로컬(백)로 요청 보낼 때, URL")
     @GetMapping("/oauth/callback/google/token/l-t-l")
-    public ApiResponseDto<Map<String, Boolean>> getAccessTokenLocalToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+    public ApiResponseDto<Map<String, String>> getAccessTokenLocalToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
         return handleAccessTokenRequest(code, "http://localhost:5173/oauth/callback/google/token", response);
     }
 
 
     @Operation(summary = "배포(프)에서 배포(백)로 요청 보낼 때, URL")
     @GetMapping("/oauth/callback/google/token/d-t-d")
-    public ApiResponseDto<Map<String, Boolean>> getAccessTokenDistToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+    public ApiResponseDto<Map<String, String>> getAccessTokenDistToDist(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
         return handleAccessTokenRequest(code, "https://j10d210.p.ssafy.io/oauth/callback/google/token", response);
     }
 
     @Operation(summary = "로컬(백)에서 배포(프)로 요청 보낼 때, URL")
     @GetMapping("/oauth/callback/google/token/d-t-l")
-    public ApiResponseDto<Map<String, Boolean>> getAccessTokenDistToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
+    public ApiResponseDto<Map<String, String>> getAccessTokenDistToLocal(@RequestParam(value = "code", required = false) String code, HttpServletResponse response){
         return handleAccessTokenRequest(code, "https://j10d210.p.ssafy.io/oauth/callback/google/token", response);
     }
 
@@ -76,9 +76,11 @@ public class MemberOauth2Controller {
         return ResponseUtils.ok("유저 : " + userDetails.getUsername(), MsgType.SEARCH_SUCCESSFULLY);
     }
 
-    private ApiResponseDto<Map<String, Boolean>> handleAccessTokenRequest(String code, String redirectUri, HttpServletResponse response) {
+    private ApiResponseDto<Map<String, String>> handleAccessTokenRequest(String code, String redirectUri, HttpServletResponse response) {
         log.info("들어온 인가코드는 다음과 같습니다.={}",code);
         GoogleOauthTokenInfo gti = memberService.getAccessToken(code, redirectUri);
+
+        log.info("Google에서 준 토큰 내용은 다음과 같습니다={}", gti);
 
         GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getIssued_at(), gti.getAccess_token(), gti.getExpires_in());
         GoogleRefreshTokenInfo grt = new GoogleRefreshTokenInfo(gti.getRefresh_token(), gti.getRefresh_token_issued_at(), gti.getRefresh_token_expires_in(), gti.getRefresh_count());
@@ -88,8 +90,9 @@ public class MemberOauth2Controller {
         boolean isNew = ans.get(1).equals("true");
         log.info("해당 사용자는 첫번째 가입 입니까?={}",isNew? "Yes" : "NO");
         log.info("해당 사용자의 AccessToken: {}", jwtAccessToken);
-        Map<String, Boolean> ret = new HashMap<>();
-        ret.put("isNew", isNew);
+        Map<String, String> ret = new HashMap<>();
+        ret.put("isNew", isNew? "true" : "false");
+        ret.put("Authorization", jwtAccessToken);
 
         return ResponseUtils.ok(ret, MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }

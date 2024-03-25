@@ -23,28 +23,27 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        log.error("시큐리티 인증 과정에서 오류가 발생하였습니다! ＼(´◓Д◔`)／{}", authException.getMessage());
 
-//        ErrorType exception = (ErrorType) request.getAttribute("exception");
-//
-//        if(exception != null) {
-//            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
-//                exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
-//                return;
-//            }
-//
-//            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
-//                exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
-//                return;
-//            }
-//
-//            if (exception.equals(ErrorType.NOT_FOUND_USER)) {
-//                exceptionHandler(response, ErrorType.NOT_FOUND_USER);
-//
-//            }
-//        }else {
-//            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
-//        }
+        ErrorType exception = (ErrorType) request.getAttribute("exception");
+
+        if(exception != null) {
+            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
+                exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
+                return;
+            }
+
+            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
+                exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
+                return;
+            }
+
+            if (exception.equals(ErrorType.NOT_FOUND_MEMBER)) {
+                exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
+
+            }
+        }else {
+            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
+        }
     }
 
 
@@ -61,7 +60,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
             response.getWriter().write(json);
 
             //      에러 내용 로그 확인
-            log.error("인증 과정에서 오류가 났습니다. 에러 내용은 다음과 같습니다.={}", error.getMsg());
+            log.error("인증 과정에서 오류가 났습니다! ＼(´◓Д◔`)／ 에러 내용은 다음과 같습니다.={}", error.getMsg());
         } catch (Exception e){
             // B-3 Response 작성 과정에서 에러가 났을 경우 알려준다.
             log.error(e.getMessage());

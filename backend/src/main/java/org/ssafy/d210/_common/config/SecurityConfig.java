@@ -58,25 +58,19 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable);            // 3)
         http
-                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                .cors((corsCustomizer -> corsCustomizer.configurationSource(request -> {
 
+                    CorsConfiguration configuration = new CorsConfiguration();
 
+                    configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+                    configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+                    configuration.setAllowCredentials(true);
+                    configuration.setAllowedHeaders(Arrays.asList("*"));
+                    configuration.setMaxAge(3600L);
 
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
-                        CorsConfiguration configuration = new CorsConfiguration();
-
-                        configuration.setAllowedOrigins(Arrays.asList("*"));
-                        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-                        configuration.setAllowCredentials(true);
-                        configuration.setAllowedHeaders(Arrays.asList("*"));
-                        configuration.setMaxAge(3600L);
-
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-                        return configuration;
-                    }
+                    return configuration;
                 })));
         http
                 .headers((headers) -> headers.frameOptions(
@@ -121,7 +115,7 @@ public class SecurityConfig {
         cors.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("*", cors);  // 모든 경로에 대해 CORS 설정 적용
+        source.registerCorsConfiguration("/**", cors);  // 모든 경로에 대해 CORS 설정 적용
 
         return source;
     }
