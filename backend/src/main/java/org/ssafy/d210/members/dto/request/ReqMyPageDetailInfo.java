@@ -28,10 +28,10 @@ public class ReqMyPageDetailInfo {
 
     @NotNull
     @Range(min = 1, max = 300)
-    Long height;
+    double height;
 
     @NotNull
-    Long weight;
+    double weight;
 
     @NotNull
     String gender;
@@ -57,7 +57,7 @@ public class ReqMyPageDetailInfo {
     String phoneNumber;
 
     @Builder
-    public ReqMyPageDetailInfo(String profileUrl, String nickname, Long birthYear, Long height, Long weight, String gender, String location, double longitude, double latitude, String comment, Long dailyCriteria, String phoneNumber) {
+    public ReqMyPageDetailInfo(String profileUrl, String nickname, Long birthYear, double height, double weight, String gender, String location, double longitude, double latitude, String comment, Long dailyCriteria, String phoneNumber) {
         this.profileUrl = profileUrl;
         this.nickname = nickname;
         this.birthYear = birthYear;
