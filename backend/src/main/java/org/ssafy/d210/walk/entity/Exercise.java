@@ -3,6 +3,7 @@ package org.ssafy.d210.walk.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210.members.entity.Members;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Exercise {
 
@@ -33,11 +35,11 @@ public class Exercise {
 
     @Column(name = "heart_rate")
     @ColumnDefault("0")
-    private Long heartRate;
+    private Double heartRate;
 
     @Column(name = "exercise_distance")
     @ColumnDefault("0")
-    private Long exerciseDistance;
+    private Double exerciseDistance;
 
     @Column(name = "exercise_day")
     private LocalDate exerciseDay = LocalDate.now();
@@ -46,6 +48,7 @@ public class Exercise {
     @ColumnDefault("false")
     private Boolean isAchieved;
 
-    private Long calorie;
+    private Double calorie;
     private Long streak;
+
 }

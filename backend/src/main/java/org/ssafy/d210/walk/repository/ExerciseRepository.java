@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.walk.dto.response.StreakRankingResopnseDto;
 import org.ssafy.d210.walk.dto.response.ThisWeekExerciseResponseDto;
 import org.ssafy.d210.walk.entity.Exercise;
@@ -12,7 +14,9 @@ import org.ssafy.d210.walk.entity.Exercise;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     // DB에 하루 치 운동이 저장된 마지막 날짜
@@ -30,5 +34,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
             " and e.exerciseDay = :yesterday" +
             " order by e.streak desc")
     Slice<StreakRankingResopnseDto> findRankingByPage(Long myId, Pageable pageable, LocalDate yesterday);
+
+    Optional<Exercise> findExerciseByMemberAndExerciseDay(Members member, LocalDate exerciseDay);
 
 }
