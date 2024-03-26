@@ -11,9 +11,11 @@ import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets.dto.request.PutEggMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
+import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
 import org.ssafy.d210.wallets.dto.response.GetEggMoneyResponse;
 import org.ssafy.d210.wallets.dto.response.PutEggMoneyResponse;
 import org.ssafy.d210.wallets.dto.response.PutEggResponse;
+import org.ssafy.d210.wallets.dto.response.PutHalleyGalleyMoneyResponse;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
@@ -55,6 +57,29 @@ public class WalletsService {
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
         return memberAccount.putEggMoney(putEggMoneyRequest, true);
+    }
+
+    public PutHalleyGalleyMoneyResponse putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest) {
+        // 갈리 정보
+        Members galley = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
+        MemberAccount galleyAccount = findMemberAccountByMembers(galley.getMemberAccountId().getId());
+
+        // 할리 정보
+        Members halley = findMembersById(putHalleyGalleyMoneyRequest.getHalleyId());
+        MemberAccount halleyAccount = findMemberAccountByMembers(halley.getMemberAccountId().getId());
+
+        // 할리 money 감소
+        int halleyMoney = halleyAccount.putMoney(putHalleyGalleyMoneyRequest, false);
+
+        // 갈리 money 증가
+        int galleyMoney = galleyAccount.putMoney(putHalleyGalleyMoneyRequest, true);
+
+        return PutHalleyGalleyMoneyResponse.of(halleyMoney, galleyMoney);
+    }
+
+    public Members findMembersById(Long halleyId) {
+        return membersRepository.findMembersById(halleyId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
     }
 
     public Members findByEmailAndDeletedAtIsNull(String email) {

@@ -11,6 +11,7 @@ import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.wallets.dto.request.PutEggMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
+import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
 import org.ssafy.d210.wallets.service.WalletsService;
 
 import static org.ssafy.d210._common.exception.ErrorType.BAD_REQUEST;
@@ -40,7 +41,7 @@ public class WalletsController {
             throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
         }
 
-        return ApiResponseDto.of(PUT_EGG_ADD_SUCCESS, walletsService.putEggAdd(userDetails, putEggRequest));
+        return ApiResponseDto.of(PUT_EGG_ADD_SUCCESSFULLY, walletsService.putEggAdd(userDetails, putEggRequest));
     }
 
     @PutMapping("/egg-sub")
@@ -52,7 +53,7 @@ public class WalletsController {
             throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
         }
 
-        return ApiResponseDto.of(PUT_EGG_SUB_SUCCESS, walletsService.putEggSub(userDetails, putEggRequest));
+        return ApiResponseDto.of(PUT_EGG_SUB_SUCCESSFULLY, walletsService.putEggSub(userDetails, putEggRequest));
     }
 
     @PutMapping("/egg-money-add")
@@ -64,6 +65,18 @@ public class WalletsController {
             throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
         }
 
-        return ApiResponseDto.of(PUT_EGG_MONEY_ADD_SUCCESS, walletsService.putEggMoneyAdd(userDetails, putEggMoneyRequest));
+        return ApiResponseDto.of(PUT_EGG_MONEY_ADD_SUCCESSFULLY, walletsService.putEggMoneyAdd(userDetails, putEggMoneyRequest));
+    }
+
+    @PutMapping("/money-halley-galley")
+    public ApiResponseDto<?> putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest, BindingResult bindingResult) {
+        log.info("WalletsController.putHalleyGalleyMoney");
+
+        // validation 오류
+        if (bindingResult.hasErrors()) {
+            throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
+        }
+
+        return ApiResponseDto.of(PUT_MONEY_HALLEY_TO_GALLEY_SUCCESSFULLY, walletsService.putHalleyGalleyMoney(userDetails, putHalleyGalleyMoneyRequest));
     }
 }
