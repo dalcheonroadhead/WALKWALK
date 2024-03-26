@@ -10,7 +10,10 @@ export const getGoogleToken = async (code) => {
     return await instance.get(url)
         .then((res) => {
             console.log('test1', res.data)
-            return res.data
+            console.log('type : ', typeof(res.data.data)) // object
+            localStorage.setItem('Authorization', res.data.data.Authorization)
+            localStorage.setItem('tokens', res.data.data)
+            return res.data.data
         })
         .catch((err) => {console.log(err)})
 }

@@ -2,29 +2,22 @@ import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import styles from "./Login.module.css";
 import { getGoogleToken } from "../../apis/member";
-import { useMemberStore } from "../../stores/member";
 
 const LoginRedirect = function () {
   const navigate = useNavigate();
-  const {setToken} = useMemberStore();
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
     console.log('code : ', code)
 
-    (async () => {
-      if (code) {
-        try {
-          // 서버에 code 전송
-          const response = await getGoogleToken(code);
-          console.log('test2', response.data);
-          setToken(response.data);
-          navigate(response.data.isNew ? '/signup' : '/main');
-        } catch (err) {
-          console.error('Token fetching failed:', err)
-        }
-      }
-    })();
+    if (code) {
+      getGoogleToken(code).then((res) => {
+        console.log('test2 :', res);
+        navigate(res.isNew ? '/signup' : '/main');
+      }).catch((err) => {
+        console.error('토큰 가져오기 실패 :', err);
+      });
+    }
   }, [])
   
   return (
