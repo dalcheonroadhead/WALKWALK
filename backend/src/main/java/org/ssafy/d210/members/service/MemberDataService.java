@@ -75,7 +75,9 @@ public class MemberDataService {
 
        // 2) 사용자가 있으면 받은 값으로 세팅 -> dirty checking
         else{
-           log.info("추가 가입하려는 사용자의 명세 " + Objects.requireNonNull(member.toString()));
+           log.info("추가 가입하려는 사용자의 기존 명세 " + Objects.requireNonNull(member.toString()));
+
+           member.setNickname(addInfo.getNickname());
 
             if(member.getMemberAccountId() == null){
                 MemberAccount memberAccount = new MemberAccount();
