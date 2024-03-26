@@ -16,23 +16,46 @@ repositories {
 }
 
 dependencies {
-    //******************** Spring Boot 기본 설정 ****************************
+    //⭐ Spring Boot 기본 설정
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    //***********************************************************************
-    //****************************** DB 설정 *********************************
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-    //***********************************************************************
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    //****************************** AWS 설정 ********************************
+    //⭐ Spring Security 설정
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // jwt version:'0.12.4'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    //⭐ Redis 설정
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //⭐ DB 설정
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    //⭐ AWS 설정
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation "com.amazonaws:aws-java-sdk-s3:1.12.395"
-    //***********************************************************************
+
+    // ⭐ Spring boot 3.x이상에서 QueryDsl 패키지를 정의하는 방법
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // ⭐ 기타
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+
+
+    // ⭐ SWAGGER 적용
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
 }
 
