@@ -180,6 +180,36 @@ public class Members extends BaseTime {
         return this;
     }
 
+
+    @Override
+    public String toString() {
+        return "Members{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", memberAccountId=" + memberAccountId +
+                ", nickname='" + nickname + '\'' +
+                ", profileUrl='" + profileUrl + '\'' +
+                ", role=" + role +
+                ", mainBadge='" + mainBadge + '\'' +
+                ", gender=" + gender +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", location='" + location + '\'' +
+                ", birthYear=" + birthYear +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", isNew=" + isNew +
+                ", streakColor='" + streakColor + '\'' +
+                ", comment='" + comment + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", dailyCriteria=" + dailyCriteria +
+                ", blockAddresses=" + blockAddresses +
+                ", exercises=" + exercises +
+                ", exerciseAcc=" + exerciseAcc +
+                ", memberBadges=" + memberBadges +
+                '}';
+    }
+
     public String getRoleKey() {
         return role.getKey();
     }
