@@ -108,7 +108,7 @@ public class Members extends BaseTime {
     @Builder
     public Members(
             String email, String nickname, String profileUrl, Role role,
-            GenderType gender, Long height, Long weight, String location,
+            GenderType gender, double height, double weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
 
@@ -146,7 +146,7 @@ public class Members extends BaseTime {
 
     public static Members of(
             String email, String nickname, String profileUrl, Role role,
-            GenderType gender, Long height, Long weight, String location,
+            GenderType gender, double height, double weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
     ) {
