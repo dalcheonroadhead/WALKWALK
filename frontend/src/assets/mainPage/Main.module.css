@@ -148,7 +148,8 @@
     align-items: center;
     justify-content: center;
     display: flex;
-    box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);    margin-left: 3%;
+    box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);    
+    margin-left: 3%;
 }
 
 .my_halli_list_modal_container{
