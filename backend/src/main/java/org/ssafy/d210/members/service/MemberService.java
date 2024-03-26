@@ -114,7 +114,7 @@ public class MemberService {
         if(member == null){
             member = Members.of(
                     googleProfileInfo.getEmail(),
-                    googleProfileInfo.getName() == null? "없음" : googleProfileInfo.getName(),
+                    googleProfileInfo.getName() == null? "없음": googleProfileInfo.getName(),
                     googleProfileInfo.getPicture(),
                     Role.USER
             );

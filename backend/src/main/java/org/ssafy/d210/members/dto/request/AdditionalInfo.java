@@ -44,7 +44,6 @@ public class AdditionalInfo {
     Long birthYear;
 
     @NotNull
-    @Size(min = 1)
     String comment;
 
     @NotBlank
