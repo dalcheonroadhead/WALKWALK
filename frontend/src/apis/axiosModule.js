@@ -5,14 +5,20 @@ const instance = axios.create({
   // baseURL: 'http://localhost:8081/api',
 });
 
+const accessToken = localStorage.getItem('Authorization')
+console.log(accessToken)
+instance.defaults.headers.common['Authorization'] = accessToken
+
 // 요청 인터셉터: 요청을 보내기 전에 실행됩니다.
 instance.interceptors.request.use(
   (config) => {
     // 요청을 보내기 전에 실행할 코드를 여기에 작성하세요.
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
+    // const accessToken = localStorage.getItem('Authorization')
+    // if (accessToken) {
+    //   // console.log('accessToken : ', accessToken)
+    //   config.headers['Authorization'] = accessToken;
+    // }
+    console.log()
     return config;
   },
   (error) => {
