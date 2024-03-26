@@ -28,6 +28,8 @@ public enum MsgType {
     POST_GALLEY_REQUEST_SUCCESSFULLY("갈리 요청 전송에 성공하였습니다."),
     PUT_GALLEY_RESPONSE_SUCCESSFULLY("갈리 요청 처리에 성공하였습니다."),
     GET_HALLEY_REQUEST_LIST_SUCCESSFULLY("할리 요청 목록 조회에 성공하였습니다."),
+    GET_GALLEY_SUCCESSFULLY("갈리 정보 조회에 성공하였습니다."),
+    GET_HALLEY_SUCCESSFULLY("할리 정보 조회에 성공하였습니다."),
 
     // ====================== WALK ============================
     GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),

@@ -1,14 +1,29 @@
 package org.ssafy.d210.members.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.ssafy.d210._common.entity.GatRedis;
+import org.ssafy.d210._common.entity.GrtRedis;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210._common.repository.GatRepository;
+import org.ssafy.d210._common.repository.GrtRepository;
+import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
+import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.dto.request.AdditionalInfo;
 import org.ssafy.d210.members.dto.request.VoiceMessageInfo;
+import org.ssafy.d210.members.dto.response.MemberBadgeInfo;
 import org.ssafy.d210.members.dto.response.ResMyPageDetailInfo;
 import org.ssafy.d210.members.entity.Badge;
 import org.ssafy.d210.members.entity.Members;
@@ -31,6 +46,16 @@ public class MemberDataService {
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final VoiceMessageRepository voiceMessageRepository;
+    private final BadgeRepository badgeRepository;
+    private final GrtRepository grtRepository;
+    private final GatRepository gatRepository;
+
+    @Value("${google.client-id}")
+    String client_id;
+    @Value("${google.client-secret}")
+    String client_secret;
+
+
     @Transactional
     public Members addAdditionalInfo (AdditionalInfo addInfo,  UserDetailsImpl userDetails) {
 
@@ -48,6 +73,8 @@ public class MemberDataService {
         else{
             if(member.getMemberAccountId() == null){
                 MemberAccount memberAccount = new MemberAccount();
+                memberAccount.setEgg(0);
+                memberAccount.setMoney(0);
                 memberAccount.setEoa(addInfo.getEoa());
                 memberAccount.setPublicKey(addInfo.getPublicKey());
                 memberAccountRepository.save(memberAccount);
@@ -85,8 +112,61 @@ public class MemberDataService {
                 .collect(Collectors.toList());
     }
 
-    public List<Badge> getBadgeList(UserDetailsImpl userDetails) throws CustomException {
+    public List<MemberBadgeInfo> getBadgeList(UserDetailsImpl userDetails) throws CustomException {
 
+        List<MemberBadgeInfo> mb = badgeRepository.getMembersBadge(userDetails.getMember().getId())
+                .stream().map(x -> MemberBadgeInfo.of(x.getIcon(), x.getName())).collect(Collectors.toList());
+
+        return mb;
+    }
+
+
+    public String refreshAccessToken(UserDetailsImpl userDetails) {
+
+        log.info("{}",userDetails.getMember().getId());
+
+
+        // 컬럼 이름이 아니라 Key Value 값의 Id를 써야한다.
+        GrtRedis grt = grtRepository.findById(userDetails.getMember().getId()).orElse(null);
+
+
+        if(grt == null) {
+            throw new CustomException(ErrorType.THIS_MEMBER_DONT_HAVE_GRT);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "refresh_token");
+        params.add("client_id", client_id);
+        params.add("client_secret", client_secret);
+        params.add("refresh_token", grt.getRefreshToken());
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> responseEntity = new RestTemplate().exchange(
+                "https://www.googleapis.com/oauth2/v4/token",
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+
+        GoogleOauthTokenInfo gti = null;
+
+        try{
+            ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            log.info("성공적으로 Google로부터 새 Access Token을 발급 받았습니다.");
+            gti = objectMapper.readValue(responseEntity.getBody(), GoogleOauthTokenInfo.class);
+
+            if(gti.getAccess_token() != null) {
+                gatRepository.save(new GatRedis(userDetails.getMember().getId(), gti.getAccess_token()));
+            }
+
+            return gti.getAccess_token();
+        }catch (JsonProcessingException e){
+            log.info("Google Access TOken 재발급 과정에서 에러가 났습니다. {}", e.getMessage());
+        }
 
         return null;
     }

@@ -65,7 +65,7 @@ jwt:
   secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
   token:
       #접근토큰시간: 5시간  #60*60*5*1000 =18000000
-      access-expiration-time: 18000000
+      access-expiration-time: 259200000
     #갱신토큰시간: 3일  #60*60*24*3*1000=259200000
       refresh-expiration-time: 259200000
 springdoc:

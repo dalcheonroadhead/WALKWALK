@@ -1,7 +1,6 @@
 package org.ssafy.d210.friends.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.ssafy.d210._common.response.ApiResponseDto;
@@ -11,7 +10,6 @@ import org.ssafy.d210.friends.dto.request.PostFriendRequest;
 import org.ssafy.d210.friends.dto.request.PutFriendRequest;
 import org.ssafy.d210.friends.service.FriendService;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/friends")
@@ -30,12 +28,12 @@ public class FriendController {
     }
 
     @PostMapping("/request")
-    public ApiResponseDto<?> postFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostFriendRequest postFriendRequest){
-        return ApiResponseDto.of(MsgType.POST_FRIEND_REQUEST_SUCCESSFULLY, friendService.postFriend(userDetails.getMember(), postFriendRequest));
+    public ApiResponseDto<?> postFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostFriendRequest request){
+        return ApiResponseDto.of(MsgType.POST_FRIEND_REQUEST_SUCCESSFULLY, friendService.postFriend(userDetails.getMember(), request));
     }
 
     @PutMapping("/response")
-    public ApiResponseDto<?> putFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PutFriendRequest putFriendRequest){
-        return ApiResponseDto.of(MsgType.PUT_FRIEND_REQUEST_SUCCESSFULLY, friendService.putFriend(userDetails.getMember(), putFriendRequest));
+    public ApiResponseDto<?> putFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PutFriendRequest request){
+        return ApiResponseDto.of(MsgType.PUT_FRIEND_REQUEST_SUCCESSFULLY, friendService.putFriend(userDetails.getMember(), request));
     }
 }

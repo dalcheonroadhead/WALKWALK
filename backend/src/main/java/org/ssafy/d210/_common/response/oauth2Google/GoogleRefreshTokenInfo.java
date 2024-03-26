@@ -15,7 +15,5 @@ import lombok.Setter;
 public class GoogleRefreshTokenInfo {
 
     private String refresh_token;
-    private int refresh_token_issued_at;
-    private int refresh_token_expires_in;
-    private int refresh_count;
+    private String token_type;
 }

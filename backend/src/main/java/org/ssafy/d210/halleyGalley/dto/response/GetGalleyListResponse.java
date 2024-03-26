@@ -12,15 +12,13 @@ public class GetGalleyListResponse {
     private LocalDateTime timeStamp;
     private Long memberId;
     private String nickname;
-    private Long exerciseTime;
     private Long requestedTime;
 
     @Builder
-    private GetGalleyListResponse(LocalDateTime timeStamp, Long memberId, String nickname, Long exerciseTime, Long requestedTime){
+    private GetGalleyListResponse(LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime){
         this.timeStamp = timeStamp;
         this.memberId = memberId;
         this.nickname = nickname;
-        this.exerciseTime = exerciseTime;
         this.requestedTime = requestedTime;
     }
 
@@ -29,8 +27,7 @@ public class GetGalleyListResponse {
                 .timeStamp(halleyGalley.getCreatedAt())
                 .memberId(halleyGalley.getGalleyId().getId())
                 .nickname(halleyGalley.getGalleyId().getNickname())
-                .exerciseTime(100L)
-                .requestedTime(null)
+                .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())
                 .build();
     }
 

@@ -1,7 +1,6 @@
 package org.ssafy.d210.friends.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssafy.d210._common.exception.CustomException;
@@ -19,7 +18,6 @@ import org.ssafy.d210.members.repository.MembersRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -27,21 +25,30 @@ public class FriendService {
     private final MembersRepository membersRepository;
 
     public GetMemberInfoResponse getMemberInfo(Members member, Long memberId){
-        Members members = membersRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
-        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(member, members).orElse(null);
-        boolean isFriend = friendList != null && friendList.getIsFriend();
+        Members members = membersRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
+
+        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(member, members)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+
+        boolean isFriend = friendList.getIsFriend();
         return GetMemberInfoResponse.from(members, isFriend);
     }
 
     public List<GetFriendListResponse> getMemberList(Members member){
-        List<FriendList> friendList = friendListRepository.findFriendListsBySenderIdAndIsFriendIsTrue(member);
+        List<FriendList> friendList = friendListRepository.findFriendListsBySenderIdAndIsFriendIsTrue(member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+
         return friendList.stream().map(GetFriendListResponse::from).collect(Collectors.toList());
     }
 
     @Transactional
-    public String postFriend(Members member, PostFriendRequest postFriendRequest){
-        Members receiver = membersRepository.findById(postFriendRequest.getMemberId()).orElse(null);
-        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver);
+    public String postFriend(Members member, PostFriendRequest request){
+        Members receiver = membersRepository.findById(request.getMemberId())
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
+
+        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
 
         if(friendList == null) {
             friendListRepository.save(
@@ -68,12 +75,16 @@ public class FriendService {
     }
 
     @Transactional
-    public PutFriendResponse putFriend(Members member, PutFriendRequest putFriendRequest){
-        Members friend = membersRepository.findById(putFriendRequest.getMemberId()).orElse(null);
-        Boolean isAccepted = putFriendRequest.getIsAccept();
+    public PutFriendResponse putFriend(Members member, PutFriendRequest request){
+        Members friend = membersRepository.findById(request.getMemberId()).orElse(null);
+        Boolean isAccepted = request.getIsAccept();
 
-        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverId(member, friend);
-        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverId(friend, member);
+        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverId(member, friend)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+
+        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverId(friend, member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+
         if(isAccepted) {
             friendList1.updateIsAccepted(isAccepted);
             friendList1.updateIsFriend(isAccepted);
@@ -87,6 +98,8 @@ public class FriendService {
             friendListRepository.delete(friendList2);
         }
 
-        return PutFriendResponse.builder().isFriend(isAccepted).build();
+        return PutFriendResponse.builder()
+                .isFriend(isAccepted)
+                .build();
     }
 }

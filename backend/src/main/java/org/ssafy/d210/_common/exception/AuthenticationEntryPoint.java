@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+import org.ssafy.d210._common.entity.GrtRedis;
+import org.ssafy.d210._common.repository.GrtRepository;
 import org.ssafy.d210._common.response.ResponseUtils;
+import org.ssafy.d210._common.service.jwt.JwtUtil;
 
 import java.io.IOException;
 
@@ -20,6 +23,8 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class AuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint {
+
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
@@ -37,12 +42,18 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
                 return;
             }
 
+            if(exception.equals(ErrorType.EXPIRED_TOKEN)) {
+
+                exceptionHandler(response, ErrorType.EXPIRED_TOKEN);
+                return;
+            }
+
             if (exception.equals(ErrorType.NOT_FOUND_MEMBER)) {
                 exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
-
             }
+
         }else {
-            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
+            exceptionHandler(response, ErrorType.ANOTHER_ERROR);
         }
     }
 
@@ -60,7 +71,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
             response.getWriter().write(json);
 
             //      에러 내용 로그 확인
-            log.error("인증 과정에서 오류가 났습니다! ＼(´◓Д◔`)／ 에러 내용은 다음과 같습니다.={}", error.getMsg());
+            log.error(" 에러 내용은 다음과 같습니다.={}", error.getMsg());
         } catch (Exception e){
             // B-3 Response 작성 과정에서 에러가 났을 경우 알려준다.
             log.error(e.getMessage());
