@@ -2,10 +2,14 @@ package org.ssafy.d210.members.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.OnlyCreatedTime;
+import org.ssafy.d210._common.request.MessageInfo;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +39,37 @@ public class VoiceMessage extends OnlyCreatedTime {
     @ColumnDefault("false")
     private boolean isOpened;
 
+    @Column(name = "text")
+//    @ColumnDefault("음성 메세지")
+    private String text;
+
+    @Column(name="msg_type")
+    @Enumerated(EnumType.STRING)
+    private MsgType msgType;
+
+
+    @Builder
+    private VoiceMessage (Members sender, Members receiver, String voiceAddr, boolean isOpened, String text, MsgType msgType ) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.voiceAddr = voiceAddr;
+        this.isOpened = isOpened;
+        this.text = text;
+        this.msgType = msgType;
+    }
+
+
+    public static VoiceMessage toEntity(Members sender, Members receiver, String voiceAddr, boolean isOpened, String text, MsgType msgType){
+
+        return builder()
+                .sender(sender)
+                .receiver(receiver)
+                .voiceAddr(voiceAddr)
+                .isOpened(isOpened)
+                .text(text)
+                .msgType(msgType)
+                .build();
+    }
 
 
 

@@ -36,6 +36,8 @@ public class TimeChecker {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
 
+
+        log.info("현재 시각: {} ☆～（ゝ。∂）", afterTime);
         if(timeTaken < 10){
             log.info("✧･ﾟ: *✧･ﾟ:* {} 서비스 처리 성공 in {} sec *:･ﾟ✧*:･ﾟ✧", method.getName(), timeTaken);
         } else {
