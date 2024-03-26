@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./Login.module.css";
 import { createWallet } from '../../apis/wallet';
-import { submitUserInfo } from '../../apis/member';
+import { submitUserInfo, checkDuplicated } from '../../apis/member';
 
 const Signup = function () {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Signup = function () {
     location: '',
     longitude: 0,
     latitude: 0,
-    birthYear: 0,
+    birthYear: currentYear,
     comment: '',
     eoa: '',
     phoneNumber: '',
@@ -30,96 +30,130 @@ const Signup = function () {
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
   // 연도 목록 생성: 현재 연도부터 100년 전까지
-  const years = Array.from(new Array(101), (val, index) => currentYear - index);
+  const years = Array.from({length:101}, (val, index) => currentYear - index);
 
   useEffect(() => {
     // selectedYear가 변경될 때마다 userInfo의 birthYear를 업데이트합니다.
-    setUserInfo(prevInfo => ({
-      ...prevInfo,
-      birthYear: parseInt(selectedYear), // 출생연도를 정수로 변환하여 저장
-    }));
+    setUserInfo(prevInfo => ({...prevInfo, birthYear: parseInt(selectedYear)}));
   }, [selectedYear]);
 
   const handleInputChange = (e) => {
-    if (e.target.name === 'selectedYear') {
-      // selectedYear의 경우 상태를 직접 업데이트합니다.
-      setSelectedYear(e.target.value);
-    } else {
-      setUserInfo((prevInfo) => ({
-        ...prevInfo,
-        [e.target.name]: e.target.value,
-      }));
+    const { name, value } = e.target;
+    // 입력 값에 대한 즉각적인 유효성 검사를 추가
+    if (name === 'nickname') {
+      validateNickname(value);
     }
-  };
-
-  // Button 클릭 이벤트 핸들러
-  const handleClick = async () => {
-    switch (step) {
-      case 1:
-        // 닉네임 중복 검사 등의 로직...
-        setStep(step + 1);
-        break;
-      case 2:
-        // 출생연도 선택 후 처리 로직...
-        setStep(step + 1);
-        break;
-      case 3:
-        // 성별 선택 후 처리 로직...
-        setStep(step + 1);
-        break;
-      case 4:
-        // 키&몸무게 선택 후 처리 로직...
-        setStep(step + 1);
-        break;
-      case 5:
-        // 전화번호 선택 후 처리 로직...
-        setStep(0);
-        setisLocationVisible(true); // 여기서 지역정보 입력을 활성화
-        break;
-      // 추가적인 단계별 처리 로직...
-      default:
-        console.log("회원가입 완료 또는 마지막 단계 이후의 처리");
-        // 회원가입완료 API 호출 등의 로직...
-        // 블록체인 지갑 생성 API
-        try {
-          const walletInfo = await createWallet();
-          const updatedUserInfo = {
-            ...userInfo,
-            eoa: walletInfo.eoa,
-            publicKey: walletInfo.publicKey,
-          }
-          setUserInfo(updatedUserInfo);
-
-          await submitUserInfo(updatedUserInfo);
-          console.log(updatedUserInfo)
-          navigate('/main')
-        } catch (error) {
-          console.log('지갑 생성 중 에러 발생', error)
-        }
-        break;
-    }
+    setUserInfo(prev => ({ ...prev, [name]: value }));
+    // if (e.target.name === 'selectedYear') {
+    //   // selectedYear의 경우 상태를 직접 업데이트합니다.
+    //   setSelectedYear(e.target.value);
+    // } else {
+    //   setUserInfo((prevInfo) => ({
+    //     ...prevInfo,
+    //     [e.target.name]: e.target.value,
+    //   }));
+    // }
   };
 
   const handleAddressChange = (address) => {
-    setUserInfo(prevInfo => ({
-      ...prevInfo,
-      location: address,
-    }));
+    setUserInfo(prevInfo => ({...prevInfo, location: address}));
   };
 
   const daumPost = () => {
     new daum.Postcode({
       oncomplete: function(data) {
           // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-          // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
           const roadAddr = data.roadAddress; // 도로명 주소 변수
-
           // 우편번호와 주소 정보를 해당 필드에 넣는다.
           handleAddressChange(roadAddr);
       }
   }).open();
   }
+
+  // Button 클릭 이벤트 핸들러
+  const handleClick = async () => {
+    if (step === 5) {
+      setStep(0);
+      setisLocationVisible(true);
+      // 블록체인 지갑 생성 API
+      try {
+        const walletInfo = await createWallet();
+        const updatedUserInfo = {
+          ...userInfo,
+          eoa: walletInfo.eoa,
+          publicKey: walletInfo.publicKey,
+        }
+        setUserInfo(updatedUserInfo);
+
+        await submitUserInfo(updatedUserInfo);
+        console.log(updatedUserInfo)
+        navigate('/main')
+      } catch (error) {
+        console.log('지갑 생성 중 에러 발생', error)
+      }
+    }
+  };
+
+  
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
+  const [nicknameError, setNicknameError] = useState('');
+  const [debounce, setDebounce] = useState(null);
+
+  useEffect(() => {
+    // 디바운스된 중복 검사 로직
+    if (step === 1 && userInfo.nickname) {
+      if (debounce) clearTimeout(debounce);
+      setDebounce(setTimeout(() => {
+        checkNicknameDuplication(userInfo.nickname);
+      }, 2000));
+    }
+  }, [userInfo.nickname]);
+  
+  useEffect(() => {
+    validateCurrentStep();
+  }, [step, userInfo]); // step 또는 userInfo가 변경될 때마다 유효성 검사 실행
+
+  const validateNickname = (nickname) => {
+    // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
+    if (!nickname) {
+      setNicknameError('닉네임을 입력해주세요.');
+      setIsNextButtonDisabled(true);
+    } else if (nickname.length > 12) {
+      setNicknameError('닉네임은 12자 이하여야 합니다.');
+      setIsNextButtonDisabled(true);
+    } else {
+      // 유효성 검사를 통과하면 에러 메시지를 초기화하고, 중복 검사 로직을 실행
+      setNicknameError('');
+      setIsNextButtonDisabled(false);
+      checkNicknameDuplication(nickname);
+    }
+  };
+
+  // 중복 검사에 디바운스 적용
+const checkNicknameDuplication = (nickname) => {
+  if (debounce) clearTimeout(debounce);
+  setDebounce(setTimeout(() => {
+    checkDuplicated(nickname);
+  }, 2000));
+};
+
+  const validateCurrentStep = () => {
+    // 닉네임 유효성 검사
+    if (step === 1) {
+      if (!userInfo.nickname) {
+        setIsNextButtonDisabled(true);
+        setNicknameError('닉네임을 입력해주세요.');
+      } else if (userInfo.nickname.length > 12) {
+        setIsNextButtonDisabled(true);
+        setNicknameError('닉네임은 12자 이하여야 합니다.');
+      }}
+    // } else if (step === 2 && !userInfo.gender) {
+    //   setIsNextButtonDisabled(true);
+    // } else {
+    //   // 추가적인 유효성 검사 로직
+    //   setIsNextButtonDisabled(false); // 모든 검사를 통과하면 버튼 활성화
+    // }
+  };
 
   return(
     <div>
@@ -177,11 +211,12 @@ const Signup = function () {
         <div className={styles.signup_form}>
           <div>
             <div className={styles.signup_title}>닉네임</div>
-            <input className={styles.signup_input} type="text" placeholder='닉네임을 입력해주세요' name="nickname" onChange={handleInputChange}/>
+            <input className={styles.signup_input} type="text" placeholder='닉네임을 입력해주세요' name="nickname" value={userInfo.nickname} onChange={handleInputChange}/>
+            {nicknameError && <p>{nicknameError}</p>}
           </div>
         </div>
       )}
-      <button className={styles.signup_btn} onClick={handleClick}>{step < 1 ? "회원가입 완료" : "다음"}</button>
+      <button className={styles.signup_btn} onClick={handleClick} disabled={isNextButtonDisabled}>{step < 1 ? "가입 완료" : "다음"}</button>
     </div>
   )
 }
