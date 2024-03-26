@@ -56,7 +56,7 @@ const Main = function(){
     // 나 모달
     const 운동데이터 = {
         criteriaTime: 120,       // 기준 운동시간
-        currentTime: 20,        // 오늘 운동시간
+        currentTime: 100,        // 오늘 운동시간
         criteriaSteps: 6000,    // 기준 걸음수
         currentSteps: 5000,     // 오늘 걸음수
         
