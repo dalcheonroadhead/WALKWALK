@@ -29,26 +29,26 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
 
-        ErrorType exception = (ErrorType) request.getAttribute("exception");
+        String exception = (String) request.getAttribute("exception");
 
         if(exception != null) {
-            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.TOKEN_DOESNT_EXIST)) {
                 exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
                 return;
             }
 
-            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.NOT_VALID_TOKEN)) {
                 exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
                 return;
             }
 
-            if(exception.equals(ErrorType.EXPIRED_TOKEN)) {
+            if(ErrorType.valueOf(exception).equals(ErrorType.EXPIRED_TOKEN)) {
 
                 exceptionHandler(response, ErrorType.EXPIRED_TOKEN);
                 return;
             }
 
-            if (exception.equals(ErrorType.NOT_FOUND_MEMBER)) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.NOT_FOUND_MEMBER)) {
                 exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
             }
 

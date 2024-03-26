@@ -10,6 +10,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 
 @Aspect // 해당 클래스가 Aspect임을 나타냄 Aspect = 자신이 실행될 위치(pointcut)을 알고 있는 부가기능(Advice) 클래스를 말함.
 @Component
@@ -37,7 +38,7 @@ public class TimeChecker {
         Method method = methodSignature.getMethod();
 
 
-        log.info("현재 시각: {} ☆～（ゝ。∂）", afterTime);
+        log.info("현재 시각: {} ☆～（ゝ。∂）", LocalDateTime.now());
         if(timeTaken < 10){
             log.info("✧･ﾟ: *✧･ﾟ:* {} 서비스 처리 성공 in {} sec *:･ﾟ✧*:･ﾟ✧", method.getName(), timeTaken);
         } else {
