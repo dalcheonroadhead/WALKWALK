@@ -1,26 +1,24 @@
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import styles from "./Login.module.css";
-import { getGoogleToken } from "../../apis/member"
-import { useUserStore } from "../../stores/member";
+import { getGoogleToken } from "../../apis/member";
 
 const LoginRedirect = function () {
   const navigate = useNavigate();
-  const {tokens, setToken} = useUserStore();
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
     console.log('code : ', code)
 
     if (code) {
-      // TODO : 서버에 code 전송
-      if (getGoogleToken(code)) {
-        navigate('/signup')
-      } else {
-        navigate('/main')
-      }
+      getGoogleToken(code).then((res) => {
+        console.log('test2 :', res);
+        navigate(res.isNew ? '/signup' : '/main');
+      }).catch((err) => {
+        console.error('토큰 가져오기 실패 :', err);
+      });
     }
-  })
+  }, [])
   
   return (
     <div className={styles.login_redirect_container}>

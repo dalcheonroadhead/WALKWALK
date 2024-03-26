@@ -100,30 +100,33 @@ const Signup = function () {
     }
   };
 
-  // Button 텍스트 결정
-  const buttonText = () => {
-    switch (step) {
-      case 1:
-        return "중복 체크";
-      case 2:
-        return "다음";
-      case 3:
-        return "다음";
-      case 4:
-        return "다음";
-      case 5:
-        return "다음";
-      // 추가적인 단계별 버튼 텍스트...
-      default:
-        return "회원가입 완료";
-    }
+  const handleAddressChange = (address) => {
+    setUserInfo(prevInfo => ({
+      ...prevInfo,
+      location: address,
+    }));
   };
+
+  const daumPost = () => {
+    new daum.Postcode({
+      oncomplete: function(data) {
+          // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+          // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+          const roadAddr = data.roadAddress; // 도로명 주소 변수
+
+          // 우편번호와 주소 정보를 해당 필드에 넣는다.
+          handleAddressChange(roadAddr);
+      }
+  }).open();
+  }
 
   return(
     <div>
       {isLocationVisible === true && (
         <div className={styles.signup_form}>
-          <div className={styles.signup_title} name="location">지역정보</div>
+          <div className={styles.signup_title}>지역정보</div>
+          <input className={styles.signup_input} type="text" placeholder='주소를 입력해주세요' name="location" onClick={daumPost} value={userInfo.location} readOnly/>
         </div>
       )}
       {step >= 5 && (
@@ -136,7 +139,9 @@ const Signup = function () {
         <div className={styles.signup_form}>
           <div>
             <div className={styles.signup_title}>키</div>
-            <input className={styles.signup_input} type="number" placeholder='키 입력해주세요' name="height" onChange={handleInputChange}/>
+            <input className={styles.signup_input} type="number" placeholder='키를 입력해주세요' name="height" onChange={handleInputChange}/>
+          </div>
+          <div>
             <div className={styles.signup_title}>몸무게</div>
             <input className={styles.signup_input} type="number" placeholder='몸무게를 입력해주세요' name="weight" onChange={handleInputChange}/>
           </div>
@@ -176,7 +181,7 @@ const Signup = function () {
           </div>
         </div>
       )}
-      <button className={styles.signup_btn} onClick={handleClick}>{buttonText()}</button>
+      <button className={styles.signup_btn} onClick={handleClick}>{step < 1 ? "회원가입 완료" : "다음"}</button>
     </div>
   )
 }
