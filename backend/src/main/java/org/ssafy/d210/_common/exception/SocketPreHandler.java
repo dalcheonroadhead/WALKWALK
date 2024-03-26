@@ -2,15 +2,21 @@ package org.ssafy.d210._common.exception;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.ssafy.d210._common.service.jwt.JwtUtil;
 
 /* （〜^∇^)〜 [SOCKET]으로 들어오기 전에 하는 handler 〜(^∇^〜） */
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class SocketPreHandler implements ChannelInterceptor {
@@ -19,6 +25,7 @@ public class SocketPreHandler implements ChannelInterceptor {
     private static final String BEARER_PREFIX = "Bearer ";
 
 
+    // 1. 메시지 전 처리
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         // A. 헤더 부분만 얻어내기
@@ -46,7 +53,29 @@ public class SocketPreHandler implements ChannelInterceptor {
             }
         }
 
+        // E. JWT 검증 통과 -> 토큰으로부터 사용자 정보를 가져온다.
+        Claims info = jwtUtil.getUserInfoFromToken(token);
+
+        log.info("토큰에 들어있는 값={}", info.toString());
+
+
+        try {
+            setAuthentication(info.getSubject());
+        }catch (UsernameNotFoundException e){
+            throw new CustomException(ErrorType.NOT_FOUND_MEMBER);
+        }
 
         return  message;
+    }
+
+
+    // 2. 인증 객체 생성
+    private void setAuthentication(String userEmail) {
+
+        SecurityContext context = SecurityContextHolder.createEmptyContext();   // 서버에서 인증 객체용 [Thread]를 만듬
+        Authentication authentication = jwtUtil.createAuthentication(userEmail); // 인증 객체 만들기
+        context.setAuthentication(authentication);  // 해당 [Thread]에 객체를 기록
+
+        SecurityContextHolder.setContext(context); // [Thread]를 서버 전체 컨테이너에 기록
     }
 }
