@@ -31,11 +31,13 @@ export const submitUserInfo = async (userInfo) => {
 
 export const checkDuplicated = async (nickname) => {
     const url = '/members/check-duplicated'
+    console.log('api nickname : ', nickname)
+    console.log(instance.defaults.headers.common['Authorization'])
 
-    return await instance.get(url, nickname)
+    return await instance.get(url, {params: {nickname}})
         .then((res) => {
-            console.log(res)
-            if (res.data.isDuplicated) {
+            console.log('checkDuplicated', res)
+            if (res.data.data.isDuplicated) {
                 return true
             } else {
                 return false
