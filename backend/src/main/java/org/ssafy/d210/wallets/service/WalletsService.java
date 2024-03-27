@@ -9,11 +9,11 @@ import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
-import org.ssafy.d210.wallets.dto.request.PutEggMoneyRequest;
+import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
 import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
 import org.ssafy.d210.wallets.dto.response.GetEggMoneyResponse;
-import org.ssafy.d210.wallets.dto.response.PutEggMoneyResponse;
+import org.ssafy.d210.wallets.dto.response.PutMoneyResponse;
 import org.ssafy.d210.wallets.dto.response.PutEggResponse;
 import org.ssafy.d210.wallets.dto.response.PutHalleyGalleyMoneyResponse;
 import org.ssafy.d210.wallets.entity.MemberAccount;
@@ -52,11 +52,11 @@ public class WalletsService {
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest, false));
     }
 
-    public PutEggMoneyResponse putEggMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, PutEggMoneyRequest putEggMoneyRequest) {
+    public PutMoneyResponse putMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        return memberAccount.putEggMoney(putEggMoneyRequest, true);
+        return memberAccount.putMoney(putMoneyRequest, true);
     }
 
     public PutHalleyGalleyMoneyResponse putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest) {

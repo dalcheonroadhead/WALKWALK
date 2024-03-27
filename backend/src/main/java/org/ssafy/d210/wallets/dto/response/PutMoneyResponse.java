@@ -6,19 +6,16 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class PutEggMoneyResponse {
-    private Integer egg;
+public class PutMoneyResponse {
     private Integer money;
 
     @Builder
-    private PutEggMoneyResponse(Integer egg, Integer money) {
-        this.egg = egg;
+    private PutMoneyResponse(Integer money) {
         this.money = money;
     }
 
-    public static PutEggMoneyResponse of(Integer egg, Integer money) {
+    public static PutMoneyResponse of(Integer money) {
         return builder()
-                .egg(egg)
                 .money(money)
                 .build();
     }

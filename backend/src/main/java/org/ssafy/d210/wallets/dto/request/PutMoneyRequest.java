@@ -8,10 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class PutEggMoneyRequest {
-
-    @NotNull(message = "변경할 Egg 값이 없습니다.")
-    private Integer putEggValue;
+public class PutMoneyRequest {
 
     @NotNull(message = "변경할 Money 값이 없습니다.")
     private Integer putMoneyValue;

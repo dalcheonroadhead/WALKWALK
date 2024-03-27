@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.service.UserDetailsImpl;
-import org.ssafy.d210.wallets.dto.request.PutEggMoneyRequest;
+import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
 import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
 import org.ssafy.d210.wallets.service.WalletsService;
@@ -56,8 +56,8 @@ public class WalletsController {
         return ApiResponseDto.of(PUT_EGG_SUB_SUCCESSFULLY, walletsService.putEggSub(userDetails, putEggRequest));
     }
 
-    @PutMapping("/egg-money-add")
-    public ApiResponseDto<?> putEggMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutEggMoneyRequest putEggMoneyRequest, BindingResult bindingResult) {
+    @PutMapping("/money-add")
+    public ApiResponseDto<?> putEggMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
         log.info("WalletsController.putEggMoneyAdd");
 
         // validation 오류
@@ -65,7 +65,7 @@ public class WalletsController {
             throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
         }
 
-        return ApiResponseDto.of(PUT_EGG_MONEY_ADD_SUCCESSFULLY, walletsService.putEggMoneyAdd(userDetails, putEggMoneyRequest));
+        return ApiResponseDto.of(PUT_EGG_MONEY_ADD_SUCCESSFULLY, walletsService.putMoneyAdd(userDetails, putMoneyRequest));
     }
 
     @PutMapping("/money-halley-galley")
