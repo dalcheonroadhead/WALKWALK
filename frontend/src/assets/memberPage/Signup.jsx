@@ -84,7 +84,7 @@ const Signup = function () {
 
   const checkNickname = useCallback(async (nickname) => {
       // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
-      if (!nickname || nickname.length > 10) {
+      if (nickname === '' || nickname.length > 10) {
         setNicknameError('닉네임은 1자 이상 10자 이하여야 합니다.');
         setNicknameErrorType(false);
         setIsButtonDisabled(true);
