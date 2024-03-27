@@ -11,8 +11,9 @@ const Signup = function () {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(''); // 현재 연도를 기준으로 상태 설정
   const years = Array.from({length:101}, (val, index) => currentYear - index); // 연도 목록 생성: 현재 연도부터 100년 전까지
-  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [nicknameError, setNicknameError] = useState('');
+  const [nicknameErrorType, setNicknameErrorType] = useState(false);
   const [debounce, setDebounce] = useState(null);
 
   const [userInfo, setUserInfo] = useState({
@@ -95,7 +96,7 @@ const Signup = function () {
       }
     } else {
       setStep(step+1);
-      setIsNextButtonDisabled(true);
+      setIsButtonDisabled(true);
     }
   };
 
@@ -110,37 +111,37 @@ const Signup = function () {
     }
     else if (step === 2) {
       if (selectedYear !== '') {
-        setIsNextButtonDisabled(false);
+        setIsButtonDisabled(false);
       } else {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
       }
     }
     else if (step === 3) {
       if (userInfo.gender !== '') {
-        setIsNextButtonDisabled(false);
+        setIsButtonDisabled(false);
       } else {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
       }
     }
     else if (step === 4) {
       if (userInfo.height !== '' && userInfo.weight !== '') {
-        setIsNextButtonDisabled(false);
+        setIsButtonDisabled(false);
       } else {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
       }
     }
     else if (step === 5) {
       if (userInfo.phoneNumber !== '') {
-        setIsNextButtonDisabled(false);
+        setIsButtonDisabled(false);
       } else {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
       }
     }
     else if (step === 0) {
       if (userInfo.location !== '') {
-        setIsNextButtonDisabled(false);
+        setIsButtonDisabled(false);
       } else {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
       }
     }
   }, [step, userInfo, selectedYear]);
@@ -152,9 +153,9 @@ const Signup = function () {
   const checkNickname = useCallback(
     async (nickname) => {
       // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
-      if (!nickname || nickname.length > 12) {
-        setNicknameError('닉네임은 1자 이상 12자 이하여야 합니다.');
-        setIsNextButtonDisabled(true);
+      if (!nickname || nickname.length > 11) {
+        setNicknameError('닉네임은 1자 이상 10자 이하여야 합니다.');
+        setIsButtonDisabled(true);
         return;
       }
   
@@ -162,26 +163,27 @@ const Signup = function () {
         const { isDuplicated } = await checkDuplicated(nickname);
         if (isDuplicated) {
           setNicknameError('이미 사용 중인 닉네임입니다.');
-          setIsNextButtonDisabled(true);
+          setIsButtonDisabled(true);
         } else {
           setNicknameError('사용 가능한 닉네임입니다.');
-          setIsNextButtonDisabled(false);
+          setIsButtonDisabled(false);
+          setNicknameErrorType(true);
         }
       } catch (error) {
         console.error('닉네임 중복 검사 중 에러 발생:', error);
         setNicknameError('중복 검사 중 오류가 발생했습니다.');
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
       }
       // if (!nickname) {
       //   setNicknameError('닉네임을 입력해주세요.');
-      //   setIsNextButtonDisabled(true);
+      //   setIsButtonDisabled(true);
       // } else if (nickname.length > 12) {
       //   setNicknameError('닉네임은 12자 이하여야 합니다.');
-      //   setIsNextButtonDisabled(true);
+      //   setIsButtonDisabled(true);
       // } else {
       //   // 유효성 검사를 통과하면 에러 메시지를 초기화하고, 중복 검사 로직을 실행
       //   setNicknameError('');
-      //   setIsNextButtonDisabled(false);
+      //   setIsButtonDisabled(false);
       //   checkNicknameDuplication(nickname);
       // }
     });
@@ -199,81 +201,75 @@ const checkNicknameDuplication = (nickname) => {
     // 닉네임 유효성 검사
     if (step === 1) {
       if (!userInfo.nickname) {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
         setNicknameError('닉네임을 입력해주세요.');
       } else if (userInfo.nickname.length > 12) {
-        setIsNextButtonDisabled(true);
+        setIsButtonDisabled(true);
         setNicknameError('닉네임은 12자 이하여야 합니다.');
       }}
     // } else if (step === 2 && !userInfo.gender) {
-    //   setIsNextButtonDisabled(true);
+    //   setIsButtonDisabled(true);
     // } else {
     //   // 추가적인 유효성 검사 로직
-    //   setIsNextButtonDisabled(false); // 모든 검사를 통과하면 버튼 활성화
+    //   setIsButtonDisabled(false); // 모든 검사를 통과하면 버튼 활성화
     // }
   };
 
   return(
-    <div>
-      {isLocationVisible === true && (
-        <div className={styles.signup_form}>
+    <div className={styles.signup_container}>
+      {step === 0 && (
+        <div>
           <div className={styles.signup_title}>지역정보</div>
           <input className={styles.signup_input} type="text" placeholder='주소를 입력해주세요' name="location" onClick={daumPost} value={userInfo.location} readOnly/>
         </div>
       )}
       {step >= 5 && (
-        <div className={styles.signup_form}>
+        <div>
           <div className={styles.signup_title}>전화번호</div>
           <input className={styles.signup_input} type="text" placeholder='ex) 01011111111' name="phoneNumber" onChange={handleInputChange}/>
         </div>
       )}
       {step >= 4 && (
-        <div className={styles.signup_form}>
+        <div className={styles.signup_2col}>
           <div>
             <div className={styles.signup_title}>키</div>
-            <input className={styles.signup_input} type="number" placeholder='키를 입력해주세요' name="height" onChange={handleInputChange}/>
+            <input className={styles.signup_input} type="number" placeholder='키를 입력해주세요 (cm)' name="height" onChange={handleInputChange}/>
           </div>
           <div>
             <div className={styles.signup_title}>몸무게</div>
-            <input className={styles.signup_input} type="number" placeholder='몸무게를 입력해주세요' name="weight" onChange={handleInputChange}/>
+            <input className={styles.signup_input} type="number" placeholder='몸무게를 입력해주세요 (kg)' name="weight" onChange={handleInputChange}/>
           </div>
         </div>
       )}
       {step >= 3 && (
-        <div className={styles.signup_form}>
-          <div>
-            <div className={styles.signup_title}>성별</div>
-            <select className={styles.signup_input} name="gender" defaultValue="" onChange={handleInputChange}>
-              <option value="" disabled>성별을 선택해주세요</option>
-              <option value="MALE">남성</option>
-              <option value="FEMALE">여성</option>
-            </select>
-          </div>
+        <div>
+          <div className={styles.signup_title}>성별</div>
+          <select className={styles.signup_input} name="gender" defaultValue="" onChange={handleInputChange}>
+            <option value="" disabled>성별을 선택해주세요</option>
+            <option value="MALE">남성</option>
+            <option value="FEMALE">여성</option>
+          </select>
         </div>
       )}
       {step >= 2 && (
-        <div className={styles.signup_form}>
-          <div>
-            <div className={styles.signup_title}>출생연도</div>
-            <select className={styles.signup_input} value={selectedYear} onChange={handleInputChange} name="selectedYear">
-              <option value="" disabled>출생연도를 선택해주세요</option>
-              {years.map((year) => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <div className={styles.signup_title}>출생연도</div>
+          <select className={styles.signup_input} name="selectedYear" value={selectedYear} onChange={handleInputChange}>
+            <option value="" disabled>출생연도를 선택해주세요</option>
+            {years.map((year) => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
         </div>
       )}
       {step >= 1 && (
-        <div className={styles.signup_form}>
-          <div>
-            <div className={styles.signup_title}>닉네임</div>
-            <input className={styles.signup_input} type="text" placeholder='닉네임을 입력해주세요' name="nickname" value={userInfo.nickname} onChange={handleInputChange}/>
-            {nicknameError && <p>{nicknameError}</p>}
-          </div>
+        <div>
+          <div className={styles.signup_title}>닉네임</div>
+          <input className={styles.signup_input} type="text" placeholder='닉네임을 입력해주세요' name="nickname" value={userInfo.nickname} onChange={handleInputChange}/>
+          {nicknameError && <p className={styles.signup_error} style={{color: nicknameErrorType ? 'green' : 'red'}}>{nicknameError}</p>}
         </div>
       )}
-      <button className={styles.signup_btn} onClick={handleClick} disabled={isNextButtonDisabled}>{step < 1 ? "가입 완료" : "다음"}</button>
+      <button className={styles.signup_btn} disabled={isButtonDisabled} onClick={handleClick}>{step === 0 ? "가입 완료" : "다 음"}</button>
     </div>
   )
 }
