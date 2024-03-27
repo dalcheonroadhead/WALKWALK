@@ -15,6 +15,7 @@ import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.members.service.MemberService;
 import org.ssafy.d210.walk.dto.response.FitnessResponse;
+import org.ssafy.d210.walk.service.ExerciseCriteriaService;
 import org.ssafy.d210.walk.service.ExerciseService;
 
 import java.time.LocalDateTime;
@@ -34,15 +35,15 @@ public class SchedulerConfig {
     private final MemberDataService memberDataService;
     private final MembersRepository membersRepository;
     private final ExerciseService exerciseService;
+    private final ExerciseCriteriaService exerciseCriteriaService;
 
-    @Scheduled(cron = "0 30 15 * * *")
+//    @Scheduled(cron = "0 4 17 * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void runTempSaveExercise() {
         List<Members> members = membersRepository.findAll();
 
         for (Members member : members) {
             String accessToken = memberDataService.refreshAccessToken(member);
-
-            System.out.println("<<<<<<<<<<<<<<<<<<<<여기까지 넘어왔니? 홁>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
             // 받아온 액세스 토큰으로 구글 피트니스 데이터 가져오기
             LocalDateTime now = LocalDateTime.now();
@@ -76,5 +77,14 @@ public class SchedulerConfig {
 //            log.error("배치 작업 실행 중 에러가 발생했습니다.", e);
 //        }
 //    }
+
+    @Scheduled(cron = "0 0 0 1 1 *")
+    public void adjustAgeGroup() {
+        List<Members> members = membersRepository.findAll();
+
+        for (Members member : members) {
+            exerciseCriteriaService.setDefaultExerciseCriteria(member);
+        }
+    }
 }
 

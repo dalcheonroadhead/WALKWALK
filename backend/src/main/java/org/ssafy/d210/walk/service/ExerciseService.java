@@ -110,9 +110,20 @@ public class ExerciseService {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
+        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.toString());
+        System.out.println("@@@@@@@김길규@@@@@@@" + entity.toString());
+        System.out.println("@@@@@@@김길규@@@@@@@" + FitnessResponse.class.toString());
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+        System.out.println("@@@@@@@김길규@@@@@@@" + response.getBody());
 
-        return response.getBody();
+        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.postForEntity(url, entity, FitnessResponse.class).getBody());
+        // 얘가 문제임
+//        ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
+
+        System.out.println("<<<<<<<<<<<<<<<<<<<<여기까지 넘어왔니? 홁>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+        return restTemplate.postForEntity(url, entity, FitnessResponse.class).getBody();
+//        return response.getBody();
     }
 
     public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member) {
@@ -123,6 +134,7 @@ public class ExerciseService {
         for (FitnessResponse.Bucket bucket : fitnessResponse.getBucket()) {
             for (FitnessResponse.DataSet dataSet : bucket.getDataset()) {
                 for (FitnessResponse.DataPoint dataPoint : dataSet.getPoint()) {
+                    System.out.println("<<<<<<<<<<<<<<<<<<<<여기까지 넘어왔니? 홁>>>>>>>>>>>>>>>>>>>>>>>>>");
                     switch (dataPoint.getDataType()) {
                         case "com.google.step_count.delta":
                             exercise.setSteps(dataPoint.getValue().get(0).getIntVal());
