@@ -1,5 +1,6 @@
 import { useState, useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Sidebar from "../common/sidebar/Sidebar";
 import styles from "./Rank.module.css"
 
 const Rank = function(){

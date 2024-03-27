@@ -1,8 +1,10 @@
+import Sidebar from "../common/sidebar/Sidebar";
+import styles from "./Walking.module.css"
 
 const Walking = function(){
     return(
         <>
-            <div>
+            <div className={styles.main_container}>
                 <h1>운동 페이지</h1>
             </div>
         </>

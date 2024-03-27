@@ -3,7 +3,7 @@ import styles from './Sidebar.module.css';
 import { useEffect } from 'react';
 
 const Sidebar = () =>{
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(false);
 
     const handleSidebarClickEvent = ()=>{
         setOpened(!opened);
