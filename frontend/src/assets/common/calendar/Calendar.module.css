@@ -1,0 +1,58 @@
+@font-face {
+  font-family: "bc_l";
+  src: url(/public/fonts/BCcardL.ttf);
+}
+@font-face {
+  font-family: "bc_b";
+  src: url(/public/fonts/BCcardB.ttf);
+}
+
+.calendar {
+  font-family: 'bc_b';
+  width: 20rem;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 0 10px 13px 10px;
+  background-color: #EDDEC3;
+}
+.month {
+  text-align: center;
+  font-size: 2.7rem;
+  font-weight: bold;
+}
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #FFF9EF;
+  border-radius: 1rem;
+  padding: 0.2rem 0.5rem;
+}
+.day_label{
+  font-size: 1.2rem;
+}
+.day {
+  padding: 5px;
+  text-align: center;
+}
+.today {
+  background-color: lightblue;
+}
+.selected{
+  background-color: rgba(255, 0, 0, 0.228);
+}
+.sunday{
+  color: #C86969;
+}
+.saturday{
+  color: #6973C8;
+}
+.duck_img{
+  position: absolute;
+	bottom: -1rem;
+  left: -0.5rem;
+  width: 2.5rem;
+}
+.calendar_bottom{
+  width: 21rem;
+	margin: 1rem 0 -1.5rem -0.5rem;
+}

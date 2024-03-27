@@ -88,7 +88,7 @@ const Friend = function(){
                 {friendlist.map((data, index) => {
                     return(
                         <>
-                            <div key={index} className={styles.receive_friend_container}>
+                            <div key={index} className={styles.send_friend_container}>
                                 <img src={data.pimg} alt="프로필 사진" className={styles.send_friend_img_container} ></img>
                                 <div className={styles.send_friend_info_container}>
                                     <p className={styles.send_friend_name_txt}>{data.nickname}</p>
