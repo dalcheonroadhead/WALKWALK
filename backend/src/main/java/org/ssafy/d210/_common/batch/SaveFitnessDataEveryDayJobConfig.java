@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -11,10 +12,12 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.ssafy.d210._common.service.UserDetailsImpl;
+import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.walk.dto.response.FitnessResponse;
 import org.ssafy.d210.walk.entity.Exercise;
@@ -26,7 +29,7 @@ import java.time.ZoneId;
 
 @Configuration
 @RequiredArgsConstructor
-public class SaveFitnessDataEveryDayJobConfig extends DefaultBatchConfiguration {
+public class SaveFitnessDataEveryDayJobConfig {
 
     private final EntityManagerFactory entityManagerFactory;
     private final MemberDataService memberDataService;
@@ -35,6 +38,7 @@ public class SaveFitnessDataEveryDayJobConfig extends DefaultBatchConfiguration 
 
     @Bean
     public Job saveFitnessDataEveryDayJob(JobRepository jobRepository, Step saveFitnessDataEveryDayStep) {
+        System.out.println("job!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return new JobBuilder("saveFitnessDataEveryDayJob", jobRepository)
                 .start(saveFitnessDataEveryDayStep)
                 .build();
@@ -42,8 +46,9 @@ public class SaveFitnessDataEveryDayJobConfig extends DefaultBatchConfiguration 
 
     @Bean
     public Step saveFitnessDataEveryDayStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
-        return new StepBuilder("Step1GetRefreshToken", jobRepository)
-                .<UserDetailsImpl, Exercise>chunk(10, platformTransactionManager)
+        System.out.println("step????????????????????????????????????????????????????????????????");
+        return new StepBuilder("saveFitnessDataEveryDayStep", jobRepository)
+                .<Members, Exercise>chunk(10, platformTransactionManager)
                 .reader(userDetailsItemReader(entityManagerFactory))
                 .processor(accessTokenProcessor())
                 .writer(userDetailsItemWriter())
@@ -51,19 +56,30 @@ public class SaveFitnessDataEveryDayJobConfig extends DefaultBatchConfiguration 
     }
 
     @Bean
-    public JpaPagingItemReader<UserDetailsImpl> userDetailsItemReader(EntityManagerFactory entityManagerFactory) {
-        JpaPagingItemReader<UserDetailsImpl> reader = new JpaPagingItemReader<>();
-        reader.setQueryString("select m from members m");
-        reader.setEntityManagerFactory(entityManagerFactory);
-        reader.setPageSize(10);
-        return reader;
+    @StepScope
+    public JpaPagingItemReader<Members> userDetailsItemReader(EntityManagerFactory entityManagerFactory) {
+
+        System.out.println("야!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return new JpaPagingItemReaderBuilder<Members>()
+                .name("userDetailsItemReader")
+                .queryString("SELECT m FROM Members m")
+                .entityManagerFactory(entityManagerFactory)
+                .pageSize(10)
+                .build();
+//        JpaPagingItemReader<Members> reader = new JpaPagingItemReader<>();
+//        reader.setQueryString("SELECT m FROM Members m");
+//        reader.setEntityManagerFactory(entityManagerFactory);
+//        reader.setPageSize(10);
+//        return reader;
     }
 
     @Bean
-    public ItemProcessor<UserDetailsImpl, Exercise> accessTokenProcessor() {
-        return userDetail -> {
+    public ItemProcessor<Members, Exercise> accessTokenProcessor() {
+        return member -> {
+            System.out.println("왜????????????????????????????????????????????????????????????????" + member.getNickname());
+//            return new Exercise();
             // access token 받아오기
-            String accessToken = memberDataService.refreshAccessToken(userDetail);
+            String accessToken = memberDataService.refreshAccessToken(member);
 
             // 받아온 액세스 토큰으로 구글 피트니스 데이터 가져오기
             LocalDateTime now = LocalDateTime.now();
@@ -75,7 +91,7 @@ public class SaveFitnessDataEveryDayJobConfig extends DefaultBatchConfiguration 
 
             FitnessResponse fitnessResponse = exerciseService.fetchGoogleFitData(accessToken, startTimeMillis, endTimeMillis);
 
-            return exerciseService.mapFitnessResponseToExercise(fitnessResponse, userDetail.getMember());
+            return exerciseService.mapFitnessResponseToExercise(fitnessResponse, member);
         };
     }
 
@@ -83,6 +99,7 @@ public class SaveFitnessDataEveryDayJobConfig extends DefaultBatchConfiguration 
     public ItemWriter<Exercise> userDetailsItemWriter() {
         return exercises -> {
             for (Exercise exercise : exercises) {
+                System.out.println("writer!!!!!!!!!!!!!!!!!!!!!!!" + exercise.getMember().getNickname());
                 exerciseRepository.save(exercise);
             }
         };

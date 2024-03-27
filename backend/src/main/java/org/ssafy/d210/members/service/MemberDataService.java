@@ -149,6 +149,7 @@ public class MemberDataService {
         params.add("grant_type", "refresh_token");
         params.add("client_id", client_id);
         params.add("client_secret", client_secret);
+        log.info("RefreshToken : {} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", grt.getRefreshToken());
         params.add("refresh_token", grt.getRefreshToken());
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
