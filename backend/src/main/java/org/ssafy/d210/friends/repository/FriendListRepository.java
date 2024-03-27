@@ -30,8 +30,8 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
     @Query(value =
             "SELECT m.member_id as memberId, m.profile_url as profileUrl, m.nickname as nickname, h.is_accepted as isAccepted " +
                     "FROM members m LEFT JOIN halley_galley h " +
-                    "ON m.member_id = h.halley_id " +
-                    "WHERE m.nickname LIKE CONCAT('%', :keyword, '%') " +
-                    "AND h.halley_id = :memberId", nativeQuery = true)
+                    "ON m.member_id = h.galley_id AND h.halley_id = :memberId  " +
+                    "WHERE m.nickname LIKE CONCAT('%', :keyword, '%')" +
+                    "AND is_accepted IS NULL ", nativeQuery = true)
     List<GalleyMemberListDto> findMembersById(@Param("memberId") Long memberId, @Param("keyword") String keyword);
 }
