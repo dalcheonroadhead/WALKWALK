@@ -9,9 +9,6 @@ export const getGoogleToken = async (code) => {
     // instance 뒤에 method 적어주고, url와 넘겨줄 정보가 있다면 같이 인자로 넘겨줍니다.
     return await instance.get(url)
         .then((res) => {
-            console.log('test1', res.data)
-            console.log('type : ', typeof(res.data.data)) // object
-            localStorage.setItem('Authorization', res.data.data.Authorization)
             localStorage.setItem('tokens', JSON.stringify(res.data.data))
             return res.data.data
         })
@@ -31,8 +28,6 @@ export const submitUserInfo = async (userInfo) => {
 
 export const checkDuplicated = async (nickname) => {
     const url = '/members/check-duplicated'
-    console.log('api nickname : ', nickname)
-    console.log(instance.defaults.headers.common['Authorization'])
 
     return await instance.get(url, {params: {nickname}})
         .then((res) => {

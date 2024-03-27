@@ -8,12 +8,9 @@ const LoginRedirect = function () {
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
-    console.log('code : ', code)
 
     if (code) {
       getGoogleToken(code).then((res) => {
-        console.log('test2 :', res);
-        console.log('isNew : ', typeof(res.isNew))
         navigate(res.isNew === 'false' ? '/main' : '/signup');
       }).catch((err) => {
         console.error('토큰 가져오기 실패 :', err);
