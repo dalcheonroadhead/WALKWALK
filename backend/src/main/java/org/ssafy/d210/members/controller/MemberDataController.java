@@ -114,7 +114,7 @@ public class MemberDataController {
     @GetMapping("/google-refresh-token")
     public ApiResponseDto<?> getAccessToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return ResponseUtils.ok(memberDataService.refreshAccessToken(userDetails), MsgType.GENERATE_TOKEN_SUCCESSFULLY);
+        return ResponseUtils.ok(memberDataService.refreshAccessToken(userDetails.getMember()), MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }
 
 
