@@ -7,12 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-import org.ssafy.d210._common.entity.GrtRedis;
-import org.ssafy.d210._common.repository.GrtRepository;
 import org.ssafy.d210._common.response.ResponseUtils;
-import org.ssafy.d210._common.service.jwt.JwtUtil;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 /*
  * (〜￣△￣)〜    인증 되지 않은 사용자의 요청에 대한 처리       〜(￣△￣〜)
@@ -29,26 +27,36 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
 
-        ErrorType exception = (ErrorType) request.getAttribute("exception");
+        String exception = (String) request.getAttribute("exception");
+
+        // 소켓 헤더 확인하기
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//
+//        while (headerNames.hasMoreElements()){
+//            String name = headerNames.nextElement();
+//            String value = request.getHeader(name);
+//
+//            log.info("header 이름: {} <<<<<<< 값: {}", name, value);
+//        }
 
         if(exception != null) {
-            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.TOKEN_DOESNT_EXIST)) {
                 exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
                 return;
             }
 
-            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.NOT_VALID_TOKEN)) {
                 exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
                 return;
             }
 
-            if(exception.equals(ErrorType.EXPIRED_TOKEN)) {
+            if(ErrorType.valueOf(exception).equals(ErrorType.EXPIRED_TOKEN)) {
 
                 exceptionHandler(response, ErrorType.EXPIRED_TOKEN);
                 return;
             }
 
-            if (exception.equals(ErrorType.NOT_FOUND_MEMBER)) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.NOT_FOUND_MEMBER)) {
                 exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
             }
 

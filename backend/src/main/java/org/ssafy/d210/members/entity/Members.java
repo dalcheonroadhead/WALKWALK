@@ -59,10 +59,10 @@ public class Members extends BaseTime {
     private GenderType gender;
 
     @Column(name = "height")
-    private Long height;
+    private double height;
 
     @Column(name = "weight")
-    private Long weight;
+    private double weight;
 
     @Column(name = "location", length = 500)
     private String location;
@@ -108,7 +108,7 @@ public class Members extends BaseTime {
     @Builder
     public Members(
             String email, String nickname, String profileUrl, Role role,
-            GenderType gender, Long height, Long weight, String location,
+            GenderType gender, double height, double weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
 
@@ -146,7 +146,7 @@ public class Members extends BaseTime {
 
     public static Members of(
             String email, String nickname, String profileUrl, Role role,
-            GenderType gender, Long height, Long weight, String location,
+            GenderType gender, double height, double weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
     ) {
@@ -178,6 +178,36 @@ public class Members extends BaseTime {
         this.profileUrl = profileUrl;
 
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Members{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", memberAccountId=" + memberAccountId +
+                ", nickname='" + nickname + '\'' +
+                ", profileUrl='" + profileUrl + '\'' +
+                ", role=" + role +
+                ", mainBadge='" + mainBadge + '\'' +
+                ", gender=" + gender +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", location='" + location + '\'' +
+                ", birthYear=" + birthYear +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", isNew=" + isNew +
+                ", streakColor='" + streakColor + '\'' +
+                ", comment='" + comment + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", dailyCriteria=" + dailyCriteria +
+                ", blockAddresses=" + blockAddresses +
+                ", exercises=" + exercises +
+                ", exerciseAcc=" + exerciseAcc +
+                ", memberBadges=" + memberBadges +
+                '}';
     }
 
     public String getRoleKey() {

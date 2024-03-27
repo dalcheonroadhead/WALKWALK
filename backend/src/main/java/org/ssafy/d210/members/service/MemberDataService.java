@@ -36,6 +36,7 @@ import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,13 +65,20 @@ public class MemberDataService {
        // 0) 추가 가입하려는 사용자의 객체 가져오기
        Members member = membersRepository.findById(id).orElse(null);
 
+
+
        // 1) 현재 [UserDetail]에 사용자가 없다.
        if(member == null){
+           log.error("추가 정보 안 들어왔다 임마! 멤버 아이디가 NULL 이야!");
            throw new CustomException(ErrorType.NOT_FOUND_MEMBER);
        }
 
        // 2) 사용자가 있으면 받은 값으로 세팅 -> dirty checking
         else{
+           log.info("추가 가입하려는 사용자의 기존 명세 " + Objects.requireNonNull(member.toString()));
+
+           member.setNickname(addInfo.getNickname());
+
             if(member.getMemberAccountId() == null){
                 MemberAccount memberAccount = new MemberAccount();
                 memberAccount.setEgg(0);
@@ -121,13 +129,13 @@ public class MemberDataService {
     }
 
 
-    public String refreshAccessToken(UserDetailsImpl userDetails) {
+    public String refreshAccessToken(Members members) {
 
-        log.info("{}",userDetails.getMember().getId());
+        log.info("{}",members.getId());
 
 
         // 컬럼 이름이 아니라 Key Value 값의 Id를 써야한다.
-        GrtRedis grt = grtRepository.findById(userDetails.getMember().getId()).orElse(null);
+        GrtRedis grt = grtRepository.findById(members.getId()).orElse(null);
 
 
         if(grt == null) {
@@ -160,7 +168,7 @@ public class MemberDataService {
             gti = objectMapper.readValue(responseEntity.getBody(), GoogleOauthTokenInfo.class);
 
             if(gti.getAccess_token() != null) {
-                gatRepository.save(new GatRedis(userDetails.getMember().getId(), gti.getAccess_token()));
+                gatRepository.save(new GatRedis(members.getId(), gti.getAccess_token()));
             }
 
             return gti.getAccess_token();

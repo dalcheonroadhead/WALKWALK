@@ -16,9 +16,9 @@ public class ResMyPageDetailInfo {
 
     Long birthYear;
 
-    Long height;
+    double height;
 
-    Long weight;
+    double weight;
 
     String gender;
 
@@ -35,7 +35,7 @@ public class ResMyPageDetailInfo {
     String phoneNumber;
 
     @Builder
-    public ResMyPageDetailInfo(String profileUrl, String nickname, Long birthYear, Long height, Long weight, String gender, String location, double longitude, double latitude, String comment, Long dailyCriteria, String phoneNumber) {
+    public ResMyPageDetailInfo(String profileUrl, String nickname, Long birthYear, double height, double weight, String gender, String location, double longitude, double latitude, String comment, Long dailyCriteria, String phoneNumber) {
         this.profileUrl = profileUrl;
         this.nickname = nickname;
         this.birthYear = birthYear;

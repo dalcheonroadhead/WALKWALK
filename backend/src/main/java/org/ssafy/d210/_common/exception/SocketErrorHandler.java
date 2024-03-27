@@ -30,7 +30,7 @@ public class SocketErrorHandler extends StompSubProtocolErrorHandler {
     }
 
     private Message<byte []> handleUnauthorizedException(Message<byte[]> clientMessage, Throwable ex){
-        ErrorResponse errorResponse = ErrorResponse.of(401, "[Socket]을 보낸 이에게 토큰이 없습니다.");
+        ErrorResponse errorResponse = ErrorResponse.of(401, "[Socket]을 보낸 이의 JWT 토큰에 문제가 있습니다.");
 
         return prepareErrorMessage(clientMessage, errorResponse, String.valueOf(errorResponse.getStatus()));
     }
