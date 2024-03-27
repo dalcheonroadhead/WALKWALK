@@ -13,7 +13,8 @@ const LoginRedirect = function () {
     if (code) {
       getGoogleToken(code).then((res) => {
         console.log('test2 :', res);
-        navigate(res.isNew ? '/signup' : '/main');
+        console.log('isNew : ', typeof(res.isNew))
+        navigate(res.isNew === 'false' ? '/main' : '/signup');
       }).catch((err) => {
         console.error('토큰 가져오기 실패 :', err);
       });

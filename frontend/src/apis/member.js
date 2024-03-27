@@ -12,7 +12,7 @@ export const getGoogleToken = async (code) => {
             console.log('test1', res.data)
             console.log('type : ', typeof(res.data.data)) // object
             localStorage.setItem('Authorization', res.data.data.Authorization)
-            localStorage.setItem('tokens', res.data.data)
+            localStorage.setItem('tokens', JSON.stringify(res.data.data))
             return res.data.data
         })
         .catch((err) => {console.log(err)})
@@ -25,6 +25,23 @@ export const submitUserInfo = async (userInfo) => {
         .then((res) => {
             console.log(res)
             return true
+        })
+        .catch((err) => {console.log(err)})
+}
+
+export const checkDuplicated = async (nickname) => {
+    const url = '/members/check-duplicated'
+    console.log('api nickname : ', nickname)
+    console.log(instance.defaults.headers.common['Authorization'])
+
+    return await instance.get(url, {params: {nickname}})
+        .then((res) => {
+            console.log('checkDuplicated', res)
+            if (res.data.data.isDuplicated) {
+                return true
+            } else {
+                return false
+            }
         })
         .catch((err) => {console.log(err)})
 }

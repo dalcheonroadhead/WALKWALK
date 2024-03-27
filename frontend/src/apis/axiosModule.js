@@ -13,11 +13,11 @@ instance.defaults.headers.common['Authorization'] = accessToken
 instance.interceptors.request.use(
   (config) => {
     // 요청을 보내기 전에 실행할 코드를 여기에 작성하세요.
-    // const accessToken = localStorage.getItem('Authorization')
-    // if (accessToken) {
-    //   // console.log('accessToken : ', accessToken)
-    //   config.headers['Authorization'] = accessToken;
-    // }
+    const accessToken = localStorage.getItem('Authorization')
+    if (accessToken) {
+      // console.log('accessToken : ', accessToken)
+      config.headers['Authorization'] = accessToken;
+    }
     console.log()
     return config;
   },
