@@ -9,6 +9,7 @@ export const getGoogleToken = async (code) => {
     // instance 뒤에 method 적어주고, url와 넘겨줄 정보가 있다면 같이 인자로 넘겨줍니다.
     return await instance.get(url)
         .then((res) => {
+            console.log('tokens : ', res.data.data)
             localStorage.setItem('tokens', JSON.stringify(res.data.data))
             return res.data.data
         })
