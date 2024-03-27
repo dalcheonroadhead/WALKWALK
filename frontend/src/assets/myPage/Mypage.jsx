@@ -1,16 +1,18 @@
-import Calendar from "../common/calendar/Calendar";
-import Sidebar from "../common/sidebar/Sidebar";
+import { useState, useEffect } from "react";
 import styles from "./Mypage.module.css"
+import { getMypage } from "../../apis/member";
 
-const Mypage = function(){
-    return(
-        <>
-            <div className={styles.main_container}>
-                <h1>마이 페이지</h1>
-                <Calendar/>
-            </div>
-        </>
-    )
+const Mypage = function () {
+  const [mypageInfo, setMypageInfo] = useState({});
+  useEffect(() => {
+    getMypage()
+  }, []);
+
+  return(
+    <div className={styles.mypage_container}>
+      
+    </div>
+  )
 }
 
 export default Mypage;

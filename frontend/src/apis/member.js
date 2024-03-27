@@ -11,6 +11,7 @@ export const getGoogleToken = async (code) => {
         .then((res) => {
             console.log('tokens : ', res.data.data)
             localStorage.setItem('tokens', JSON.stringify(res.data.data))
+            // instance.defaults.headers.common["Authorization"] = tokens.Authorization || '';
             return res.data.data
         })
         .catch((err) => {console.log(err)})
@@ -38,6 +39,17 @@ export const checkDuplicated = async (nickname) => {
             } else {
                 return false
             }
+        })
+        .catch((err) => {console.log(err)})
+}
+
+export const getMypage = async () => {
+    const url = '/members/'
+
+    await instance.get(url)
+        .then((res) => {
+            console.log('mypage : ', res)
+            
         })
         .catch((err) => {console.log(err)})
 }

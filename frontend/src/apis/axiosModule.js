@@ -7,7 +7,8 @@ const instance = axios.create({
 
 const tokens = JSON.parse(localStorage.getItem('tokens')) || {};
 if (tokens) {
-  instance.defaults.headers.common["token"] = tokens.Authorization || '';
+  instance.defaults.headers.common["Authorization"] = tokens.Authorization || '';
+  console.log('common header : ', instance.defaults.headers.common["Authorization"])
 }
 
 // 요청 인터셉터: 요청을 보내기 전에 실행됩니다.
