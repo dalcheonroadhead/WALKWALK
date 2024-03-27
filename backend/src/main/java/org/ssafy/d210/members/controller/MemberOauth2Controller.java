@@ -83,7 +83,7 @@ public class MemberOauth2Controller {
 
         log.info("Google에서 준 토큰 내용은 다음과 같습니다={}", gti);
 
-        GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getToken_type(), gti.getAccess_token(), gti.getExpires_in());
+        GoogleAccessTokenInfo gat = new GoogleAccessTokenInfo(gti.getToken_type(), gti.getAccess_token(), gti.getExpires_in(), gti.getScope());
         GoogleRefreshTokenInfo grt = new GoogleRefreshTokenInfo(gti.getRefresh_token(), gti.getToken_type());
 
         List<String> ans = memberService.SaveUserAndGetToken(gti.getAccess_token(),response,gat,grt);

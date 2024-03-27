@@ -91,7 +91,7 @@ public class JwtUtil {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return 1;
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (io.jsonwebtoken.security.SignatureException | SecurityException | MalformedJwtException e){
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
             return -1;
         } catch (UnsupportedJwtException e) {
