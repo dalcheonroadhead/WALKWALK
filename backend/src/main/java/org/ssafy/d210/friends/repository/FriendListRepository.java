@@ -4,6 +4,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.ssafy.d210.friends.dto.GalleyMemberListDto;
 import org.ssafy.d210.friends.dto.MemberListDto;
 import org.ssafy.d210.friends.entity.FriendList;
 import org.ssafy.d210.members.entity.Members;
@@ -26,5 +27,11 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
                     "WHERE m.nickname LIKE CONCAT('%', :keyword, '%')", nativeQuery = true)
     List<MemberListDto> findAllBySenderId(@Param("memberId") Long memberId, @Param("keyword") String keyword);
 
-
+    @Query(value =
+            "SELECT m.member_id as memberId, m.profile_url as profileUrl, m.nickname as nickname, h.is_accepted as isAccepted " +
+                    "FROM members m LEFT JOIN halley_galley h " +
+                    "ON m.member_id = h.halley_id " +
+                    "WHERE m.nickname LIKE CONCAT('%', :keyword, '%') " +
+                    "AND h.halley_id = :memberId", nativeQuery = true)
+    List<GalleyMemberListDto> findMembersById(@Param("memberId") Long memberId, @Param("keyword") String keyword);
 }

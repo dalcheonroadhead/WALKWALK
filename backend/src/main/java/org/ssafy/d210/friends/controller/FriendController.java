@@ -42,4 +42,9 @@ public class FriendController {
     public ApiResponseDto<?> searchMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostSearchMemberListRequest request){
         return ApiResponseDto.of(MsgType.POST_MEMBER_LIST_SUCCESSFULLY, friendService.getSearchedMemberList(userDetails.getMember(), request));
     }
+
+    @PostMapping("/search-galley")
+    public ApiResponseDto<?> searchGalleyMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostSearchMemberListRequest request){
+        return ApiResponseDto.of(MsgType.POST_MEMBER_LIST_SUCCESSFULLY, friendService.getSearchedGalleyMemberList(userDetails.getMember(), request));
+    }
 }
