@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210.friends.dto.GalleyMemberListDto;
 import org.ssafy.d210.friends.dto.MemberListDto;
 import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
 import org.ssafy.d210.friends.dto.response.GetFriendListResponse;
@@ -109,5 +110,9 @@ public class FriendService {
 
     public List<MemberListDto> getSearchedMemberList(Members member, PostSearchMemberListRequest request){
         return friendListRepository.findAllBySenderId(member.getId(), request.getKeyword());
+    }
+
+    public List<GalleyMemberListDto> getSearchedGalleyMemberList(Members member, PostSearchMemberListRequest request){
+        return friendListRepository.findMembersById(member.getId(), request.getKeyword());
     }
 }
