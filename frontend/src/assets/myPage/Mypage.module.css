@@ -1,10 +1,31 @@
 
 .mypage_container {
-    /* position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; */
-    height: 100dvh;
-    width: 100dvw;
+    height: 100%;
+    width: 100%;
+    padding: 2rem 0;
+}
+
+.mypage_btn {
+    position: relative;
+    width: 80%;
+    background-color: #FFCB23;
+    padding: 1rem;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.mypage_direct {
+    position: absolute;
+    right: 1rem;
+    /* 아래 두가지 컬럼을 합치면 부모 요소의 수직 중앙에 위치하게 됨 */
+    top: 50%; /* 해당 요소의 상단(top)이 부모의 50% 크기에 위치 */
+    transform: translateY(-50%); /* 해당 요소의 크기 50%만큼 위로 이동 */
+    width: 1rem;
 }

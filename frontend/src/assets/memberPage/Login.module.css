@@ -72,6 +72,7 @@
   cursor: pointer;
   margin: 1rem 0;
   font-size: 1.2rem;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
 }
 
 .signup_btn:disabled {

@@ -9,9 +9,9 @@ export const getGoogleToken = async (code) => {
     // instance 뒤에 method 적어주고, url와 넘겨줄 정보가 있다면 같이 인자로 넘겨줍니다.
     return await instance.get(url)
         .then((res) => {
-            console.log('tokens : ', res.data.data)
+            console.log('tokens : ', res.data.data.Authorization)
             localStorage.setItem('tokens', JSON.stringify(res.data.data))
-            // instance.defaults.headers.common["Authorization"] = tokens.Authorization || '';
+            instance.defaults.headers.common["Authorization"] = res.data.data.Authorization;
             return res.data.data
         })
         .catch((err) => {console.log(err)})
@@ -46,10 +46,29 @@ export const checkDuplicated = async (nickname) => {
 export const getMypage = async () => {
     const url = '/members/'
 
-    await instance.get(url)
+    return await instance.get(url)
         .then((res) => {
-            console.log('mypage : ', res)
-            
+            return res.data.data
+        })
+        .catch((err) => {console.log(err)})
+}
+
+export const getMyInfo = async () => {
+    const url = '/members/detail'
+
+    return await instance.get(url)
+        .then((res) => {
+            return res.data.data
+        })
+        .catch((err) => {console.log(err)})
+}
+
+export const updateMyInfo = async () => {
+    const url = '/members/'
+
+    return await instance.put(url)
+        .then((res) => {
+            console.log(res)
         })
         .catch((err) => {console.log(err)})
 }
