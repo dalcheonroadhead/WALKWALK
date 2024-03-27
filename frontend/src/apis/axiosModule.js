@@ -14,14 +14,14 @@ if (tokens) {
 instance.interceptors.request.use(
   (config) => {
     // 요청을 보내기 전에 실행할 코드를 여기에 작성하세요.
-    // const tokens = JSON.parse(localStorage.getItem('tokens'));
+    const tokens = JSON.parse(localStorage.getItem('tokens'));
     // Authorization : JWT 액세스 토큰 (Bearer 포함)
     // Google_access_token : 구글 액세스 토큰 (Bearer 포함 X)
-    // const accessToken = tokens.Authorization;
-    // if (accessToken) {
-    //   console.log('accessToken : ', accessToken)
-    //   config.headers['Authorization'] = accessToken;
-    // }
+    const accessToken = tokens.Authorization;
+    if (accessToken) {
+      console.log('accessToken : ', accessToken)
+      config.headers['Authorization'] = accessToken;
+    }
     return config;
   },
   (error) => {
