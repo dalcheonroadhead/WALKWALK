@@ -28,5 +28,5 @@ public class BlockAddress {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Members members;
+    private Members member;
 }
