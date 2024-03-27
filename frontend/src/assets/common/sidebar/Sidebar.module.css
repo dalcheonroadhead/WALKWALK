@@ -4,7 +4,7 @@
     width: 70vw;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
-    position: absolute;
+    position: fixed;
     transition: 0.5s all;
     z-index: 7;
     transform: translateX(-85vw);
