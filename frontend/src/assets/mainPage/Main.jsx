@@ -3,25 +3,61 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
+import { getGalleyList } from "../../apis/halleygalley";
+import { getHalleyList } from "../../apis/halleygalley";
+import { searchGalleyMemberList } from "../../apis/friend";
 
 const Main = function(){
 
+    useEffect(()=>{
+        // 갈리 리스트 조회
+        getGalleyList().then((res)=>{
+            if(res){
+                // setGalliList(getGalleyListResponse);
+                setGalli(true);
+            }
+            else{
+                setGalliList([])
+                setGalli(false);
+            }
+        }
+        
+        )
+        getHalleyList().then((res)=>{
+            if(res){
+                // setHalliList(getHalleyListResponse);
+                setHalli(true);
+            }
+            else{
+                setHalliList([])
+                setHalli(false);
+            }
+        })
+    }, [])
+
     const navigate = useNavigate();
     
-    const handle = {
-        barClick: (data) => {
-            console.log(data);
-        },
-
-        legendClick: (data) => {
-            console.log(data);
-        },
-    };
 
     const moveToHalliGalliPage = function () {
         navigate("/halligalli")
     }
 
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        // 입력 값에 대한 즉각적인 유효성 검사를 추가
+        
+        setKeyword(value);
+      };
+    const handleSearchClick = ()=>{
+        searchGalleyMemberList(keyword)
+        .then((res)=>{
+            alert(res)
+            setMemberList(res);
+        })  
+        .catch((err)=>{
+            console.log(err);
+        })
+    }
 
     const [tabIndex, settabIndex] = useState(0);
     const [halli, setHalli] = useState(true);
@@ -30,6 +66,10 @@ const Main = function(){
     const [isGalliOpen, setIsGalliOpen] = useState(false);
     const [isHalliListOpen, setIsHalliListOpen] = useState(false);
     const [expanded, setExpanded] = useState(true);
+    const [keyword, setKeyword] = useState('');
+    const [memberList, setMemberList] = useState([]);
+    const [galliList, setGalliList] = useState([]);
+    const [halliList, setHalliList] = useState([]);
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -71,37 +111,7 @@ const Main = function(){
         calculatedTime: 운동데이터.currentTime/운동데이터.criteriaTime*300 < 70 ? 70 : 운동데이터.currentTime/운동데이터.criteriaTime*300,
         calculatedSteps: 운동데이터.currentSteps/운동데이터.criteriaSteps*300 < 90 ? 90 : 운동데이터.currentSteps/운동데이터.criteriaSteps*300,
     }
-
-    const galli_list = [
-        {
-            name: "우주최강세현",
-            criteriaTime: 120,       // 기준 운동시간
-            currentTime: 100,        // 오늘 운동시간
-            criteriaSteps: 6000,    // 기준 걸음수
-            currentSteps: 4220,     // 오늘 걸음수
-        },
-        {
-            name: "지구최강세현",
-            criteriaTime: 120,       // 기준 운동시간
-            currentTime: 130,        // 오늘 운동시간
-            criteriaSteps: 6000,    // 기준 걸음수
-            currentSteps: 6200,     // 오늘 걸음수
-        },
-        {
-            name: "지상최강세현",
-            criteriaTime: 120,       // 기준 운동시간
-            currentTime: 70,        // 오늘 운동시간
-            criteriaSteps: 5000,    // 기준 걸음수
-            currentSteps: 4000,     // 오늘 걸음수
-        },
-        {
-            name: "지하최강세현",
-            criteriaTime: 120,       // 기준 운동시간
-            currentTime: 160,        // 오늘 운동시간
-            criteriaSteps: 8000,    // 기준 걸음수
-            currentSteps: 9000,     // 오늘 걸음수
-        },
-    ]
+    
 
     // 할리 모달
     const 할리API요청결과 = {
@@ -276,8 +286,8 @@ const Main = function(){
                             <p className={styles.no_halli_detail}> 등록된 <br></br> 나의 할리가 <br></br> 없습니다.</p> 
                             <img src="/imgs/ch2_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
                         </div>
-                        <div className={styles.no_halli_btn}>
-                            <p className={styles.no_halli_btn_txt} onClick={openHalliModal}>요청 목록 보러가기</p>
+                        <div className={styles.no_halli_btn} onClick={openHalliModal}>
+                            <p className={styles.no_halli_btn_txt} >요청 목록 보러가기</p>
                         </div>
 
                     </div>
@@ -302,8 +312,8 @@ const Main = function(){
                             <p className={styles.galli_detail}>나의 갈리 목록</p>
                             <img src="/imgs/direct.png" alt="확장 버튼" className={`${styles.galli_direct_btn} ${expanded ? '' : styles.galli_direct_btn2}`} onClick={longGalliList}></img>
                         </div>
-                        <div className={styles.galli_expanded} style={{height: 107 * galli_list.length, overflow: !expanded && 'scroll'}}>
-                        {galli_list.map((data, index) => {
+                        <div className={styles.galli_expanded} style={{height: 107 * galliList.length, overflow: !expanded && 'scroll'}}>
+                        {galliList.map((data, index) => {
                             return(
                                 <>  
                                     <div className={styles.my_galli_list_container}>
@@ -337,9 +347,9 @@ const Main = function(){
                     <div className={styles.no_galli_container}>
                         <p className={styles.no_galli_detail}> 등록된 <br></br> 나의 갈리가 <br></br> 없습니다.</p> 
                         <img src="/imgs/ch1_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
-                    </div>
-                    <div className={styles.no_galli_btn}>
-                        <p className={styles.no_galli_btn_txt} onClick={openGalliModal}>나의 갈리 등록하기</p>
+                    </div>    
+                    <div className={styles.no_galli_btn} onClick={openGalliModal}>
+                        <p className={styles.no_galli_btn_txt}>나의 갈리 등록하기</p>
                     </div>
                 </div>
                 )}
@@ -393,18 +403,18 @@ const Main = function(){
                         </div>                                
                         
                         <div className={styles.galli_search_container}>
-                            <input className={styles.galli_search_box}></input>
-                            <img className={styles.galli_search_icon} src="/imgs/search.png" alt="찾기 아이콘"></img>
+                            <input className={styles.galli_search_box}  value={keyword} onChange={handleInputChange}></input>
+                            <img className={styles.galli_search_icon} src="/imgs/search.png" alt="찾기 아이콘" onClick={handleSearchClick}></img>
                         </div>
 
                         <div className={styles.galli_list_container}>
                             <div className={styles.galli_names_container}>
 
-                                {namelist.map((data, index) => {
+                                {memberList.map((data, index) => {
                                     return(
                                         <>
                                             <div key={index} className={styles.galli_name_container}>
-                                                <img src={data.pimg} alt="프로필 사진" className={styles.galli_img_container} ></img>
+                                                <img src={data.profileUrl} alt="프로필 사진" className={styles.galli_img_container} ></img>
                                                 <p className={styles.galli_name_txt}>{data.nickname}</p>
                                                 <div className={styles.galli_btn_container}>
                                                     <div className={styles.galli_put_btn}>
