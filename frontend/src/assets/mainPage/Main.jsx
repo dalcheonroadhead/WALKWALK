@@ -4,6 +4,7 @@ import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 import { getGalleyList } from "../../apis/halleygalley";
+import { getHalleyList } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
 
 const Main = function(){
@@ -12,27 +13,30 @@ const Main = function(){
         // 갈리 리스트 조회
         getGalleyList().then((res)=>{
             if(res){
-                setGalliList(getGalleyListResponse);
+                // setGalliList(getGalleyListResponse);
                 setGalli(true);
             }
             else{
                 setGalliList([])
                 setGalli(false);
             }
+        }
+        
+        )
+        getHalleyList().then((res)=>{
+            if(res){
+                // setHalliList(getHalleyListResponse);
+                setHalli(true);
+            }
+            else{
+                setHalliList([])
+                setHalli(false);
+            }
         })
     }, [])
 
     const navigate = useNavigate();
     
-    const handle = {
-        barClick: (data) => {
-            console.log(data);
-        },
-
-        legendClick: (data) => {
-            console.log(data);
-        },
-    };
 
     const moveToHalliGalliPage = function () {
         navigate("/halligalli")
@@ -49,7 +53,7 @@ const Main = function(){
         .then((res)=>{
             alert(res)
             setMemberList(res);
-        })
+        })  
         .catch((err)=>{
             console.log(err);
         })
@@ -64,6 +68,8 @@ const Main = function(){
     const [expanded, setExpanded] = useState(true);
     const [keyword, setKeyword] = useState('');
     const [memberList, setMemberList] = useState([]);
+    const [galliList, setGalliList] = useState([]);
+    const [halliList, setHalliList] = useState([]);
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -105,8 +111,6 @@ const Main = function(){
         calculatedTime: 운동데이터.currentTime/운동데이터.criteriaTime*300 < 70 ? 70 : 운동데이터.currentTime/운동데이터.criteriaTime*300,
         calculatedSteps: 운동데이터.currentSteps/운동데이터.criteriaSteps*300 < 90 ? 90 : 운동데이터.currentSteps/운동데이터.criteriaSteps*300,
     }
-
-    const [galliList, setGalliList] = useState([]);
     
 
     // 할리 모달
@@ -282,8 +286,8 @@ const Main = function(){
                             <p className={styles.no_halli_detail}> 등록된 <br></br> 나의 할리가 <br></br> 없습니다.</p> 
                             <img src="/imgs/ch2_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
                         </div>
-                        <div className={styles.no_halli_btn}>
-                            <p className={styles.no_halli_btn_txt} onClick={openHalliModal}>요청 목록 보러가기</p>
+                        <div className={styles.no_halli_btn} onClick={openHalliModal}>
+                            <p className={styles.no_halli_btn_txt} >요청 목록 보러가기</p>
                         </div>
 
                     </div>
@@ -343,10 +347,9 @@ const Main = function(){
                     <div className={styles.no_galli_container}>
                         <p className={styles.no_galli_detail}> 등록된 <br></br> 나의 갈리가 <br></br> 없습니다.</p> 
                         <img src="/imgs/ch1_bol_q.png" alt="오리무중 오리" className={styles.no_halli_img}></img>
-                        
-                        <div className={styles.no_galli_btn}>
-                            <p className={styles.no_galli_btn_txt} onClick={openGalliModal}>나의 갈리 등록하기</p>
-                        </div>
+                    </div>    
+                    <div className={styles.no_galli_btn} onClick={openGalliModal}>
+                        <p className={styles.no_galli_btn_txt}>나의 갈리 등록하기</p>
                     </div>
                 </div>
                 )}

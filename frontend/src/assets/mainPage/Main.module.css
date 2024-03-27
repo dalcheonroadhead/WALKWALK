@@ -77,6 +77,8 @@
     z-index: 11;
     position: absolute;
     border-radius: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
     transform: translate(-50%, -50%);
     background: #FFFBF3;
 }
@@ -872,9 +874,10 @@
     border-bottom-left-radius: 0.938rem;
     border-bottom-right-radius: 0.938rem;
     background: #FFFEFC;
-    justify-content: center;
-    align-items: center;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
 
 }
@@ -904,25 +907,20 @@
 }
 
 .no_halli_btn{
-    position: absolute;
     width: 15rem;
     height: 3.8rem;
     background: #FFCB23;
-    top: 90%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border-radius: 1.5rem;
+
+    display: flex;
+    align-items: center;
     box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .no_halli_btn_txt{
-    position: absolute;
     font-family: "bc_b";
     font-size: 1.5rem;
     width: 15rem;
-    top: 14%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .mode_galli{
@@ -1123,7 +1121,8 @@
     border-bottom-left-radius: 0.938rem;
     border-bottom-right-radius: 0.938rem;
     background: #FFFEFC;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     text-align: center;
     box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
@@ -1135,6 +1134,8 @@
     height: 12rem;
     position: relative;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     top: 5%;
 }
 
@@ -1155,25 +1156,19 @@
 }
 
 .no_galli_btn{
-    position: absolute;
     width: 15rem;
     height: 3.8rem;
     background: #FFCB23;
-    top: 110%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
     box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .no_galli_btn_txt{
-    position: absolute;
     font-family: "bc_b";
     font-size: 1.5rem;
     width: 15rem;
-    top: 14%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 
