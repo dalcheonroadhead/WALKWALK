@@ -129,13 +129,13 @@ public class MemberDataService {
     }
 
 
-    public String refreshAccessToken(UserDetailsImpl userDetails) {
+    public String refreshAccessToken(Members members) {
 
-        log.info("{}",userDetails.getMember().getId());
+        log.info("{}",members.getId());
 
 
         // 컬럼 이름이 아니라 Key Value 값의 Id를 써야한다.
-        GrtRedis grt = grtRepository.findById(userDetails.getMember().getId()).orElse(null);
+        GrtRedis grt = grtRepository.findById(members.getId()).orElse(null);
 
 
         if(grt == null) {
@@ -168,7 +168,7 @@ public class MemberDataService {
             gti = objectMapper.readValue(responseEntity.getBody(), GoogleOauthTokenInfo.class);
 
             if(gti.getAccess_token() != null) {
-                gatRepository.save(new GatRedis(userDetails.getMember().getId(), gti.getAccess_token()));
+                gatRepository.save(new GatRedis(members.getId(), gti.getAccess_token()));
             }
 
             return gti.getAccess_token();
