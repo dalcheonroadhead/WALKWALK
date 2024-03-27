@@ -18,14 +18,19 @@ import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
 import org.ssafy.d210.wallets._payment.dto.Payment;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
+import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentExchangeResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
+import org.ssafy.d210.wallets.entity.MemberAccount;
+import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER_ACCOUNT;
 
 @Slf4j
 @Service
@@ -37,14 +42,16 @@ public class PaymentService {
     private final RestTemplate restTemplate;
     private final PaymentRepository paymentRepository;
     private final MembersRepository membersRepository;
+    private final MemberAccountRepository memberAccountRepository;
 
     private final String kakaoPayReadyUrl = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private final String kakaoPayApproveUrl = "https://open-api.kakaopay.com/online/v1/payment/approve";
 
-    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository) {
+    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository) {
         this.restTemplate = restTemplateBuilder.build();
         this.paymentRepository = paymentRepository;
         this.membersRepository = membersRepository;
+        this.memberAccountRepository = memberAccountRepository;
     }
 
     public Members findMembersByMembers(String email) {
@@ -111,5 +118,16 @@ public class PaymentService {
         System.out.println(response);
         return response.getBody();
 
+    }
+
+    public PaymentExchangeResponse exchangeMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentExchangeRequest paymentExchangeRequest) {
+
+        Members member = membersRepository.findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail())
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
+
+        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
+
+        return PaymentExchangeResponse.of(memberAccount.exchangeMoney(paymentExchangeRequest));
     }
 }

@@ -1,16 +1,20 @@
 package org.ssafy.d210.wallets._payment.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
+import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
+import org.ssafy.d210.wallets._payment.dto.response.PaymentExchangeResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
 import org.ssafy.d210.wallets._payment.service.PaymentService;
 
@@ -56,5 +60,10 @@ public class PaymentController {
     @GetMapping("/cancel")
     public String paymentCancel() {
         return "redirect:/kakaopay-cancel";
+    }
+
+    @PutMapping("/exchange")
+    public PaymentExchangeResponse paymentExchange(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PaymentExchangeRequest paymentExchangeRequest, BindingResult bindingResult) {
+        return paymentService.exchangeMoney(userDetails, paymentExchangeRequest);
     }
 }
