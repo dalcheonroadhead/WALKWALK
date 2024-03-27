@@ -5,6 +5,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 import { getGalleyList } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
+import Sidebar from "../common/sidebar/Sidebar";
 
 const Main = function(){
 
@@ -356,6 +357,8 @@ const Main = function(){
         
     ]
     return(
+        <>
+        <Sidebar/>
         <div>
             {isHalliOpen && (
                 <>
@@ -661,6 +664,7 @@ const Main = function(){
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
