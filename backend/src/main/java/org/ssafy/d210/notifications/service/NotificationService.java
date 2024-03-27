@@ -2,10 +2,18 @@ package org.ssafy.d210.notifications.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import org.ssafy.d210.notifications.repository.repository.EmitterRepository;
+import org.ssafy.d210._common.exception.CustomException;
+import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210.notifications.dto.request.PutNotificationRequest;
+import org.ssafy.d210.notifications.entity.Notification;
+import org.ssafy.d210.notifications.repository.EmitterRepository;
+import org.ssafy.d210.notifications.repository.NotificationRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +22,7 @@ public class NotificationService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
 
     private final EmitterRepository emitterRepository;
+    private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(Long userId) {
         SseEmitter emitter = createEmitter(userId);
@@ -34,7 +43,7 @@ public class NotificationService {
         SseEmitter emitter = emitterRepository.get(id);
         if (emitter != null) {
             try {
-                emitter.send(SseEmitter.event().id(String.valueOf(id)).name("sse").data("아하하하하하하"));
+                emitter.send(SseEmitter.event().id(String.valueOf(id)).name("sse").data(data));
             } catch (IOException exception) {
                 emitterRepository.deleteById(id);
                 emitter.completeWithError(exception);
@@ -54,5 +63,24 @@ public class NotificationService {
 
         return emitter;
 
+    }
+
+    @Transactional
+    public void insertNotification(Notification notification){
+        notificationRepository.save(notification);
+    }
+
+    public List<Notification> getAllNotifications(Members member){
+        return notificationRepository.findAllByReceiverId(member)
+                .orElseThrow(()->new CustomException(ErrorType.CANT_FIND_NOTIFICATION));
+    }
+
+    @Transactional
+    public String putNotifications(PutNotificationRequest request){
+        Notification notification = notificationRepository.findNotificationById(request.getNotificationId())
+                .orElseThrow(()->new CustomException(ErrorType.CANT_FIND_NOTIFICATION));
+        notification.updateIsChecked(true);
+        notificationRepository.save(notification);
+        return "";
     }
 }

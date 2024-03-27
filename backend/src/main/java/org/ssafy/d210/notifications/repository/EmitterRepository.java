@@ -1,4 +1,4 @@
-package org.ssafy.d210.notifications.repository.repository;
+package org.ssafy.d210.notifications.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
