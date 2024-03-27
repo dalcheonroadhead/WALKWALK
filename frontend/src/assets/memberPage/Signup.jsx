@@ -7,15 +7,13 @@ import { submitUserInfo, checkDuplicated } from '../../apis/member';
 const Signup = function () {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [isLocationVisible, setisLocationVisible] = useState(false); // 지역정보 입력 여부 변수
-  const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState(''); // 현재 연도를 기준으로 상태 설정
-  const years = Array.from({length:101}, (val, index) => currentYear - index); // 연도 목록 생성: 현재 연도부터 100년 전까지
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [nicknameError, setNicknameError] = useState('');
   const [nicknameErrorType, setNicknameErrorType] = useState(false);
   const [debounce, setDebounce] = useState(null);
-
+  const [selectedYear, setSelectedYear] = useState('');
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({length:101}, (val, index) => currentYear - index); // 연도 목록 생성: 현재 연도부터 100년 전까지
   const [userInfo, setUserInfo] = useState({
     nickname: '',
     gender: '',
@@ -31,85 +29,23 @@ const Signup = function () {
     publicKey: '',
   });
   
-
   useEffect(() => {
     // selectedYear가 변경될 때마다 userInfo의 birthYear를 업데이트합니다.
     setUserInfo(prevInfo => ({...prevInfo, birthYear: parseInt(selectedYear)}));
   }, [selectedYear]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    // 입력 값에 대한 즉각적인 유효성 검사를 추가
-    // if (name === 'nickname') {
-    //   validateNickname(value);
-    // }
-    // setUserInfo(prev => ({ ...prev, [name]: value }));
-    if (name === 'selectedYear') {
-      // selectedYear의 경우 상태를 직접 업데이트합니다.
-      setSelectedYear(value);
-    } else {
-      setUserInfo((prevInfo) => ({
-        ...prevInfo,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleAddressChange = (address) => {
-    setUserInfo(prevInfo => ({...prevInfo, location: address}));
-  };
-
-  const daumPost = () => {
-    new daum.Postcode({
-      oncomplete: function(data) {
-          // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-          const roadAddr = data.roadAddress; // 도로명 주소 변수
-          // 우편번호와 주소 정보를 해당 필드에 넣는다.
-          handleAddressChange(roadAddr);
-      }
-  }).open();
-  }
-
-  // Button 클릭 이벤트 핸들러
-  const handleClick = async () => {
-    setNicknameError('');
-    if (step === 5) {
-      setStep(0);
-      setisLocationVisible(true);
-    } else if (step === 0) {
-      // 블록체인 지갑 생성 API
-      try {
-        const walletInfo = await createWallet();
-        // await submitUserInfo({ ...userInfo, eoa: walletInfo.eoa, publicKey: walletInfo.publicKey });
-        const updatedUserInfo = {
-          ...userInfo,
-          eoa: walletInfo.eoa,
-          publicKey: walletInfo.publicKey,
-        }
-        setUserInfo(updatedUserInfo);
-
-        await submitUserInfo(updatedUserInfo);
-        console.log(updatedUserInfo)
-        navigate('/main')
-      } catch (error) {
-        console.log('지갑 생성 중 에러 발생', error)
-      }
-    } else {
-      setStep(step+1);
-      setIsButtonDisabled(true);
-    }
-  };
-
   useEffect(() => {
-    // 디바운스된 중복 검사 로직
-    if (step === 1 && userInfo.nickname) {
+    if (userInfo.nickname) {
       if (debounce) clearTimeout(debounce);
       setDebounce(setTimeout(() => {
-        console.log('입력 nickname : ', userInfo.nickname)
         checkNickname(userInfo.nickname);
-      }, 500));
+      }, 700));
     }
-    else if (step === 2) {
+  }, [userInfo.nickname]);
+
+  useEffect(() => {
+    // 입력값마다 유효성 검사하기
+    if (step === 2) {
       if (selectedYear !== '') {
         setIsButtonDisabled(false);
       } else {
@@ -144,75 +80,87 @@ const Signup = function () {
         setIsButtonDisabled(true);
       }
     }
-  }, [step, userInfo, selectedYear]);
-  
-  // useEffect(() => {
-  //   validateCurrentStep();
-  // }, [step, userInfo]); // step 또는 userInfo가 변경될 때마다 유효성 검사 실행
+  }, [step, selectedYear, userInfo.gender, userInfo.height, userInfo.weight, userInfo.phoneNumber, userInfo.location]);
 
-  const checkNickname = useCallback(
-    async (nickname) => {
+  const checkNickname = useCallback(async (nickname) => {
       // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
-      if (!nickname || nickname.length > 11) {
+      if (!nickname || nickname.length > 10) {
         setNicknameError('닉네임은 1자 이상 10자 이하여야 합니다.');
+        setNicknameErrorType(false);
         setIsButtonDisabled(true);
         return;
       }
-  
+
       try {
         const { isDuplicated } = await checkDuplicated(nickname);
         if (isDuplicated) {
           setNicknameError('이미 사용 중인 닉네임입니다.');
+          setNicknameErrorType(false);
           setIsButtonDisabled(true);
         } else {
           setNicknameError('사용 가능한 닉네임입니다.');
-          setIsButtonDisabled(false);
           setNicknameErrorType(true);
+          if (step === 1) {
+            setIsButtonDisabled(false);
+          }
         }
       } catch (error) {
         console.error('닉네임 중복 검사 중 에러 발생:', error);
         setNicknameError('중복 검사 중 오류가 발생했습니다.');
+        setNicknameErrorType(false);
         setIsButtonDisabled(true);
       }
-      // if (!nickname) {
-      //   setNicknameError('닉네임을 입력해주세요.');
-      //   setIsButtonDisabled(true);
-      // } else if (nickname.length > 12) {
-      //   setNicknameError('닉네임은 12자 이하여야 합니다.');
-      //   setIsButtonDisabled(true);
-      // } else {
-      //   // 유효성 검사를 통과하면 에러 메시지를 초기화하고, 중복 검사 로직을 실행
-      //   setNicknameError('');
-      //   setIsButtonDisabled(false);
-      //   checkNicknameDuplication(nickname);
-      // }
     });
-    
 
-  // 중복 검사에 디바운스 적용
-const checkNicknameDuplication = (nickname) => {
-  if (debounce) clearTimeout(debounce);
-  setDebounce(setTimeout(() => {
-    checkDuplicated(nickname);
-  }, 2000));
-};
+  const handleAddressChange = (address) => {
+    setUserInfo(prevInfo => ({...prevInfo, location: address}));
+  };
 
-  const validateCurrentStep = () => {
-    // 닉네임 유효성 검사
-    if (step === 1) {
-      if (!userInfo.nickname) {
-        setIsButtonDisabled(true);
-        setNicknameError('닉네임을 입력해주세요.');
-      } else if (userInfo.nickname.length > 12) {
-        setIsButtonDisabled(true);
-        setNicknameError('닉네임은 12자 이하여야 합니다.');
-      }}
-    // } else if (step === 2 && !userInfo.gender) {
-    //   setIsButtonDisabled(true);
-    // } else {
-    //   // 추가적인 유효성 검사 로직
-    //   setIsButtonDisabled(false); // 모든 검사를 통과하면 버튼 활성화
-    // }
+  const daumPost = () => {
+    new daum.Postcode({
+      oncomplete: function(data) {
+          // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+          const roadAddr = data.roadAddress; // 도로명 주소 변수
+          // 우편번호와 주소 정보를 해당 필드에 넣는다.
+          handleAddressChange(roadAddr);
+      }
+  }).open();
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'selectedYear') {
+      // selectedYear의 경우 상태를 직접 업데이트합니다.
+      setSelectedYear(value);
+    } else {
+      setUserInfo((prevInfo) => ({...prevInfo, [name]: value}));
+    }
+  };
+
+  const handleClick = async () => {
+    setNicknameError('');
+    if (step === 5) {
+      setStep(0);
+    } else if (step === 0) {
+      // 블록체인 지갑 생성 API
+      try {
+        const walletInfo = await createWallet();
+        const updatedUserInfo = {
+          ...userInfo,
+          eoa: walletInfo.eoa,
+          publicKey: walletInfo.publicKey,
+        }
+        setUserInfo(updatedUserInfo);
+
+        await submitUserInfo(updatedUserInfo);
+        navigate('/main')
+      } catch (error) {
+        console.log('지갑 생성 중 에러 발생', error)
+      }
+    } else {
+      setStep(step + 1);
+      setIsButtonDisabled(true);
+    }
   };
 
   return(
@@ -233,11 +181,11 @@ const checkNicknameDuplication = (nickname) => {
         <div className={styles.signup_2col}>
           <div>
             <div className={styles.signup_title}>키</div>
-            <input className={styles.signup_input} type="number" placeholder='키를 입력해주세요 (cm)' name="height" onChange={handleInputChange}/>
+            <input className={styles.signup_input} type="number" placeholder='ex) 111.1 (단위 : cm)' name="height" onChange={handleInputChange}/>
           </div>
           <div>
             <div className={styles.signup_title}>몸무게</div>
-            <input className={styles.signup_input} type="number" placeholder='몸무게를 입력해주세요 (kg)' name="weight" onChange={handleInputChange}/>
+            <input className={styles.signup_input} type="number" placeholder='ex) 11.1 (단위 : kg)' name="weight" onChange={handleInputChange}/>
           </div>
         </div>
       )}
