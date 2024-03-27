@@ -56,7 +56,7 @@ const Main = function(){
     // 나 모달
     const 운동데이터 = {
         criteriaTime: 120,       // 기준 운동시간
-        currentTime: 121,        // 오늘 운동시간
+        currentTime: 100,        // 오늘 운동시간
         criteriaSteps: 6000,    // 기준 걸음수
         currentSteps: 5000,     // 오늘 걸음수
         
@@ -108,6 +108,7 @@ const Main = function(){
         data: {
             timeStamp: "2024-12-11 21:10:10",
             exerciseTime: 10,
+            maxExerciseTime: 120,
             
             creteriaContent: { // 기준
                 timeStamp: "2024-12-11 21:10:10", // LocalDateTime
@@ -116,18 +117,25 @@ const Main = function(){
         
             requestContent: [ 
                 {
-                    profileUrl: "https://", 
+                    profileUrl: "https://lh3.googleusercontent.com/a-/ALV-UjWWsoJkyZLe8JNBVN2HAJ8tPX2JcXCcr2bVd44YEapN=s96-c", 
                     timeStamp: "2024-12-11 21:10:10",
                     memberId: 3,
                     nickname: "우주최강수민",
                     requestedTime: 120,
                 },
                 {
-                    profileUrl: "https://", 
+                    profileUrl: "https://lh3.googleusercontent.com/a/ACg8ocIgs9aTv2Ift58zj51IXknNTaXKG2UtAjRVNVjTwyBb=s96-c", 
                     timeStamp: "2024-12-11 21:20:10",
                     memberId: 4,
                     nickname: "우주최강지수",
-                    requestedTime: 120,
+                    requestedTime: 50,
+                },
+                {
+                    profileUrl: "https://lh3.googleusercontent.com/a/ACg8ocIgs9aTv2Ift58zj51IXknNTaXKG2UtAjRVNVjTwyBb=s96-c", 
+                    timeStamp: "2024-12-11 21:20:10",
+                    memberId: 4,
+                    nickname: "우주최강지수",
+                    requestedTime: 20,
                 }
             ]
         },
@@ -235,10 +243,19 @@ const Main = function(){
                                 <p className={styles.halli_goal_title}>목표 걷기 시간</p>
                                 <div className={styles.halli_time_progress_container}>
                                     <div className={styles.halli_time_progress_base}>
-                                        <div className={styles.halli_mission_container}>
-
-
-                                        </div>
+                                        {할리API요청결과.data.requestContent.map((data) =>{
+                                            return (
+                                                <div className={styles.halli_mission_container} style={{left: `${data.requestedTime/할리API요청결과.data.maxExerciseTime*16}rem`, backgroundImage: 운동데이터.currentTime >= data.requestedTime ? 'url(/public/imgs/yes_markerpng.png)' : 'url(/public/imgs/no_marker.png)'}}>
+                                                    <div className={styles.halli_mission_profile}>
+                                                        <img src={data.profileUrl}/>
+                                                    </div>
+                                                    <h4>
+                                                        {data.requestedTime}분
+                                                    </h4>
+                                                </div>
+                                            )
+                                        })}
+                                        
                                         <div className={styles.halli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>
                                         <div className={styles.halli_time_ori_container} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}>
                                             <p className={styles.halli_time_mine} style={{color: 프로그래스바2.calculatedTime > 300 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
@@ -246,7 +263,7 @@ const Main = function(){
                                         </div>
                                         <div className={styles.halli_time_number_base}>
                                             <p className={styles.halli_time_min}>0분</p>
-                                            <p className={styles.halli_time_min2}>{운동데이터.criteriaTime}분</p>
+                                            <p className={styles.halli_time_min2}></p>
                                         </div>
                                     </div>
                                 </div>  

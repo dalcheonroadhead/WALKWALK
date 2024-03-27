@@ -1,0 +1,190 @@
+@font-face {
+    font-family: "bc_b";
+    src: url(/public/fonts/BCcardB.ttf);
+}
+
+@font-face {
+    font-family: "bc_l";
+    src: url(/public/fonts/BCcardL.ttf);
+}
+
+.main_container {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.rank_list_content{
+    width: 20.4rem;
+    height: 40.125rem;
+    border-radius: 0.938rem;
+    margin-top: 5%;
+    background: #FFFEFC;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+}
+
+.mode_choose{
+    width: 4.6rem;
+    height: 3.125rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-bottom: 6px solid #FFDD71;
+}
+
+
+.rank_content_container{
+    width: 22.5rem;
+    height: 47rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.938rem;
+    background: #FFDD71;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
+}
+
+.rank_title{
+    width: 13rem;
+    height: 3.5rem;
+    background: #FFFEFC;
+    border-radius: 0.938rem;
+    font-family: "bc_b";
+    font-size: 1.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
+}
+
+.tab_container{
+    width: fit-content;
+    height: fit-content;
+    margin-top: 6%;
+}
+
+.mode_tabs{
+    margin-top: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20.4rem;
+    height: 3.125rem;
+}
+
+.day_rank_tab{
+    width: 4.6rem;
+    height: 3.125rem;
+    border-top-left-radius: 0.938rem;
+    border-top-right-radius: 0.938rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.day_rank_tab_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+
+
+.week_rank_tab{
+    width: 4.6rem;
+    height: 3.125rem;
+    display: flex;
+    justify-content: center;    
+    align-items: center;
+    text-align: center;
+}
+
+.week_rank_tab_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+
+.month_rank_tab{
+    width: 4.6rem;
+    height: 3.125rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.month_rank_tab_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.strick_rank_tab{
+    width: 4.6rem;
+    height: 3.125rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.strick_rank_tab_txt{
+    font-size: 1.3rem;
+    font-family: "bc_b";
+}
+
+.day_rank_container{
+    width: 20.4rem;
+    height: 35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2.5%;
+}
+
+.rank_day{
+    width: 19.4rem;
+    height: 4rem;
+    margin-top: 2%;
+    border-radius: 0.938rem;
+    background: #FFDD71;
+    border: 2px solid #EACB68;
+    font-family: "bc_b";
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top_rank_container{
+    width: 19.4rem;
+    height: 12rem;
+    margin-top: 3%;
+    border-radius: 0.938rem;
+    background: #FFF2CB;
+}
+
+.first_rank_container{
+    width: 6rem;
+    height: 12rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "bc_b";
+}
+
+.first_rank_title{
+    font-size: 2rem;
+    font-family: "bc_b";
+}
