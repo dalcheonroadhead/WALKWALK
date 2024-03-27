@@ -16,8 +16,7 @@
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    overflow-y: auto;
 }
 
 .modal_background{
@@ -428,14 +427,11 @@
 }
 
 
-/* .tab_container{
-    height: 18.75rem;
-    width: 22.5rem;
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-} */
+.tab_container{
+    height: fit-content;
+    width: 22.5rem;   
+    margin-top: 5rem;
+}
 
 .mode_choose{
     width: 5rem;
@@ -1178,6 +1174,7 @@
     height: 23.75rem;
     width: 22.5rem;
     margin-top: 4%;
+    margin-bottom: 5rem;;
     /* top: 68.5%;
     left: 50%;
     position: absolute;
