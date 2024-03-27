@@ -245,7 +245,7 @@ const Main = function(){
                                     <div className={styles.halli_time_progress_base}>
                                         {할리API요청결과.data.requestContent.map((data) =>{
                                             return (
-                                                <div className={styles.halli_mission_container} style={{left: `${data.requestedTime/할리API요청결과.data.maxExerciseTime*16}rem`, backgroundImage: 운동데이터.currentTime >= data.requestedTime ? 'url(/public/imgs/yes_markerpng.png)' : 'url(/public/imgs/no_marker.png)'}}>
+                                                <div className={styles.halli_mission_container} style={{left: `${data.requestedTime/할리API요청결과.data.maxExerciseTime*16}rem`, backgroundImage: 운동데이터.currentTime >= data.requestedTime ? 'url(/public/imgs/yes_marker.png)' : 'url(/public/imgs/no_marker.png)'}}>
                                                     <div className={styles.halli_mission_profile}>
                                                         <img src={data.profileUrl}/>
                                                     </div>
