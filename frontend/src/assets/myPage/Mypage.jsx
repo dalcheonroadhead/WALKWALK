@@ -11,8 +11,8 @@ const Mypage = function () {
       try {
         const data = await getMypage();
         setMypageInfo(data);
-      } catch (error) {
-        console.error('mypage 정보를 가져오는 중 에러 발생:', error);
+      } catch (err) {
+        console.error('mypage 정보를 가져오는 중 에러 발생:', err);
       }
     })();
   }, []);
