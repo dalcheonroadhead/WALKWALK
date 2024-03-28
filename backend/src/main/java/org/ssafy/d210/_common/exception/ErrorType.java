@@ -45,7 +45,11 @@ public enum ErrorType {
     NOT_FOUND_FRIEND(401, "친구가 존재하지 않습니다."),
 
     // --------------------------- ETC -------------------------------
-    ANOTHER_ERROR(401, "[Security]는 통과 했으나, 다른 위치에서 [Error]가 발생하였습니다.");
+    ANOTHER_ERROR(401, "[Security]는 통과 했으나, 다른 위치에서 [Error]가 발생하였습니다."),
+
+    // --------------------------- NOTIFICATION ----------------------
+    CANT_FIND_NOTIFICATION(401, "알림이 존재하지 않습니다."),
+    ;
 
     private int code;
     private String msg;
