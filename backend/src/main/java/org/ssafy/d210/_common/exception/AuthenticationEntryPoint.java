@@ -30,14 +30,14 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
         String exception = (String) request.getAttribute("exception");
 
         // 소켓 헤더 확인하기
-//        Enumeration<String> headerNames = request.getHeaderNames();
-//
-//        while (headerNames.hasMoreElements()){
-//            String name = headerNames.nextElement();
-//            String value = request.getHeader(name);
-//
-//            log.info("header 이름: {} <<<<<<< 값: {}", name, value);
-//        }
+        Enumeration<String> headerNames = request.getHeaderNames();
+
+        while (headerNames.hasMoreElements()){
+            String name = headerNames.nextElement();
+            String value = request.getHeader(name);
+
+            log.info("header 이름: {} <<<<<<< 값: {}", name, value);
+        }
 
         if(exception != null) {
             if (ErrorType.valueOf(exception).equals(ErrorType.TOKEN_DOESNT_EXIST)) {

@@ -35,6 +35,7 @@ import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER_ACCOUN
 @Slf4j
 @Service
 @Transactional
+
 public class PaymentService {
 
     @Value("${pay.secret-key}")
