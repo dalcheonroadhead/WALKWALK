@@ -9,7 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.ssafy.d210._common.entity.BaseTime;
 import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.entity.ExerciseAcc;
-import org.ssafy.d210.wallets._payment.dto.Payment;
+import org.ssafy.d210.wallets._payment.entity.Payment;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 

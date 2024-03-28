@@ -16,13 +16,13 @@ import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
-import org.ssafy.d210.wallets._payment.dto.Payment;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentExchangeResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
+import org.ssafy.d210.wallets._payment.entity.Payment;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
