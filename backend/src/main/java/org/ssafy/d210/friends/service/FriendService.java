@@ -94,7 +94,7 @@ public class FriendService {
     }
 
     public List<FriendSentDto> getSentList(Members member){
-        return friendListRepository.findFriendListsBySenderIdAndIsFriendIsFalse(member)
+        return friendListRepository.findFriendListsBySenderIdAndIsAcceptedIsTrue(member)
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND))
                 .stream().map(FriendSentDto::from).toList();
     }
