@@ -14,6 +14,7 @@ const MessageForm = ({ onSendMessage }) => {
   
   
     };
+    
   
     return (
       <form onSubmit={HandleSubmit} className="message-form">
