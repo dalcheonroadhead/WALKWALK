@@ -180,6 +180,9 @@ public class MemberDataService {
         return null;
     }
 
+    public Members getTargetMemberDetail(Long id ){
+        return membersRepository.findById(id).orElse(null);
+    }
 
 
 }

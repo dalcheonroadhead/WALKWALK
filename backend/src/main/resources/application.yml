@@ -24,6 +24,9 @@ spring:
       host: ${REDIS_HOST}
       port: 6379
       password: ${REDIS_PASSWORD}
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
   batch:
     job:
@@ -91,11 +94,6 @@ springdoc:
   model-and-view-allowed: true
   paths-to-match:
     - /api/**
-#logging:
-#  level:
-##    org.springframework.batch: debug
-##    org.springframework.jdbc.datasource: debug
-#    root: trace
 
 pay:
   secret-key: ${PAY_SECRET_KEY}

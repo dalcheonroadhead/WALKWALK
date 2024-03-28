@@ -55,6 +55,8 @@ public enum MsgType {
     POST_FRIEND_REQUEST_SUCCESSFULLY("친구 요청 전송에 성공하였습니다."),
     PUT_FRIEND_REQUEST_SUCCESSFULLY("친구 요청 수락/거절에 성공하였습니다."),
     POST_MEMBER_LIST_SUCCESSFULLY("해당 키워드가 포함된 유저 목록 조회에 성공하였습니다."),
+    GET_FRIEND_SENT_LIST_SUCCESSFULLY("친구 신청 목록 조회에 성공하였습니다."),
+    GET_FRIEND_RECEIVED_LIST_SUCCESSFULLY("친구 요청 수신 목록 조회에 성공하였습니다."),
 
     // ====================== NOTIFICATION ======================
     SUBSCRIBE_SUCCESSFULLY("SSE 구독에 성공하였습니다."),

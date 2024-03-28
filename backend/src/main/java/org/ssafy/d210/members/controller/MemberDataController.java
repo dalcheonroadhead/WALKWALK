@@ -117,6 +117,12 @@ public class MemberDataController {
         return ResponseUtils.ok(memberDataService.refreshAccessToken(userDetails.getMember()), MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }
 
+    @GetMapping("/{id}")
+    public ApiResponseDto<?> getTargetMemberDetails(@PathVariable("id") Long id){
+
+        return ResponseUtils.ok(memberDataService.getTargetMemberDetail(id), MsgType.SEARCH_SUCCESSFULLY);
+    }
+
 
 
 }
