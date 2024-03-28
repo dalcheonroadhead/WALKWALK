@@ -10,19 +10,6 @@ import Sidebar from "../common/sidebar/Sidebar";
 const Main = function(){
 
     useEffect(()=>{
-        // 갈리 리스트 조회
-        getGalleyList().then((res)=>{
-            if(res){
-                // setGalliList(getGalleyListResponse);
-                setGalli(true);
-            }
-            else{
-                setGalliList([])
-                setGalli(false);
-            }
-        }
-        
-        )
         getHalleyList().then((res)=>{
             if(res){
                 // setHalliList(getHalleyListResponse);
@@ -76,10 +63,31 @@ const Main = function(){
 
     const openGalliModal = function(){
         setIsGalliOpen(!isGalliOpen);
+        handleSearchClick();
     }
 
     const tabClickHandler = function(index){
         settabIndex(index)
+        if(index == 0){
+
+        }
+        else if(index == 1){
+
+        }
+        else{
+            // 갈리 리스트 조회
+            getGalleyList().then((res)=>{
+                if(res){
+                    setGalliList(res);
+                    console.log(res)
+                    setGalli(true);
+                }
+                else{
+                    setGalliList([])
+                    setGalli(false);
+                }
+            })
+        }
     }
 
     const openHalliListModal = function(){
@@ -300,9 +308,9 @@ const Main = function(){
                             return(
                                 <>  
                                     <div className={styles.my_galli_list_container}>
-                                        <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.name}</span>님의 <br></br>운동기록</p>
+                                        <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
                                         <div className={styles.galli_time_progress_container}>
-                                            <div className={styles.galli_time_progress_base}>
+                                            {data.requestedTime == null ? <p>설정안됨</p> :<div className={styles.galli_time_progress_base}>
                                                 <div className={styles.galli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>
                                                 <div className={styles.galli_time_ori_container} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}>
                                                     <p className={styles.galli_time_mine} style={{color: 프로그래스바2.calculatedTime > 300 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
@@ -312,7 +320,7 @@ const Main = function(){
                                                     <p className={styles.galli_time_min}>0분</p>
                                                     <p className={styles.galli_time_min2}>{운동데이터.criteriaTime}분</p>
                                                 </div>
-                                            </div>
+                                            </div>}
                                         </div>
                                     </div>
                                 </>
@@ -405,6 +413,7 @@ const Main = function(){
                                                         <p className={styles.btn_txt} onClick={()=>{
                                                             postGalleyRequest({'memberId': data.memberId});
                                                             setIsGalliOpen(false);
+                                                            setMemberList([]);
                                                             }}>신청</p>
                                                     </div>
                                                 </div>
