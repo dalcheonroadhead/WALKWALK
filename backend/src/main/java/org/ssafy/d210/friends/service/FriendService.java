@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210.friends.dto.FriendSendDto;
 import org.ssafy.d210.friends.dto.GalleyMemberListDto;
 import org.ssafy.d210.friends.dto.MemberListDto;
 import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
@@ -91,9 +92,10 @@ public class FriendService {
         return "";
     }
 
-    public List<FriendList> getSendList(Members member){
+    public List<FriendSendDto> getSendList(Members member){
         return friendListRepository.findFriendListsBySenderIdAndIsFriendIsFalse(member)
-                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND))
+                .stream().map(FriendSendDto::from).toList();
     }
 
     @Transactional
