@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Mypage.module.css"
+import styles from "./Mypage.module.css";
 import { getMypage } from "../../apis/member";
 
 const Mypage = function () {
