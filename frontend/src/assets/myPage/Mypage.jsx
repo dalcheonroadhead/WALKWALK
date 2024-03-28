@@ -30,6 +30,10 @@ const Mypage = function () {
             <span>내 정보 수정</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
+          <button className={styles.mypage_btn} onClick={() => {navigate()}}>
+            <span>내 목표 수정</span>
+            <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
+          </button>
           <button className={styles.mypage_btn} onClick={() => {navigate('/mywallet')}}>
             <span>내 금고</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />

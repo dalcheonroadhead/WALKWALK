@@ -32,19 +32,17 @@ const MyWallet = function () {
 
   const isMobile = () => {
     // 터치 이벤트 지원 여부 및 화면 크기를 통한 모바일 환경 판별
-    return ('ontouchstart' in window || navigator.maxTouchPoints > 1 ) && window.innerWidth <= 850;
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 1 ;
+    // return ('ontouchstart' in window || navigator.maxTouchPoints > 1 ) && window.innerWidth <= 800;
   }
 
   const submitMoneyCharge = async () => {
     try {
-      console.log('inputMoney : ', inputMoney, typeof(inputMoney));
-      chargeMoney(inputMoney);
+      const res = await requestMoneyCharge(inputMoney.trim());
       if (isMobile()) {
-        alert('모바일')
-        console.log("모바일 환경입니다.");
+        window.location.href = res.next_redirect_mobile_url
       } else {
-        alert('모바일 아님')
-        console.log("비모바일 환경입니다.");
+        window.location.href = res.next_redirect_pc_url
       }
     } catch (err) {
       console.error('머니 충전 실패 : ', err)
