@@ -67,7 +67,6 @@ public class SecurityConfig {
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Arrays.asList("*"));
                     configuration.setMaxAge(3600L);
-
                     configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                     return configuration;
@@ -86,6 +85,7 @@ public class SecurityConfig {
                         (auth) ->
                                 auth
                                         .requestMatchers("/api/**").permitAll()
+                                        .requestMatchers("/ws-stomp/**").permitAll()
                                         .requestMatchers("/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**" ).permitAll()
 //                                        .requestMatchers("/api/oauth/authorize").permitAll()
                                         .requestMatchers("/oauth2/**").permitAll() //모든 소셜 로그인 후 인가코드 Redirect URL는 다음과 같이 설정

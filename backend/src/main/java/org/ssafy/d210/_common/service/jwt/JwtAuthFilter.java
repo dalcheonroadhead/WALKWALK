@@ -28,7 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // B. 토큰이 null 이면 다음 필터로 넘어간다
         if (token == null) {
-            request.setAttribute("exception", ErrorType.TOKEN_DOESNT_EXIST.toString());
+
             filterChain.doFilter(request, response);
             return;
         }

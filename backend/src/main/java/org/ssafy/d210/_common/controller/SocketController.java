@@ -44,6 +44,7 @@ public class SocketController {
     }
 
     // 3. 퇴장 메세지 용
+
     @MessageMapping("/api/socket/quit")
     public void quitMsg(String publishMessage, SimpMessageHeaderAccessor headerAccessor) {
         log.info("입장 메시지 Header: {}", headerAccessor);

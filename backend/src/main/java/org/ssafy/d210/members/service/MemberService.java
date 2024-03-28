@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -85,7 +84,7 @@ public class MemberService {
         try {
             // B-4) 직렬화된 JSON을 진짜 객체 형태로 역직렬화, 실패시 FAIL_ON_UNKNOWN_PROPERTIES 에러가 나고, 이는 DTO 명세를 맞추지 못한 것이다.
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            log.info("성공적으로 GOOGLE과 통신했습니다={}",responseEntity.getBody());
+            log.info("성공적으로 GOOGLE과 통신했습니다={}", responseEntity.getBody());
             return objectMapper.readValue(responseEntity.getBody(), GoogleOauthTokenInfo.class);
         } catch (JsonProcessingException e) {
             // B-5) 에러 내역 참고
@@ -111,7 +110,7 @@ public class MemberService {
         boolean isNew = false;
 
         // C-4) 아예 처음 가입한 사람인 경우 다 비어있을 것이다. 그러면 신규 유저다.
-        if(member == null){
+        if (member == null) {
             member = Members.of(
                     googleProfileInfo.getEmail(),
                     googleProfileInfo.getName() == null? "없음": googleProfileInfo.getName(),
@@ -122,14 +121,14 @@ public class MemberService {
         }
 
         // C-5) 처음 가입한 유저는 아니지만, 추가 정보 입력 단계에서 나간 유저의 경우 해당 부분이 비어있다. -> 따라서 이를 통해 확인한다.
-        else if(member.getBirthYear() == null || member.getBlockAddresses() == null || member.getPhoneNumber() == null){
+        else if (member.getBirthYear() == null || member.getBlockAddresses() == null || member.getPhoneNumber() == null) {
             isNew = true;
         }
         // C-6) 추가 정보도 다 차 있는 유저일 경우, 신규 가입 여부를 [false]로 두고, 수정일자를 갱신한다.
         //      원래 [setter]로 인한 변경 값이 있을 경우, [save]만 해도 수정일자가 바뀌지만 [isNew]가 [false]인 경우
         //      즉, 추가정보도 다 기입했는데, Google 토큰 만료로 인해 OAuth2 다시 한 사람의 경우, 변경 내용이 없으므로,
         //      save 를 해도 updated_at 이 바뀌지 않는다. 따라서 억지로 수정일자를 변경 해줘야 한다.
-        else{
+        else {
             member.setNew(false);
 
             membersRepository.updateById(member.getId());
@@ -140,7 +139,7 @@ public class MemberService {
         membersRepository.save(member);
 
         // C-8) 구글 AT, RT 정보를 담은 jwt 토큰을 만들어서 헤더에 실는다.
-        String jwtAccessToken = jwtUtil.createToken(member,false);
+        String jwtAccessToken = jwtUtil.createToken(member, false);
         String jwtRefreshToken = jwtUtil.createToken(member, true);
         response.addHeader("Authorization", jwtAccessToken);
 
@@ -150,8 +149,8 @@ public class MemberService {
         ans.add(String.valueOf(isNew));
         ans.add(jwtRefreshToken);
         // C-10) [REDIS]에 Member 의 PK(식별자), RefreshToken, AccessToken 을 저장
-        refreshTokenInRedisRepository.save(new RefreshTokenInRedis(String.valueOf(member.getId()),jwtRefreshToken, jwtAccessToken));
-        gatRepository.save(new GatRedis(member.getId(),gat.getAccess_token()));
+        refreshTokenInRedisRepository.save(new RefreshTokenInRedis(String.valueOf(member.getId()), jwtRefreshToken, jwtAccessToken));
+        gatRepository.save(new GatRedis(member.getId(), gat.getAccess_token()));
         grtRepository.save(new GrtRedis(member.getId(), grt.getRefresh_token(), gat.getAccess_token()));
 
         return ans;
@@ -186,8 +185,8 @@ public class MemberService {
         GoogleProfileInfo googleProfileInfo = null;
 
         try {
-            googleProfileInfo = objectMapper.readValue(googleProfileResponse.getBody(),GoogleProfileInfo.class);
-        }catch (JsonProcessingException e){
+            googleProfileInfo = objectMapper.readValue(googleProfileResponse.getBody(), GoogleProfileInfo.class);
+        } catch (JsonProcessingException e) {
             log.error(e.getMessage());
         }
 
@@ -202,7 +201,7 @@ public class MemberService {
     }
 
     // F. 닉네임 중복확인
-    public boolean isDuplicatedID(String nickname){
+    public boolean isDuplicatedID(String nickname) {
         return membersRepository.findByNicknameAndDeletedAtIsNull(nickname).isPresent();
     }
 
