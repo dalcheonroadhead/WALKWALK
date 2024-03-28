@@ -1,0 +1,32 @@
+{
+  "short_name": "WalkWalk",
+  "name": "WalkWalk",
+  "start_url": "/",
+  "scope": ".",
+  "orientation": "portrait",
+  "display": "standalone",
+  "theme_color": "#FFCB23",
+  "background_color": "#FAFAFA",
+  "icons": [
+    {
+      "src": "/imgs/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/imgs/logo180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/imgs/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/imgs/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+@font-face {
+    font-family: "bc_b";
+    src: url(/public/fonts/BCcardB.ttf);
+}
+
+@font-face {
+    font-family: "bc_l";
+    src: url(/public/fonts/BCcardL.ttf);
+}
+
+.main_container {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: auto;
+}
+
+.title_container{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    justify-content: center;
+}
+
+.back_btn{
+    position: absolute;
+    left: 3%;
+    top: 19%;
+    height: 2.1rem;
+    width: auto;
+    transform: rotate(180deg);
+}
+
+.title_txt{
+    font-family: "bc_b";
+    font-size: 1.5rem;
+}
+
+.profile_container{
+    width: 100%;
+    height: 16rem;
+    display: flex;
+    margin-top: 6%;
+    flex-direction: column; /* 세로로 배치 */
+    align-items: center;
+    justify-content: center;
+}
+
+.profile_txt{
+    font-family: "bc_b";
+    font-size: 1.5rem;
+    margin-top: 20%;
+    margin-bottom: 1%;
+}
+
+.profile_img{
+    height: 10rem;
+    width: 10rem;
+    border-radius: 8rem;
+}
+
+.profile_name_txt{
+    font-family: "bc_b";
+    font-size: 2rem;
+    margin-top: 1%;
+}
+
+.mission_container{
+    width: 22rem;
+    height: 28rem;
+    margin-top: 10%;
+    border-radius: 0.938rem;;
+}
+
+.mission_title{
+    font-size: 1.5rem;
+    text-align: left;
+    margin-top: -1%;
+    font-family: "bc_b";
+}
+
+.mission_back{
+    width: 22rem;
+    height: 25rem;
+    margin-top: 0%;
+    background: #FFFEFC;
+    flex-direction: column; /* 세로로 배치 */
+    display: flex;
+    align-items: center;
+    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+    border-radius: 0.938rem;;
+}
+
+.content_txt{
+    font-size: 1.5rem;
+    font-family: "bc_b";
+    margin-left: -78%;
+}
+
+.bottom_line{
+    width: 20.4rem;
+    height: 0.5rem;
+    margin-top: -5%;
+    background: #FFCB23;
+}
+
+.content_container{
+    width: 20.4rem;
+    height: 8rem;
+    display: flex;
+}
+
+.ch2_money{
+    margin-top: -15%;
+    margin-left: -5%;
+    height: 12rem;
+    width: auto;
+}
+
+.content_txt_container{
+    width: 12.4rem;
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.content_detail_txt{
+    font-family: "bc_b";
+    font-size: 1.3rem;
+}
+
+.money_content_txt{
+    font-size: 1.5rem;
+    font-family: "bc_b";
+    margin-left: -78%;
+    margin-top: 3%;
+}
+
+.money_bottom_line{
+    width: 20.4rem;
+    height: 0.5rem;
+    margin-top: -5%;
+    background: #FFCB23;
+}
+
+.money_content_container{
+    width: 20.4rem;
+    height: 8rem;
+    display: flex;
+}
+
+.money{
+    margin-top: 8%;
+    margin-left: 0%;
+    height: 5rem;
+    width: auto;
+}
+
+.money_content_txt_container{
+    width: 15.4rem;
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 2%;
+}
+
+.money_content_detail_txt{
+    font-family: "bc_b";
+    font-size: 1.3rem;
+}
+.calendar-wrapper {
+    text-align: center;
+}
+
+.calendar_container {
+    border: 1px solid #ccc;
+    max-width: 300px;
+    margin: auto;
+}
+
+.calendar_header {
+    padding: 10px;
+}
+
+.calendar_day_name {
+    display: inline-block;
+    width: 14.28%; /* 100% / 7 */
+    padding: 10px;
+}
+
+.calendar_row {
+    display: flex;
+}
+
+.calendar_day {
+    width: 14.28%; /* 100% / 7 */
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.calendar_day_selected {
+    background-color: #f0f0f0;
+}

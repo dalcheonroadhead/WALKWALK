@@ -1,0 +1,16 @@
+.login_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+}
+
+.login_app_name {
+  font-size: 4.5rem;
+}
+
+.google_login_btn {
+  width: 75%;
+  margin: 2rem 0 2rem 0;
+}
