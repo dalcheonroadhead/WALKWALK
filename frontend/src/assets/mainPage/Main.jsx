@@ -295,8 +295,8 @@ const Main = function(){
                         <div className={styles.galli_expanded} style={{height: 240 * galliList.length, overflow: !expanded && 'scroll'}}>
                         {galliList.map((data, index) => {
                             return(
-                                <div key={index} className={styles.my_galli_list_container} onClick={()=>moveToGalliPage(data.memberId)}>
-                                    <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
+                                <div key={index} className={styles.my_galli_list_container}>
+                                    <p className={styles.galli_goal_title} onClick={()=>moveToGalliPage(data.memberId)}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
                                     <div className={styles.galli_time_progress_container}>
                                         {data.requestedTime == null ? <p>등록한 미션이 없습니다...</p> :<div className={styles.galli_time_progress_base}>
                                             <div className={styles.galli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>
