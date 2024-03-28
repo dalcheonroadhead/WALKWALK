@@ -29,7 +29,7 @@ public class GetGalleyListResponse {
     public static GetGalleyListResponse from(HalleyGalley halleyGalley){
         return builder()
                 .timeStamp(halleyGalley.getCreatedAt())
-                .profileUrl(halleyGalley.getHalleyId().getProfileUrl())
+                .profileUrl(halleyGalley.getGalleyId().getProfileUrl())
                 .memberId(halleyGalley.getGalleyId().getId())
                 .nickname(halleyGalley.getGalleyId().getNickname())
                 .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())
