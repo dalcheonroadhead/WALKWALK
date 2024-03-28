@@ -10,14 +10,16 @@ import org.ssafy.d210.halleyGalley.entity.HalleyGalley;
 @Getter
 public class GetGalleyListResponse {
     private LocalDateTime timeStamp;
+    private String profileUrl;
     private Long memberId;
     private String nickname;
     private Long requestedTime;
     private Boolean isAccepted;
 
     @Builder
-    private GetGalleyListResponse(LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime, Boolean isAccepted){
+    private GetGalleyListResponse(LocalDateTime timeStamp, String profileUrl, Long memberId, String nickname, Long requestedTime, Boolean isAccepted){
         this.timeStamp = timeStamp;
+        this.profileUrl = profileUrl;
         this.memberId = memberId;
         this.nickname = nickname;
         this.requestedTime = requestedTime;
@@ -27,6 +29,7 @@ public class GetGalleyListResponse {
     public static GetGalleyListResponse from(HalleyGalley halleyGalley){
         return builder()
                 .timeStamp(halleyGalley.getCreatedAt())
+                .profileUrl(halleyGalley.getGalleyId().getProfileUrl())
                 .memberId(halleyGalley.getGalleyId().getId())
                 .nickname(halleyGalley.getGalleyId().getNickname())
                 .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())

@@ -25,6 +25,7 @@ public enum MsgType {
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+    POST_ITEM_USE_SUCCESSFULLY("아이템 사용에 성공하였습니다."),
 
     // ====================== HALLEY_GALLEY ======================
     GET_HALLEY_LIST_SUCCESSFULLY("할리 목록 조회에 성공하였습니다."),
