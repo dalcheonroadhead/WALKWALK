@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.ssafy.d210._common.repository.GrtRepository;
 import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.response.ResponseUtils;
@@ -35,6 +36,7 @@ import java.util.Map;
 public class MemberOauth2Controller {
 
     private final MemberService memberService;
+    private final GrtRepository grtRepository;
 
 
     // A. 프론트에서 인가코드 다시 주는 주소.
@@ -98,6 +100,10 @@ public class MemberOauth2Controller {
         ret.put("Refresh_Token", jwtRefreshToken);
         ret.put("Google_access_token", gti.getAccess_token());
         ret.put("Google_refresh_token",gti.getRefresh_token());
+
+        if(gti.getRefresh_token() == null){
+            ret.put("Google_refresh_token", grt.getRefresh_token());
+        }
 
         return ResponseUtils.ok(ret, MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }

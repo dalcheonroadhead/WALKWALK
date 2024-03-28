@@ -88,14 +88,14 @@ public class HalleyGalleyService {
 
     public GetHalleyResponse getHalley(Members member, Long halleyId){
         Members members = membersRepository.findById(halleyId).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
-        HalleyGalley halley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(members, member).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY));
+        HalleyGalley halley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, members).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY));
 
         return GetHalleyResponse.from(halley, halley.getMissionId());
     }
 
     public GetGalleyResponse getGalley(Members member, Long galleyId){
         Members members = membersRepository.findById(galleyId).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
-        HalleyGalley galley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, members).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_GALLEY));
+        HalleyGalley galley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(members, member).orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_GALLEY));
 
         return GetGalleyResponse.from(galley, galley.getMissionId());
     }

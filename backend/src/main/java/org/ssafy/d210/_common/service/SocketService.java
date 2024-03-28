@@ -54,6 +54,7 @@ public class SocketService {
             msg.setTextContent(msg.getSenderId()+"님 환영합니다!");
             msg.setCreatedAt(LocalDateTime.now());
             msg.setOpened(false);
+            msg.setCreatedAt(LocalDateTime.now());
 
 
             saveAndSendingMessageToSubscriber(msg);
@@ -80,11 +81,12 @@ public class SocketService {
             );
 
             // B. 만약 들어온 메세지의 URL이 BASE64라면, http로 변환
-            if(!msg.getVoiceURL().substring(0,4).equals("http")){
+            if(msg.getVoiceURL().length()>=10 && !msg.getVoiceURL().substring(0,4).equals("http")){
                String httpUrl =  s3Base64Uploader.Base64ToHttp(msg.getVoiceURL());
+               log.info(httpUrl);
                msg.setVoiceURL(httpUrl);
             }
-
+            msg.setCreatedAt(LocalDateTime.now());
             saveAndSendingMessageToSubscriber(msg);
 
         } catch (Exception e){
@@ -117,6 +119,7 @@ public class SocketService {
         }
     }
 
+
     // Message EKsm
     public void  saveAndSendingMessageToSubscriber(MessageInfo msg ){
 
@@ -136,7 +139,9 @@ public class SocketService {
                 ));
 
 
+        log.info("{}",msg.getReceiverId());
+
         // B. 메세지 전송
-        template.convertAndSend("sub/member/"+msg.getReceiverId(), msg);
+        template.convertAndSend("/sub/member/"+msg.getReceiverId(), msg);
     }
 }

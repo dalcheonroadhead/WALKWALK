@@ -8,10 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.BaseTime;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
-import org.ssafy.d210.wallets.dto.request.PutEggRequest;
-import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
-import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
-import org.ssafy.d210.wallets.dto.response.PutMoneyResponse;
 
 import static org.ssafy.d210._common.exception.ErrorType.NOT_ENOUGH_EGG;
 
@@ -39,40 +35,31 @@ public class MemberAccount extends BaseTime {
     @ColumnDefault("0")
     private Integer money;
 
-    public Integer putEgg(PutEggRequest putEggRequest, boolean operation) {
+    public Integer putEgg(int egg, boolean operation) {
         // operation true(1): 획득, operation false(0): 차감
         if (operation) {
-            this.egg += putEggRequest.getPutEggValue();
+            this.egg += egg;
         } else {
-            if (putEggRequest.getPutEggValue() < 0 || this.egg < putEggRequest.getPutEggValue()) {
+            if (egg < 0 || this.egg < egg) {
                 throw new CustomException(NOT_ENOUGH_EGG);
             }
 
-            this.egg -= putEggRequest.getPutEggValue();
+            this.egg -= egg;
         }
 
         return egg;
     }
 
-    public PutMoneyResponse putMoney(PutMoneyRequest putMoneyRequest, boolean operation) {
-        // operation true(1): 획득
-        if (operation) {
-            this.money += putMoneyRequest.getPutMoneyValue();
-        }
-
-        return PutMoneyResponse.of(money);
-    }
-
-    public Integer putMoney(PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest, boolean operation) {
+    public Integer putMoney(Integer money, boolean operation) {
         // operation true(1): 획득, operation false(0): 차감
         if (operation) {
-            this.money += putHalleyGalleyMoneyRequest.getPutMoneyValue();
+            this.money += money;
         } else {
-            if (putHalleyGalleyMoneyRequest.getPutMoneyValue() < 0 || this.money < putHalleyGalleyMoneyRequest.getPutMoneyValue()) {
+            if (money < 0 || this.money < money) {
                 throw new CustomException(NOT_ENOUGH_EGG);
             }
 
-            this.money -= putHalleyGalleyMoneyRequest.getPutMoneyValue();
+            this.money -= money;
         }
 
         return money;

@@ -33,38 +33,41 @@ public class MessageInfo {
     private String senderProfileUrl;
 
     // 6. 받는 사람 닉네임
-    private String receiverNickname;
+    private String senderNickname;
 
     // 7. 메세지 생성 일자
     private LocalDateTime createdAt;
+
+
+
 
     // 8. 알림 여부
     private boolean isOpened;
 
     @Builder
     private MessageInfo (String messageType, String textContent, String voiceURL, Long senderId, Long receiverId,
-                         String senderProfileUrl, String receiverNickname, LocalDateTime createdAt, boolean isOpened) {
+                         String senderProfileUrl, String senderNickname, LocalDateTime createdAt, boolean isOpened) {
         this.messageType = messageType;
         this.textContent = textContent;
         this.voiceURL = voiceURL;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.senderProfileUrl = senderProfileUrl;
-        this.receiverNickname = receiverNickname;
+        this.senderNickname = senderNickname;
         this.createdAt = createdAt;
         this.isOpened = isOpened;
 
     }
 
     public static MessageInfo toDto (Long senderId, String senderProfileUrl, String textContent, Long receiverId,
-                                     String receiverNickname, String voiceURL,
+                                     String senderNickname, String voiceURL,
                                      String messageType, LocalDateTime createdAt, boolean isOpened) {
 
         return  builder()
                 .senderId(senderId)
                 .senderProfileUrl(senderProfileUrl)
                 .receiverId(receiverId)
-                .receiverNickname(receiverNickname)
+                .senderNickname(senderNickname)
                 .voiceURL(voiceURL)
                 .isOpened(isOpened)
                 .textContent(textContent)

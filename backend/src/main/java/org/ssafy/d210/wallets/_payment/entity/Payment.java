@@ -1,16 +1,17 @@
-package org.ssafy.d210.wallets._payment.dto;
+package org.ssafy.d210.wallets._payment.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ssafy.d210._common.entity.OnlyCreatedTime;
 import org.ssafy.d210.members.entity.Members;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Payment {
+public class Payment extends OnlyCreatedTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +31,6 @@ public class Payment {
     private Integer total_amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Members member;
 }
