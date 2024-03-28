@@ -26,7 +26,7 @@ public class GetGalleyResponse {
         return builder()
                 .profileUrl(galley.getHalleyId().getProfileUrl())
                 .nickname(galley.getHalleyId().getNickname())
-                .requestedTime(mission == null ? 0 : mission.getExerciseMinute())
+                .requestedTime(mission == null ? -1 : mission.getExerciseMinute())
                 .reward(galley.getReward())
                 .dayoff(galley.getDayoff())
                 .build();
