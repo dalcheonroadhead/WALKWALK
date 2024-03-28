@@ -54,3 +54,14 @@ export const getFriendSentList = async () => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 친구 요청 수신 목록 조회
+export const getFriendReceivedList = async () => {
+    const url = '/friends/received-list'
+    return await instance.get(url)
+        .then((res) => {
+            console.log(res);
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}

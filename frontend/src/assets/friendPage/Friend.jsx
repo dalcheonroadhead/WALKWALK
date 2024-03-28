@@ -2,7 +2,7 @@ import { useState, useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Friend.module.css";
 import Sidebar from "../common/sidebar/Sidebar";
-import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList } from "../../apis/friend";
+import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList, getFriendReceivedList } from "../../apis/friend";
 
 const Friend = function(){
 
@@ -11,6 +11,7 @@ const Friend = function(){
     const [searchedFriendList, setSearchedFriendList] = useState([]);
     const [friendList, setFriendList] = useState([]);
     const [sentFriendList, setSentFriendList] = useState([]);
+    const [receivedFriendList, setReceivedFriendList] = useState([]);
     const [keyword, setKeyword] = useState('');
 
     useEffect(()=>{
@@ -27,7 +28,8 @@ const Friend = function(){
                 .then(res=>setSentFriendList(res))
         }
         else{
-
+            getFriendReceivedList()
+                .then(res=>setReceivedFriendList(res))
         }
         setTabIndex(index)
     }
@@ -52,44 +54,6 @@ const Friend = function(){
         sendFriendRequest(memberId)
             .then(res=>{alert("친구 요청에 성공했습니다."); searchedFriendList([]); setFindFriend(false);});
     }
-
-    const friendlist = [
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김도리",
-            info: "나는 도리도리 김도리 닭도리탕이 맛있당"
-        },
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김고리",
-            info: "나는 고리고리 김고리 모든걸 걸 수 있당"
-        },
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김노리",
-            info: "나는 노리노리 김노리 노리개가 갖고 싶당"
-        },
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김로리",
-            info: "나는 로리로리 김로리 로리라는 이름은 좀 위험해"
-        },
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김모리모리대머리",
-            info: "나는 머리머리대머리 이름도 김모리모리대머리"
-        },
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김보리",
-            info: "나는 보리보리 김보리 보리씌!!! 보리씌!!"
-        },
-        {
-            pimg: "/imgs/profile_img1.jpg",
-            nickname: "김소리",
-            info: "나는 소리소리 김소리 내 귀는 소머즈 귀 ㅋ"
-        },
-    ]
 
     const tabArr=[{
         tabTitle:(
@@ -149,11 +113,11 @@ const Friend = function(){
         ),
         tabCont:(
             <div className={styles.receive_list_content}>
-                {friendlist.map((data, index) => {
+                {receivedFriendList.map((data, index) => {
                     return(
                         <>
                             <div key={index} className={styles.receive_friend_container}>
-                                <img src={data.pimg} alt="프로필 사진" className={styles.receive_friend_img_container} ></img>
+                                <img src={data.profileUrl} alt="프로필 사진" className={styles.receive_friend_img_container} ></img>
                                 <div className={styles.receive_friend_info_container}>
                                     <p className={styles.receive_friend_name_txt}>{data.nickname}</p>
                                     <div className={styles.receive_btn_container}>
