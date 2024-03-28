@@ -8,6 +8,12 @@
     padding: 2rem 0;
 }
 
+.mypage_profile_img {
+    border-radius: 50%;
+    width: 30%;
+    height: 30%;
+}
+
 .mypage_btn {
     position: relative;
     width: 80%;
