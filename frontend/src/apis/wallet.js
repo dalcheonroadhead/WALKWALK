@@ -24,7 +24,6 @@ export const getEggMoney = async () => {
 
   return await instance.get(url)
       .then((res) => {
-        console.log('res : ', res.data)
         return res.data.data
       })
       .catch((err) => {console.log(err)})
@@ -33,6 +32,7 @@ export const getEggMoney = async () => {
 // 에그 충전 요청
 export const requestMoneyCharge = async (money) => {
   const url = '/payment/kakaoPayReady'
+  const REDIRECT_URI = import.meta.env.VITE_NODE_ENV === 'production' ? import.meta.env.VITE_REDIRECT_URI_PROD : import.meta.env.VITE_REDIRECT_URI_DEV;
   const info = {
     "cid": "TC0ONETIME",
     "partner_order_id": "walkwalk",
@@ -41,14 +41,13 @@ export const requestMoneyCharge = async (money) => {
     "quantity": 1,
     "total_amount": money,
     "tax_free_amount": 0,
-    "approval_url":"http://localhost:5173/kakaopay/callback?status=approval",
-    "fail_url":"http://localhost:5173/kakaopay/callback?status=fail",
-    "cancel_url":"http://localhost:5173/kakaopay/callback?status=cancel"
+    "approval_url": `${REDIRECT_URI}/kakaopay/callback?status=approval`,
+    "fail_url": `${REDIRECT_URI}/mywallet?status=fail`,
+    "cancel_url": `${REDIRECT_URI}/mywallet?status=cancel`
   }
 
   return await instance.post(url, info)
       .then((res) => {
-        console.log('res : ', res.data)
         return res.data
       })
       .catch((err) => {console.log(err)})
@@ -68,11 +67,9 @@ export const approveMoneyCharge = async (info) => {
 
   return await instance.post(url, chargeInfo)
       .then((res) => {
-        console.log('res : ', res)
         return true
       })
       .catch((err) => {
-        console.log(err)
         return false
       })
 }
