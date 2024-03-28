@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable);       // 2)
         http
                 .csrf(AbstractHttpConfigurer::disable);            // 3)
+
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(request -> {
 

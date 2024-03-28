@@ -61,6 +61,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
             }
 
         }else {
+            authException.printStackTrace();
             exceptionHandler(response, ErrorType.ANOTHER_ERROR);
         }
     }

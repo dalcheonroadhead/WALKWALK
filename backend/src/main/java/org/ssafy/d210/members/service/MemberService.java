@@ -152,7 +152,8 @@ public class MemberService {
         refreshTokenInRedisRepository.save(new RefreshTokenInRedis(String.valueOf(member.getId()), jwtRefreshToken, jwtAccessToken));
         gatRepository.save(new GatRedis(member.getId(), gat.getAccess_token()));
 
-        if(grtRepository.findById(member.getId()).isEmpty()){
+
+        if(grt.getRefresh_token() != null){
             grtRepository.save(new GrtRedis(member.getId(), grt.getRefresh_token(), gat.getAccess_token()));
         }
 
