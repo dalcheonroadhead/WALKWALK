@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./MyWallet.module.css"
+import styles from "./MyWallet.module.css";
 import { getEggMoney, requestMoneyCharge } from "../../apis/wallet";
 import useWalletStore from "../../stores/wallet";
 
@@ -9,7 +9,7 @@ const MyWallet = function () {
   const [eggMoney, setEggMoney] = useState();
   const [isChargeModalOpen, setChargeModalOpen] = useState(false);
   const [isExchangeModalOpen, setExchangeModalOpen] = useState(false);
-  const { inputMoney, tid, setInputMoney, setTid} = useWalletStore();
+  const { inputMoney, updateInputMoney, updateTid } = useWalletStore();
 
   useEffect(() => {
     (async () => {
@@ -24,27 +24,34 @@ const MyWallet = function () {
 
   const handleInputChange = (e) => {
     if (e.target.value === '') {
-      setInputMoney(0);
+      updateInputMoney(0);
     } else {
-      setInputMoney(Number(e.target.value));
+      updateInputMoney(Number(e.target.value));
     }
   }
 
   const isMobile = () => {
     // 터치 이벤트 지원 여부 및 화면 크기를 통한 모바일 환경 판별
-    return 'ontouchstart' in window || navigator.maxTouchPoints > 1 ;
+    return navigator.maxTouchPoints > 1 ;
     // return ('ontouchstart' in window || navigator.maxTouchPoints > 1 ) && window.innerWidth <= 800;
   }
 
   const submitMoneyCharge = async () => {
     try {
-      const res = await requestMoneyCharge(inputMoney);
-      setTid(res.tid);
-      console.log('tid : ', tid)
-      if (isMobile()) {
-        window.location.href = res.next_redirect_mobile_url
+      if (inputMoney === 0) {
+        alert('충전할 금액을 입력해주세요!')
       } else {
-        window.location.href = res.next_redirect_pc_url
+        const res = await requestMoneyCharge(inputMoney);
+        updateTid(res.tid);
+        console.log('모바일? : ', isMobile())
+  
+        setTimeout(() => {
+          if (isMobile()) {
+            window.location.href = res.next_redirect_mobile_url
+          } else {
+            window.location.href = res.next_redirect_pc_url
+          }
+        }, 1000);
       }
     } catch (err) {
       console.error('머니 충전 실패 : ', err)
