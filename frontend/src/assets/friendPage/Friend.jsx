@@ -2,18 +2,55 @@ import { useState, useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Friend.module.css";
 import Sidebar from "../common/sidebar/Sidebar";
+import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList } from "../../apis/friend";
 
 const Friend = function(){
 
     const [tabIndex, setTabIndex] = useState(0);
     const [findFriend, setFindFriend] = useState(false);
+    const [searchedFriendList, setSearchedFriendList] = useState([]);
+    const [friendList, setFriendList] = useState([]);
+    const [sentFriendList, setSentFriendList] = useState([]);
+    const [keyword, setKeyword] = useState('');
+
+    useEffect(()=>{
+        getFriendList()
+            .then(res=>setFriendList(res));
+    }, [])
 
     const tabClickHandler = function(index){
+        if(index == 0){
+
+        }
+        else if(index == 1){
+            getFriendSentList()
+                .then(res=>setSentFriendList(res))
+        }
+        else{
+
+        }
         setTabIndex(index)
     }
 
     const openFindFriendModal = function(){
+        if(!findFriend){
+            searchMemberList('')
+                .then(res=>setSearchedFriendList(res));
+        }
+        else{
+            getFriendList()
+                .then(res=>setFriendList(res));
+        }
         setFindFriend(!findFriend)
+    }
+
+    const onChangeHandler = (e)=>{
+        setKeyword(e.target.value)
+    }
+
+    const sendFriendRequestHandler = (memberId)=>{
+        sendFriendRequest(memberId)
+            .then(res=>{alert("친구 요청에 성공했습니다."); searchedFriendList([]); setFindFriend(false);});
     }
 
     const friendlist = [
@@ -62,14 +99,14 @@ const Friend = function(){
         ),
         tabCont:(
             <div className={styles.friend_list_content}>
-                {friendlist.map((data, index) => {
+                {friendList.map((data, index) => {
                     return(
                         <>
                             <div key={index} className={styles.friend_container}>
-                                <img src={data.pimg} alt="프로필 사진" className={styles.friend_img_container} ></img>
+                                <img src={data.profileUrl} alt="프로필 사진" className={styles.friend_img_container} ></img>
                                 <div className={styles.friend_info_container}>
                                     <p className={styles.friend_name_txt}>{data.nickname}</p>
-                                    <p className={styles.friend_intro}>{data.info}</p>
+                                    <p className={styles.friend_intro}>{data.comment}</p>
                                 </div>
                             </div>  
                         </>
@@ -86,11 +123,11 @@ const Friend = function(){
         ),
         tabCont:(
             <div className={styles.send_list_content}>
-                {friendlist.map((data, index) => {
+                {sentFriendList.map((data, index) => {
                     return(
                         <>
                             <div key={index} className={styles.send_friend_container}>
-                                <img src={data.pimg} alt="프로필 사진" className={styles.send_friend_img_container} ></img>
+                                <img src={data.profileUrl} alt="프로필 사진" className={styles.send_friend_img_container} ></img>
                                 <div className={styles.send_friend_info_container}>
                                     <p className={styles.send_friend_name_txt}>{data.nickname}</p>
                                     <div className={styles.send_cancel_btn}>
@@ -149,22 +186,22 @@ const Friend = function(){
                         </div>                                
                         
                         <div className={styles.find_friend_search_container}>
-                            <input className={styles.find_friend_search_box}></input>
-                            <img className={styles.find_friend_search_icon} src="/imgs/search.png" alt="찾기 아이콘"></img>
+                            <input className={styles.find_friend_search_box} onChange={onChangeHandler}></input>
+                            <img className={styles.find_friend_search_icon} src="/imgs/search.png" alt="찾기 아이콘" onClick={()=>searchMemberList(keyword).then(res=>setSearchedFriendList(res))}></img>
                         </div>
 
                         <div className={styles.find_friend_list_container}>
                             <div className={styles.find_friend_names_container}>
 
-                                {friendlist.map((data, index) => {
+                                {searchedFriendList.map((data, index) => {
                                     return(
                                         <>
                                             <div key={index} className={styles.find_friend_name_container}>
-                                                <img src={data.pimg} alt="프로필 사진" className={styles.find_friend_img_container} ></img>
+                                                <img src={data.profileUrl} alt="프로필 사진" className={styles.find_friend_img_container} ></img>
                                                 <p className={styles.find_friend_name_txt}>{data.nickname}</p>
                                                 <div className={styles.find_friend_modal_btn_container}>
                                                     <div className={styles.find_friend_put_btn}>
-                                                        <p className={styles.find_friend_btn_txt}>신청</p>
+                                                        <p className={styles.find_friend_btn_txt} onClick={()=>{sendFriendRequestHandler(data.memberId)}}>신청</p>
                                                     </div>
                                                 </div>
                                             </div>  
