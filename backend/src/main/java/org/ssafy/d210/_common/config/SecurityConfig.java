@@ -67,14 +67,13 @@ public class SecurityConfig {
                     configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Arrays.asList("*"));
-                    configuration.setMaxAge(3600L);
                     configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                     return configuration;
                 })));
         http
                 .headers((headers) -> headers.frameOptions(
-                        HeadersConfigurer.FrameOptionsConfig::disable
+                        HeadersConfigurer.FrameOptionsConfig::sameOrigin
                 ));                                                 // 4)
         http
                 .sessionManagement((sessionManagement) ->

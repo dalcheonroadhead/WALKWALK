@@ -1,5 +1,6 @@
 package org.ssafy.d210.members.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class Members extends BaseTime {
     @Column(name = "member_email")
     private String email;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_account_id")
     private MemberAccount memberAccountId;
@@ -91,21 +93,27 @@ public class Members extends BaseTime {
     @Column(name = "daily_criteria")
     private Long dailyCriteria;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<BlockAddress> blockAddresses = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Exercise> exercises = new ArrayList<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private ExerciseAcc exerciseAcc;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberBadge> memberBadges = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberItemHistory> memberItemHistories = new ArrayList<>();
 
