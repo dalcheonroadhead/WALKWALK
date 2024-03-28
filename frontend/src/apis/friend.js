@@ -16,7 +16,6 @@ export const searchMemberList = async (keyword) => {
     const url = '/friends/search'
     return await instance.post(url, {"keyword": keyword})
         .then((res) => {
-            console.log(res);
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
@@ -27,7 +26,6 @@ export const sendFriendRequest = async (memberId) => {
     const url = '/friends/request'
     return await instance.post(url, {"memberId": memberId})
         .then((res) => {
-            console.log(res);
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
@@ -38,7 +36,6 @@ export const getFriendList = async () => {
     const url = '/friends/'
     return await instance.get(url)
         .then((res) => {
-            console.log(res);
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
@@ -49,7 +46,6 @@ export const getFriendSentList = async () => {
     const url = '/friends/sent-list'
     return await instance.get(url)
         .then((res) => {
-            console.log(res);
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
@@ -60,7 +56,16 @@ export const getFriendReceivedList = async () => {
     const url = '/friends/received-list'
     return await instance.get(url)
         .then((res) => {
-            console.log(res);
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
+
+// 친구 요청 수락/거절
+export const putFriendRequest = async (requestBody) => {
+    const url = '/friends/response'
+    return await instance.put(url, requestBody)
+        .then((res) => {
             return res.data.data;
         })
         .catch((err) => {console.log(err)})

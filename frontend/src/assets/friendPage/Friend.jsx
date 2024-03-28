@@ -2,7 +2,7 @@ import { useState, useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Friend.module.css";
 import Sidebar from "../common/sidebar/Sidebar";
-import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList, getFriendReceivedList } from "../../apis/friend";
+import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList, getFriendReceivedList, putFriendRequest } from "../../apis/friend";
 
 const Friend = function(){
 
@@ -21,7 +21,8 @@ const Friend = function(){
 
     const tabClickHandler = function(index){
         if(index == 0){
-
+            getFriendList()
+            .then(res=>setFriendList(res));
         }
         else if(index == 1){
             getFriendSentList()
@@ -42,6 +43,10 @@ const Friend = function(){
         else{
             getFriendList()
                 .then(res=>setFriendList(res));
+            getFriendSentList()
+                .then(res=>setSentFriendList(res))
+            getFriendReceivedList()
+                .then(res=>setReceivedFriendList(res))
         }
         setFindFriend(!findFriend)
     }
@@ -52,7 +57,18 @@ const Friend = function(){
 
     const sendFriendRequestHandler = (memberId)=>{
         sendFriendRequest(memberId)
-            .then(res=>{alert("친구 요청에 성공했습니다."); searchedFriendList([]); setFindFriend(false);});
+            .then(res=>{alert("친구 요청에 성공했습니다."); setSearchedFriendList([]); openFindFriendModal();});
+    }
+
+    const putFriendRequestHandler = (memberId, isAccept) =>{
+        putFriendRequest({memberId: memberId, isAccept: isAccept})
+            .then(res=>{
+                alert("친구 요청 수락/거절에 성공했습니다."); 
+                getFriendReceivedList()
+                    .then(resp=>setReceivedFriendList(resp))
+                getFriendSentList()
+                    .then(resp=>setSentFriendList(resp))
+                })
     }
 
     const tabArr=[{
@@ -95,7 +111,7 @@ const Friend = function(){
                                 <div className={styles.send_friend_info_container}>
                                     <p className={styles.send_friend_name_txt}>{data.nickname}</p>
                                     <div className={styles.send_cancel_btn}>
-                                        <p className={styles.cancel_btn_txt}>취소</p>
+                                        <p className={styles.cancel_btn_txt} onClick={()=>{putFriendRequestHandler(data.memberId, false)}}>취소</p>
                                     </div>
                                 </div>
                             </div>  
@@ -122,10 +138,10 @@ const Friend = function(){
                                     <p className={styles.receive_friend_name_txt}>{data.nickname}</p>
                                     <div className={styles.receive_btn_container}>
                                         <div className={styles.receive_ok_btn}>
-                                            <p className={styles.receive_ok_btn_txt}>수락</p>
+                                            <p className={styles.receive_ok_btn_txt} onClick={()=>{putFriendRequestHandler(data.memberId, true)}}>수락</p>
                                         </div>
                                         <div className={styles.receive_cancel_btn}>
-                                            <p className={styles.receive_cancel_btn_txt}>거절</p>
+                                            <p className={styles.receive_cancel_btn_txt} onClick={()=>{putFriendRequestHandler(data.memberId, false)}}>거절</p>
                                         </div>
                                     </div>
                                 </div>
