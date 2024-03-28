@@ -21,9 +21,11 @@ const Mypage = function () {
     <div className={styles.mypage_container}>
       {mypageInfo && (
         <>
-          <img className={styles.mypage_profile_img} src={mypageInfo.profileUrl} alt="my profile img" />
-          <div className={styles.mypage_profile_nickname}>{mypageInfo.nickname}</div>
-          <div>{mypageInfo.comment}</div>
+          <div className={styles.mypage_profile_container}>
+            <img className={styles.mypage_profile_img} src={mypageInfo.profileUrl} alt="my profile img" />
+            <div className={styles.mypage_profile_nickname}>{mypageInfo.nickname}</div>
+            <div>{mypageInfo.comment}</div>
+          </div>
           <button className={styles.mypage_btn} onClick={() => {navigate('/userinfoupdate')}}>
             <span>내 정보 수정</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />

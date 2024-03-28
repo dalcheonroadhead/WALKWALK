@@ -308,7 +308,7 @@ const Main = function(){
                             <p className={styles.galli_detail}>나의 갈리 목록</p>
                             <img src="/imgs/direct.png" alt="확장 버튼" className={`${styles.galli_direct_btn} ${expanded ? '' : styles.galli_direct_btn2}`} onClick={longGalliList}></img>
                         </div>
-                        <div className={styles.galli_expanded} style={{height: 107 * galliList.length, overflow: !expanded && 'scroll'}}>
+                        <div className={styles.galli_expanded} style={{height: 240 * galliList.length, overflow: !expanded && 'scroll'}}>
                         {galliList.map((data, index) => {
                             return(
                                 <>  
