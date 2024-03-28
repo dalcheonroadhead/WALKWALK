@@ -24,7 +24,6 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
-
 public class PaymentController {
     private final PaymentService paymentService;
 

@@ -17,7 +17,7 @@ public enum MsgType {
     UPLOAD_FILE_SUCCESSFULLY("파일 업로드를 성공적으로 했습니다."),
 
     // ====================== WALLETS ============================
-    GET_EGG_MONEY_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+    GET_EGG_MONEY_SUCCESSFULLY("에그, 머니 조회에 성공하였습니다."),
     PUT_EGG_ADD_SUCCESSFULLY("에그 획득에 성공하였습니다."),
     PUT_EGG_SUB_SUCCESSFULLY("에그 차감에 성공하였습니다."),
     PUT_EGG_MONEY_ADD_SUCCESSFULLY("에그, 머니 획득에 성공하였습니다."),
@@ -41,7 +41,6 @@ public enum MsgType {
     SET_DEFAULT_CRITERIA("연령대 맞춤 운동 기준 등록을 성공하였습니다."),
     SET_CUSTOM_CRITERIA("사용자 맞춤 운동 기준 등록을 성공하였습니다."),
     GET_EXERCISE_CRITERIA("운동 기준 조회에 성공하였습니다."),
-
 
     // ====================== MISSION ==========================
     POST_MISSION_SUCCESSFULLY("미션 등록에 성공하였습니다."),
