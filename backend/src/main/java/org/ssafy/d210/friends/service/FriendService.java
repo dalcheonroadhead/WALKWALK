@@ -91,6 +91,11 @@ public class FriendService {
         return "";
     }
 
+    public List<FriendList> getSendList(Members member){
+        return friendListRepository.findFriendListsBySenderIdAndIsFriendIsFalse(member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+    }
+
     @Transactional
     public PutFriendResponse putFriend(Members member, PutFriendRequest request){
         Members friend = membersRepository.findById(request.getMemberId()).orElse(null);
@@ -121,7 +126,7 @@ public class FriendService {
     }
 
     public List<MemberListDto> getSearchedMemberList(Members member, PostSearchMemberListRequest request){
-        return friendListRepository.findAllBySenderId(member.getId(), request.getKeyword());
+        return friendListRepository.findAllByKeyword(member.getId(), request.getKeyword());
     }
 
     public List<GalleyMemberListDto> getSearchedGalleyMemberList(Members member, PostSearchMemberListRequest request){
