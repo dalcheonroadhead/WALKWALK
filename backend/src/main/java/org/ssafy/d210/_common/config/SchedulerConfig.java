@@ -32,8 +32,8 @@ public class SchedulerConfig {
     private final ExerciseService exerciseService;
     private final ExerciseCriteriaService exerciseCriteriaService;
 
-//    @Scheduled(cron = "0 0 4 * * *")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 4 * * *")
+//    @Scheduled(cron = "0 * * * * *")
     public void runTempSaveExercise() {
 //        exerciseService.saveExerciseDataEveryDay();
         List<Members> members = membersRepository.findAll();

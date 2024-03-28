@@ -27,16 +27,17 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     // 스트릭 랭킹 조회 기능 중 1. 페이지네이션
     @Query("select distinct new org.ssafy.d210.walk.dto.response.FriendRankingResponseDto(m.id, m.nickname, m.profileUrl, e.streak)" +
             " from Exercise e join Members m on e.member.id = m.id" +
-            " where (m.id = :myId or m.id in (select f.receiverId.id from FriendList f where f.senderId.id = :myId))" +
+            " where (m.id = :myId or m.id in (select f.receiverId.id from FriendList f where f.senderId.id = :myId and f.isFriend = true))" +
             " and e.exerciseDay = :yesterday" +
             " order by e.streak desc")
     Slice<FriendRankingResponseDto> findStreakRankingByPage(Long myId, Pageable pageable, LocalDate yesterday);
 
-    @Query("select distinct new org.ssafy.d210.walk.dto.response.FriendRankingResponseDto(m.id, m.nickname, m.profileUrl, sum(e.steps) as total_steps)" +
+    @Query("select distinct new org.ssafy.d210.walk.dto.response.FriendRankingResponseDto(m.id, m.nickname, m.profileUrl, sum(e.steps))" +
             " from Exercise e join Members m on e.member.id = m.id" +
             " where (m.id = :myId or m.id in (select f.receiverId.id from FriendList f where f.senderId.id = :myId))" +
             " and e.exerciseDay between :startDate and :endDate" +
-            " order by total_steps desc")
+            " group by m.id" +
+            " order by sum(e.steps) desc")
     Slice<FriendRankingResponseDto> findStepsRankingByPage(Long myId, Pageable pageable, LocalDate startDate, LocalDate endDate);
 
     Optional<Exercise> findExerciseByMemberAndExerciseDay(Members member, LocalDate exerciseDay);
