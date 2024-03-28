@@ -30,7 +30,7 @@ const Mypage = function () {
             <span>내 정보 수정</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
-          <button className={styles.mypage_btn} onClick={() => {navigate()}}>
+          <button className={styles.mypage_btn} onClick={() => {navigate('/mygoal/update')}}>
             <span>내 목표 수정</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
@@ -38,7 +38,7 @@ const Mypage = function () {
             <span>내 금고</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
-          <button className={styles.mypage_btn} onClick={() => {navigate()}}>
+          <button className={styles.mypage_btn} onClick={() => {navigate('/mybadge')}}>
             <span>내 배지</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
