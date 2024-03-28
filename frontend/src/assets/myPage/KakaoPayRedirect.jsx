@@ -6,13 +6,13 @@ import useWalletStore from "../../stores/wallet";
 
 const KakaoPayRedirect = function () {
   const navigate = useNavigate();
-  const { inputMoney, tid } = useWalletStore();
+  const { inputMoney, tid, updateInputMoney, updateTid } = useWalletStore();
 
   useEffect(() => {
     const pgToken = new URLSearchParams(location.search).get('pg_token')
 
     const approveCharge = async () => {
-      if (pgToken && tid) {
+      if (pgToken) {
         const chargeInfo = {
           tid: tid,
           inputMoney: inputMoney,
@@ -26,10 +26,14 @@ const KakaoPayRedirect = function () {
           } else {
             alert('충전 실패')
           }
+          updateInputMoney(0);
+          updateTid('');
           navigate('/mywallet')
         } catch (err) {
           console.error('머니 충전 승인 과정에서 오류가 발생했습니다:', err)
         }
+      } else {
+        console.log('머니 충전 승인 실패했습니다.')
       }
     };
 
