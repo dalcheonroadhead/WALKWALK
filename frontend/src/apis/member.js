@@ -4,7 +4,8 @@ import { instance } from "./axiosModule";
 // JWT 토큰, 구글 토큰, 회원가입 여부 확인
 export const getGoogleToken = async (code) => {
     // API명세서 주소 '/도메인/URI'
-    const url = import.meta.env.VITE_NODE_ENV === 'production' ? `/oauth/callback/google/token/d-t-d?code=${code}` : `/oauth/callback/google/token/l-t-l?code=${code}`;
+    const url = `/oauth/callback/google/token/d-t-d?code=${code}`
+    // const url = import.meta.env.VITE_NODE_ENV === 'production' ? `/oauth/callback/google/token/d-t-d?code=${code}` : `/oauth/callback/google/token/l-t-l?code=${code}`;
     
     // return은 필요할 때만 붙이면 됩니다.
     // instance 뒤에 method 적어주고, url와 넘겨줄 정보가 있다면 같이 인자로 넘겨줍니다.
