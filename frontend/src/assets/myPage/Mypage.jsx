@@ -26,8 +26,12 @@ const Mypage = function () {
             <div className={styles.mypage_profile_nickname}>{mypageInfo.nickname}</div>
             <div>{mypageInfo.comment}</div>
           </div>
-          <button className={styles.mypage_btn} onClick={() => {navigate('/userinfoupdate')}}>
+          <button className={styles.mypage_btn} onClick={() => {navigate('/userinfo/update')}}>
             <span>내 정보 수정</span>
+            <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
+          </button>
+          <button className={styles.mypage_btn} onClick={() => {navigate()}}>
+            <span>내 목표 수정</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
           <button className={styles.mypage_btn} onClick={() => {navigate('/mywallet')}}>

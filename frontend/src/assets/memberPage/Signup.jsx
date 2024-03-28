@@ -82,7 +82,8 @@ const Signup = function () {
 
   const checkNickname = useCallback(async (nickname) => {
       // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
-      if (!nickname || nickname.length > 10) {
+      const trimmedNickname = nickname.trim()
+      if (!trimmedNickname || trimmedNickname.length > 10) {
         setNicknameError('닉네임은 1자 이상 10자 이하여야 합니다.');
         setNicknameErrorType(false);
         setIsButtonDisabled(true);
@@ -90,7 +91,8 @@ const Signup = function () {
       }
 
       try {
-        const { isDuplicated } = await checkDuplicated(nickname);
+        const isDuplicated = await checkDuplicated(trimmedNickname);
+        console.log('isDuplicated : ', isDuplicated)
         if (isDuplicated) {
           setNicknameError('이미 사용 중인 닉네임입니다.');
           setNicknameErrorType(false);
@@ -131,7 +133,7 @@ const Signup = function () {
       // selectedYear의 경우 상태를 직접 업데이트합니다.
       setSelectedYear(value);
     } else {
-      setUserInfo((prevInfo) => ({...prevInfo, [name]: value}));
+      setUserInfo((prevInfo) => ({...prevInfo, [name]: value.trim()}));
     }
   };
 

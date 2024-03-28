@@ -2,6 +2,7 @@ import { instance } from "./axiosModule";
 import axios from "axios";
 import { updateGoogleToken } from "./member";
 
+// 실시간 운동 정보 조회
 export const getRealtimeExerciseData = async () => {
     const url = 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate';
 
@@ -52,4 +53,23 @@ export const getRealtimeExerciseData = async () => {
                 return data;
             })})
     return data;
+}
+
+// 일주일 운동 정보 조회
+export const getWeeklyExerciseData = async () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    // JavaScript의 getMonth() 함수는 0부터 시작하므로 +1 해줌
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const date = `${year}-${month}-${day}`;
+
+    const url = `/walk/${date}`;
+    
+    return await instance.get(url)
+        .then((res) => {
+            console.log(res.data.data);
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
 }

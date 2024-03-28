@@ -1,5 +1,6 @@
 import { instance } from "./axiosModule";
 
+// 할리 목록 조회
 export const getHalleyList = async () => {
     const url = '/halleygalley/galley-to-halley';
     return await instance.get(url)
@@ -13,6 +14,7 @@ export const getHalleyList = async () => {
         
 }
 
+// 갈리 목록 조회
 export const getGalleyList = async () => {
     const url = '/halleygalley/halley-to-galley';
     
@@ -34,6 +36,7 @@ export const getGalleyList = async () => {
         .catch((err) => {console.log(err)})
 }
 
+// 갈리 요청을 보낼 목록 조회
 export const getHalleyReauestList = async () => {
     const url = '/halleygalley/halley-request-list';
     
@@ -47,6 +50,7 @@ export const getHalleyReauestList = async () => {
         .catch((err) => {console.log(err)})
 }
 
+// 갈리 요청 전송
 export const postGalleyRequest = async (request) => {
     const url = '/halleygalley/galley-request';
 
@@ -57,8 +61,21 @@ export const postGalleyRequest = async (request) => {
         .catch(err => console.log(err))
 }
 
+// 할리 세부정보 조회
 export const getHalley = async (memberId) => {
     const url = `/halleygalley/halley?memberId=${memberId}`;
+    
+    return await instance.get(url)
+        .then((res) => {
+            console.log(res)
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
+
+// 갈리 세부정보 조회
+export const getGalley = async (memberId) => {
+    const url = `/halleygalley/galley?memberId=${memberId}`;
     
     return await instance.get(url)
         .then((res) => {

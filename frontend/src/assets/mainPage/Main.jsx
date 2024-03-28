@@ -5,12 +5,14 @@ import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 import { getGalleyList, getHalleyList, postGalleyRequest, getHalley } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
-import {getRealtimeExerciseData} from "../../apis/exercise";
+import { getRealtimeExerciseData, getWeeklyExerciseData } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
 
 const Main = function(){
     const {memberId, setMemberId} = useStore();
     useEffect(()=>{
+        getWeeklyExerciseData()
+            .then(res=>{setWeeklyExerciseData(res);})
         getRealtimeExerciseData()
             .then((res)=>{
               setRealtimeExerciseData(res);
@@ -21,9 +23,14 @@ const Main = function(){
     const navigate = useNavigate();
     
 
-    const moveToHalliGalliPage = function (memberId) {
+    const moveToHalliPage = function (memberId) {
         setMemberId(memberId);
-        navigate("/halligalli")
+        navigate("/halli")
+    }
+
+    const moveToGalliPage = function (memberId) {
+        setMemberId(memberId);
+        navigate("/galli")
     }
 
     const handleInputChange = (e) => {
@@ -55,6 +62,7 @@ const Main = function(){
     const [halliList, setHalliList] = useState([]);
     const [realtimeExerciseData, setRealtimeExerciseData] = useState({});
     const [halliRoadmapList, setHalliRoadmapList] = useState([]);
+    const [weeklyExerciseData, setWeeklyExerciseData] = useState({avg:0, content:[{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},]});
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -288,10 +296,10 @@ const Main = function(){
                         <div className={styles.galli_expanded} style={{height: 240 * galliList.length, overflow: !expanded && 'scroll'}}>
                         {galliList.map((data, index) => {
                             return(
-                                <div key={index} className={styles.my_galli_list_container}>
+                                <div key={index} className={styles.my_galli_list_container} onClick={()=>moveToGalliPage(data.memberId)}>
                                     <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
                                     <div className={styles.galli_time_progress_container}>
-                                        {data.requestedTime == null ? <p>설정안됨</p> :<div className={styles.galli_time_progress_base}>
+                                        {data.requestedTime == null ? <p>등록한 미션이 없습니다...</p> :<div className={styles.galli_time_progress_base}>
                                             <div className={styles.galli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>
                                             <div className={styles.galli_time_ori_container} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}>
                                                 <p className={styles.galli_time_mine} style={{color: 프로그래스바2.calculatedTime > 300 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
@@ -420,7 +428,7 @@ const Main = function(){
                                 {halliList.map((data, index) => {
                                     console.log(data)
                                     return(
-                                        <div key={index} className={styles.my_halli_list_name_container} onClick={()=>moveToHalliGalliPage(data.memberId)}>
+                                        <div key={index} className={styles.my_halli_list_name_container} onClick={()=>moveToHalliPage(data.memberId)}>
                                             <img src={data.profileUrl} alt="프로필 사진" className={styles.my_halli_list_img_container} ></img>
                                             <p className={styles.my_halli_list_name_txt}>{data.nickname}</p>
                                             <div className={styles.my_halli_list_btn_container}>
@@ -454,7 +462,7 @@ const Main = function(){
                         <p className={styles.week_title}>이번주 나의 기록</p>
                         <p className={styles.week_detail}>걸음 수 평균</p>
                         <div className={styles.avg_container}>
-                            <p className={styles.week_avg_number}>6704</p>
+                            <p className={styles.week_avg_number}>{weeklyExerciseData.avg}</p>
                             <p className={styles.week_avg_walk}>걸음</p>
                         </div>
                         <div className={styles.graph_container}>
@@ -466,31 +474,31 @@ const Main = function(){
                          data={[
                             {
                                 "요일": "월",
-                                "걸음 수": 6204,
+                                "걸음 수": weeklyExerciseData.content[0].steps,
                               },
                               {
                                 "요일": "화",
-                                "걸음 수": 12311,
+                                "걸음 수": weeklyExerciseData.content[1].steps,
                               },
                               {
                                 "요일": "수",
-                                "걸음 수": 3234,
+                                "걸음 수": weeklyExerciseData.content[2].steps,
                               },
                               {
                                 "요일": "목",
-                                "걸음 수": 2311,
+                                "걸음 수": weeklyExerciseData.content[3].steps,
                               },
                               {
                                 "요일": "금",
-                                "걸음 수": 0,
+                                "걸음 수": weeklyExerciseData.content[4].steps,
                               },
                               {
                                 "요일": "토",
-                                "걸음 수": 0,
+                                "걸음 수": weeklyExerciseData.content[5].steps,
                               },
                               {
                                 "요일": "일",
-                                "걸음 수": 0,
+                                "걸음 수": weeklyExerciseData.content[6].steps,
                               }
                         ]}
                         keys={[
@@ -534,7 +542,7 @@ const Main = function(){
                             ]
                         }}
                         axisLeft={{
-                            tickValues: [0, 6000, 10000], // 0만 포함하도록 설정
+                            tickValues: [0, 3000, 6000, 10000, 20000], // 0만 포함하도록 설정
                             format: value => value.toLocaleString(),
                             text: {
                                 fontSize: 10,
