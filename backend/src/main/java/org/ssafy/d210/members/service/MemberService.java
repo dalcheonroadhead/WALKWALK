@@ -151,7 +151,10 @@ public class MemberService {
         // C-10) [REDIS]에 Member 의 PK(식별자), RefreshToken, AccessToken 을 저장
         refreshTokenInRedisRepository.save(new RefreshTokenInRedis(String.valueOf(member.getId()), jwtRefreshToken, jwtAccessToken));
         gatRepository.save(new GatRedis(member.getId(), gat.getAccess_token()));
-        grtRepository.save(new GrtRedis(member.getId(), grt.getRefresh_token(), gat.getAccess_token()));
+
+        if(grtRepository.findById(member.getId()).isEmpty()){
+            grtRepository.save(new GrtRedis(member.getId(), grt.getRefresh_token(), gat.getAccess_token()));
+        }
 
         return ans;
     }
