@@ -104,14 +104,13 @@ public class ExerciseService {
 
         if (type == StepsRankingPeriodEnum.WEEKLY) {
             startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            endDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+            endDate = today.with(DayOfWeek.SUNDAY);
         } else if (type == StepsRankingPeriodEnum.MONTHLY) {
             startDate = today.withDayOfMonth(1);
             endDate = today.withDayOfMonth(today.lengthOfMonth());
         }
 
         Long myId = member.getId();
-
 
         Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStepsRankingByPage(myId, pageable, startDate, endDate);
 

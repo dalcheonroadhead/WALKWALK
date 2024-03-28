@@ -23,9 +23,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SchedulerConfig {
 
-//    private final JobLauncher jobLauncher;
-//    private final Job job;
-//    private final JobExplorer jobExplorer;
+    private final JobLauncher jobLauncher;
+    private final Job job;
+    private final JobExplorer jobExplorer;
 
     private final MemberDataService memberDataService;
     private final MembersRepository membersRepository;
