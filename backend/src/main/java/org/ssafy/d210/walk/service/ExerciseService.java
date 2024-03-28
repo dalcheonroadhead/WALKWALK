@@ -14,12 +14,14 @@ import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
+import org.ssafy.d210.walk.dto.request.StepsRankingPeriodEnum;
 import org.ssafy.d210.walk.dto.response.*;
 import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.repository.ExerciseRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Service
@@ -42,7 +44,7 @@ public class ExerciseService {
     // 오늘 날짜만 받으면 이번주 월요일부터 어제까지 데이터를 조회하고 나머지 날은 디폴트로
     @Transactional
     public Map<String, Object> findWeeklyExerciseRecords(LocalDate today, Long memberId) {
-        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         Map<String, Object> data = new HashMap<>();
         System.out.println(exerciseRepository.findExercisesFromStartOfWeekToYesterday(startOfWeek, today, memberId));
@@ -78,15 +80,45 @@ public class ExerciseService {
         return data;
     }
 
-    public SliceResponseDto getRankingWithFriends(Members member, Pageable pageable) {
+    public SliceResponseDto getStreakRankingWithFriends(Members member, Pageable pageable) {
 //        Members member = membersRepository.findById(memberId).orElseThrow();
         Long myId = member.getId();
-        Slice<StreakRankingResopnseDto> exercises = exerciseRepository.findRankingByPage(myId, pageable, LocalDate.now().minusDays(1));
+        Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStreakRankingByPage(myId, pageable, LocalDate.now().minusDays(1));
 
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
-        for (StreakRankingResopnseDto exercise : exercises) {
+        for (FriendRankingResponseDto exercise : exercises) {
+            exercise.setRank((long) startRank++);
+        }
+
+        return new SliceResponseDto(exercises);
+    }
+
+    public SliceResponseDto getStepsRankingWithFriends(Members member, StepsRankingPeriodEnum type, Pageable pageable) {
+
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+        LocalDate startDate = yesterday;
+        LocalDate endDate = yesterday;
+
+        if (type == StepsRankingPeriodEnum.WEEKLY) {
+            startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            endDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        } else if (type == StepsRankingPeriodEnum.MONTHLY) {
+            startDate = today.withDayOfMonth(1);
+            endDate = today.withDayOfMonth(today.lengthOfMonth());
+        }
+
+        Long myId = member.getId();
+
+
+        Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStepsRankingByPage(myId, pageable, startDate, endDate);
+
+        // 시작 순위 계산
+        int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
+
+        for (FriendRankingResponseDto exercise : exercises) {
             exercise.setRank((long) startRank++);
         }
 
@@ -169,5 +201,7 @@ public class ExerciseService {
 
         return exerciseRepository.save(exercise);
     }
+
+
 
 }

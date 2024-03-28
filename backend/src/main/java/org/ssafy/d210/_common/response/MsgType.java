@@ -37,11 +37,13 @@ public enum MsgType {
 
     // ====================== WALK ============================
     GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),
-    GET_LAST_SAVED_DATE("마지막으로 저장된 날짜 조회에 성공하였습니다."),
-    SET_DEFAULT_CRITERIA("연령대 맞춤 운동 기준 등록을 성공하였습니다."),
-    SET_CUSTOM_CRITERIA("사용자 맞춤 운동 기준 등록을 성공하였습니다."),
-    GET_EXERCISE_CRITERIA("운동 기준 조회에 성공하였습니다."),
-    INIT_CRITERIA("연령대 맞춤 운동 기준으로 초기화에 성공하였습니다."),
+    GET_LAST_SAVED_DATE_SUCCESSFULLY("마지막으로 저장된 날짜 조회에 성공하였습니다."),
+    SET_DEFAULT_CRITERIA_SUCCESSFULLY("연령대 맞춤 운동 기준 등록을 성공하였습니다."),
+    SET_CUSTOM_CRITERIA_SUCCESSFULLY("사용자 맞춤 운동 기준 등록을 성공하였습니다."),
+    GET_EXERCISE_CRITERIA_SUCCESSFULLY("운동 기준 조회에 성공하였습니다."),
+    INIT_CRITERIA_SUCCESSFULLY("연령대 맞춤 운동 기준으로 초기화에 성공하였습니다."),
+    GET_STEPS_RANKING_SUCCESSFULLY("걸음 수 기준 랭킹 조회에 성공하였습니다."),
+    GET_STREAK_RANKING_SUCCESSFULLY("스트릭 기준 랭킹 조회에 성공하였습니다."),
 
     // ====================== MISSION ==========================
     POST_MISSION_SUCCESSFULLY("미션 등록에 성공하였습니다."),
