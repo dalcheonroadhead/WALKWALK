@@ -94,13 +94,13 @@ public class FriendService {
     }
 
     public List<FriendSentDto> getSentList(Members member){
-        return friendListRepository.findFriendListsBySenderIdAndIsFriendIsFalse(member)
+        return friendListRepository.findFriendListsBySenderIdAndIsAcceptedIsTrueAndIsFriendIsFalse(member)
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND))
                 .stream().map(FriendSentDto::from).toList();
     }
 
     public List<FriendReceivedDto> getReceivedList(Members member){
-        return friendListRepository.findFriendListsByReceiverIdAndIsAcceptedIsTrue(member)
+        return friendListRepository.findFriendListsByReceiverIdAndIsAcceptedIsTrueAndIsFriendIsFalse(member)
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND))
                 .stream().map(FriendReceivedDto::from).toList();
     }
