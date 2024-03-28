@@ -17,7 +17,7 @@ public enum MsgType {
     UPLOAD_FILE_SUCCESSFULLY("파일 업로드를 성공적으로 했습니다."),
 
     // ====================== WALLETS ============================
-    GET_EGG_MONEY_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+    GET_EGG_MONEY_SUCCESSFULLY("에그, 머니 조회에 성공하였습니다."),
     PUT_EGG_ADD_SUCCESSFULLY("에그 획득에 성공하였습니다."),
     PUT_EGG_SUB_SUCCESSFULLY("에그 차감에 성공하였습니다."),
     PUT_EGG_MONEY_ADD_SUCCESSFULLY("에그, 머니 획득에 성공하였습니다."),
@@ -25,6 +25,7 @@ public enum MsgType {
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
+    POST_ITEM_USE_SUCCESSFULLY("아이템 사용에 성공하였습니다."),
 
     // ====================== HALLEY_GALLEY ======================
     GET_HALLEY_LIST_SUCCESSFULLY("할리 목록 조회에 성공하였습니다."),

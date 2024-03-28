@@ -1,4 +1,4 @@
-package org.ssafy.d210.wallets.dto.request;
+package org.ssafy.d210.items.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -8,7 +8,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class PutEggRequest {
-    @NotNull(message = "변경할 Egg 값이 없습니다.")
-    private Integer putEggValue;
+public class PostUseItemRequest {
+
+    @NotNull(message = "사용할 아이템의 id를 입력해주세요.")
+    private Long itemId;
 }
