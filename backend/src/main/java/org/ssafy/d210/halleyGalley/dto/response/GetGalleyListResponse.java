@@ -13,13 +13,15 @@ public class GetGalleyListResponse {
     private Long memberId;
     private String nickname;
     private Long requestedTime;
+    private Boolean isAccepted;
 
     @Builder
-    private GetGalleyListResponse(LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime){
+    private GetGalleyListResponse(LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime, Boolean isAccepted){
         this.timeStamp = timeStamp;
         this.memberId = memberId;
         this.nickname = nickname;
         this.requestedTime = requestedTime;
+        this.isAccepted = isAccepted;
     }
 
     public static GetGalleyListResponse from(HalleyGalley halleyGalley){
@@ -28,6 +30,7 @@ public class GetGalleyListResponse {
                 .memberId(halleyGalley.getGalleyId().getId())
                 .nickname(halleyGalley.getGalleyId().getNickname())
                 .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())
+                .isAccepted(halleyGalley.getIsAccepted())
                 .build();
     }
 
