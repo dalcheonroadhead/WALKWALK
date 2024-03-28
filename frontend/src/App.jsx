@@ -14,7 +14,7 @@ import UserInfoUpdate from "./assets/myPage/UserInfoUpdate";
 import Alarm from "./assets/alarmPage/Alarm";
 import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
 import './App.css'
-import SocketPage4Member from "./assets/exercisePage/SocketPage4Member";
+import SocketPage4Member from "./assets/exercisePage/SocketPage4Member"; 
 
 function App() {
   return (
