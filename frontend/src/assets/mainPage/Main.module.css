@@ -14,10 +14,8 @@
     flex-direction: column; /* 세로로 배치 */
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    /* height: 100%; */
     width: 100vw;
-    padding-top: 5rem;
-    padding-bottom: 5rem;
 }
 
 .modal_background{

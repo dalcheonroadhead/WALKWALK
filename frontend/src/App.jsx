@@ -9,6 +9,10 @@ import Rank from "./assets/rankPage/Rank";
 import Walking from "./assets/walkingPage/Walking";
 import Friend from "./assets/friendPage/Friend";
 import Mypage from "./assets/myPage/Mypage";
+import MyWallet from "./assets/myPage/MyWallet";
+import UserInfoUpdate from "./assets/myPage/UserInfoUpdate";
+import Alarm from "./assets/alarmPage/Alarm";
+import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
 import './App.css'
 import SocketPage4Member from "./assets/exercisePage/SocketPage4Member";
 
@@ -30,6 +34,10 @@ function App() {
         <Route path="/oauth/callback/google/token" element={<LoginRedirect />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/halligalli" element={<HalliGalli />}></Route>
+        <Route path="/mywallet" element={<MyWallet />}></Route>
+        <Route path="/userinfo/update" element={<UserInfoUpdate />}></Route>
+        <Route path="/alarm" element={<Alarm />}></Route>
+        <Route path="/kakaopay/callback" element={<KakaoPayRedirect />}></Route>
       </Routes>
     </BrowserRouter>
   )
