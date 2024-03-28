@@ -3,9 +3,6 @@ package org.ssafy.d210._common.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
-import org.ssafy.d210.members.service.MemberService;
 import org.ssafy.d210.walk.dto.response.FitnessResponse;
 import org.ssafy.d210.walk.service.ExerciseCriteriaService;
 import org.ssafy.d210.walk.service.ExerciseService;
@@ -21,7 +17,6 @@ import org.ssafy.d210.walk.service.ExerciseService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Component
@@ -37,24 +32,31 @@ public class SchedulerConfig {
     private final ExerciseService exerciseService;
     private final ExerciseCriteriaService exerciseCriteriaService;
 
-//    @Scheduled(cron = "0 4 17 * * *")
+    //    @Scheduled(cron = "0 4 17 * * *")
     @Scheduled(cron = "0 * * * * *")
     public void runTempSaveExercise() {
+//        exerciseService.saveExerciseDataEveryDay();
         List<Members> members = membersRepository.findAll();
 
         for (Members member : members) {
-            String accessToken = memberDataService.refreshAccessToken(member);
 
-            // 받아온 액세스 토큰으로 구글 피트니스 데이터 가져오기
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime startOfYesterday = now.minusDays(1).toLocalDate().atStartOfDay();
-            LocalDateTime endOfYesterday = startOfYesterday.plusDays(1).minusNanos(1);
+            try {
+                String accessToken = memberDataService.refreshAccessToken(member);
 
-            long startTimeMillis = startOfYesterday.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-            long endTimeMillis = endOfYesterday.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+                // 받아온 액세스 토큰으로 구글 피트니스 데이터 가져오기
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime startOfYesterday = now.minusDays(1).toLocalDate().atStartOfDay();
+                LocalDateTime endOfYesterday = startOfYesterday.plusDays(1).minusNanos(1);
 
-            FitnessResponse fitnessResponse = exerciseService.fetchGoogleFitData(accessToken, startTimeMillis, endTimeMillis);
-            exerciseService.mapFitnessResponseToExercise(fitnessResponse, member);
+                long startTimeMillis = startOfYesterday.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+                long endTimeMillis = endOfYesterday.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+                FitnessResponse fitnessResponse = exerciseService.fetchGoogleFitData(accessToken, startTimeMillis, endTimeMillis);
+                exerciseService.mapFitnessResponseToExercise(fitnessResponse, member);
+            } catch (Exception e) {
+                log.info(member.getNickname() + " 씨는 에러가 났다.", e);
+            }
+
         }
 
     }

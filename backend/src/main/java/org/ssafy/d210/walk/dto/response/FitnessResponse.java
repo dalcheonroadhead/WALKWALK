@@ -1,10 +1,12 @@
 package org.ssafy.d210.walk.dto.response;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
+@ToString
 public class FitnessResponse {
     private List<Bucket> bucket;
 
@@ -42,7 +44,7 @@ public class FitnessResponse {
 
     public static class DataPoint {
         private List<Value> value;
-        private String dataType;
+        private String dataTypeName;
         private String startTimeNanos;
         private String endTimeNanos;
 
@@ -54,12 +56,12 @@ public class FitnessResponse {
             this.value = value;
         }
 
-        public String getDataType() {
-            return dataType;
+        public String getDataTypeName() {
+            return dataTypeName;
         }
 
-        public void setDataType(String dataType) {
-            this.dataType = dataType;
+        public void setDataTypeName(String dataTypeName) {
+            this.dataTypeName = dataTypeName;
         }
 
         public String getStartTimeNanos() {

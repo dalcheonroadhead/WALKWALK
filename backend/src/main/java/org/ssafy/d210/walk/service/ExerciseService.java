@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
+import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.walk.dto.response.*;
 import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.repository.ExerciseRepository;
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class ExerciseService {
@@ -30,9 +31,13 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final ExerciseCriteriaService exerciseCriteriaService;
     private final MembersRepository membersRepository;
+    private final MemberDataService memberDataService;
+
 
     // db에 저장된 마지막 날짜
-    public LocalDate findLastSavedDate() { return exerciseRepository.findLastDate(); }
+    public LocalDate findLastSavedDate() {
+        return exerciseRepository.findLastDate();
+    }
 
     // 오늘 날짜만 받으면 이번주 월요일부터 어제까지 데이터를 조회하고 나머지 날은 디폴트로
     @Transactional
@@ -101,7 +106,7 @@ public class ExerciseService {
                 Map.of("dataSourceId", "derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas"),
                 Map.of("dataSourceId", "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"),
                 Map.of("dataSourceId", "derived:com.google.calories.expended:com.google.android.gms:merge_calories_expended"),
-                Map.of("dataSourceId", "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"),
+                Map.of("dataTypeName", "com.google.heart_rate.bpm"),
                 Map.of("dataSourceId", "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes")
         ));
         requestBody.put("bucketByTime", Map.of("durationMillis", 86400000)); // 24시간 (하루)를 밀리초로 표현
@@ -110,22 +115,15 @@ public class ExerciseService {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.toString());
-        System.out.println("@@@@@@@김길규@@@@@@@" + entity.toString());
-        System.out.println("@@@@@@@김길규@@@@@@@" + FitnessResponse.class.toString());
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-        System.out.println("@@@@@@@김길규@@@@@@@" + response.getBody());
-
-        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.postForEntity(url, entity, FitnessResponse.class).getBody());
+//        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.postForEntity(url, entity, String.class).getBody());
         // 얘가 문제임
-//        ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
+        ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
 
-        System.out.println("<<<<<<<<<<<<<<<<<<<<여기까지 넘어왔니? 홁>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-        return restTemplate.postForEntity(url, entity, FitnessResponse.class).getBody();
-//        return response.getBody();
+        return response.getBody();
     }
 
+    @Transactional
     public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member) {
         Exercise exercise = new Exercise();
         exercise.setMember(member);
@@ -134,8 +132,7 @@ public class ExerciseService {
         for (FitnessResponse.Bucket bucket : fitnessResponse.getBucket()) {
             for (FitnessResponse.DataSet dataSet : bucket.getDataset()) {
                 for (FitnessResponse.DataPoint dataPoint : dataSet.getPoint()) {
-                    System.out.println("<<<<<<<<<<<<<<<<<<<<여기까지 넘어왔니? 홁>>>>>>>>>>>>>>>>>>>>>>>>>");
-                    switch (dataPoint.getDataType()) {
+                    switch (dataPoint.getDataTypeName()) {
                         case "com.google.step_count.delta":
                             exercise.setSteps(dataPoint.getValue().get(0).getIntVal());
                             break;
@@ -157,16 +154,20 @@ public class ExerciseService {
         }
 
         MainCriteriaResponseDto criteria = exerciseCriteriaService.findMyCriteria(member);
+//        System.out.println("criteria : " + criteria.getExerciseMinute());
         if (criteria.getExerciseMinute() <= exercise.getExerciseMinute()) {
             exercise.setIsAchieved(true);
             Optional<Exercise> lastExercise = exerciseRepository.findExerciseByMemberAndExerciseDay(member, LocalDate.now().minusDays(2));
-            lastExercise.ifPresent(value -> exercise.setStreak(value.getStreak() + 1));
+            lastExercise.ifPresentOrElse(
+                    value -> exercise.setStreak(value.getStreak() + 1),
+                    () -> exercise.setStreak(1L)
+            );
         } else {
             exercise.setIsAchieved(false);
             exercise.setStreak(0L);
         }
 
-        return exercise;
+        return exerciseRepository.save(exercise);
     }
 
 }
