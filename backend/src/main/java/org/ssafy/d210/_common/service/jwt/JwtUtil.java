@@ -92,16 +92,20 @@ public class JwtUtil {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return 1;
         } catch (io.jsonwebtoken.security.SignatureException | SecurityException | MalformedJwtException e){
-            log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+            log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
+            log.error("관련에러: {}", e.getMessage());
             return -1;
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+            log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
+            log.error("관련에러: {}", e.getMessage());
             return -1;
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            log.error("관련에러: {}", e.getMessage());
             return -1;
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            log.error("Expired JWT token, 만료된 JWT token 입니다.");
+            log.error("관련에러: {}", e.getMessage());
             return -2;
         }
     }

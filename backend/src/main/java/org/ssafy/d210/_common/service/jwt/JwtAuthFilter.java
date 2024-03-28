@@ -59,6 +59,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         } catch (UsernameNotFoundException e) {
             request.setAttribute("exception", ErrorType.NOT_FOUND_MEMBER.toString());
+            log.error("관련에러: {}", e.getMessage());
         }
         // 다음 필터로 넘어간다.
         filterChain.doFilter(request, response);

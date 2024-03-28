@@ -14,5 +14,4 @@ public interface RefreshTokenInRedisRepository extends CrudRepository<RefreshTok
     // A. [RefreshTokenInRedis Entity]에서 [accessToken]을 [Index]로 설정해놔서 밑의 DB 사용 매서드가 가능하다.
     Optional<RefreshTokenInRedis> findByAccessToken(String accessToken);
 
-
 }
