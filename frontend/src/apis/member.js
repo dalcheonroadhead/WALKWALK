@@ -80,6 +80,7 @@ export const updateMyInfo = async () => {
         .catch((err) => {console.log(err)})
 }
 
+// 구글 access_token 갱신
 export const updateGoogleToken = async () => {
     const url = '/members/google-refresh-token'
     

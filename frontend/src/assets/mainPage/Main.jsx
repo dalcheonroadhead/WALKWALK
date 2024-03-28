@@ -5,12 +5,14 @@ import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 import { getGalleyList, getHalleyList, postGalleyRequest, getHalley } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
-import {getRealtimeExerciseData} from "../../apis/exercise";
+import { getRealtimeExerciseData, getWeeklyExerciseData } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
 
 const Main = function(){
     const {memberId, setMemberId} = useStore();
     useEffect(()=>{
+        getWeeklyExerciseData()
+            .then(res=>{setWeeklyExerciseData(res);})
         getRealtimeExerciseData()
             .then((res)=>{
               setRealtimeExerciseData(res);
@@ -55,6 +57,7 @@ const Main = function(){
     const [halliList, setHalliList] = useState([]);
     const [realtimeExerciseData, setRealtimeExerciseData] = useState({});
     const [halliRoadmapList, setHalliRoadmapList] = useState([]);
+    const [weeklyExerciseData, setWeeklyExerciseData] = useState({avg:0, content:[{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},]});
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -454,7 +457,7 @@ const Main = function(){
                         <p className={styles.week_title}>이번주 나의 기록</p>
                         <p className={styles.week_detail}>걸음 수 평균</p>
                         <div className={styles.avg_container}>
-                            <p className={styles.week_avg_number}>6704</p>
+                            <p className={styles.week_avg_number}>{weeklyExerciseData.avg}</p>
                             <p className={styles.week_avg_walk}>걸음</p>
                         </div>
                         <div className={styles.graph_container}>
@@ -466,31 +469,31 @@ const Main = function(){
                          data={[
                             {
                                 "요일": "월",
-                                "걸음 수": 6204,
+                                "걸음 수": weeklyExerciseData.content[0].steps,
                               },
                               {
                                 "요일": "화",
-                                "걸음 수": 12311,
+                                "걸음 수": weeklyExerciseData.content[1].steps,
                               },
                               {
                                 "요일": "수",
-                                "걸음 수": 3234,
+                                "걸음 수": weeklyExerciseData.content[2].steps,
                               },
                               {
                                 "요일": "목",
-                                "걸음 수": 2311,
+                                "걸음 수": weeklyExerciseData.content[3].steps,
                               },
                               {
                                 "요일": "금",
-                                "걸음 수": 0,
+                                "걸음 수": weeklyExerciseData.content[4].steps,
                               },
                               {
                                 "요일": "토",
-                                "걸음 수": 0,
+                                "걸음 수": weeklyExerciseData.content[5].steps,
                               },
                               {
                                 "요일": "일",
-                                "걸음 수": 0,
+                                "걸음 수": weeklyExerciseData.content[6].steps,
                               }
                         ]}
                         keys={[
@@ -534,7 +537,7 @@ const Main = function(){
                             ]
                         }}
                         axisLeft={{
-                            tickValues: [0, 6000, 10000], // 0만 포함하도록 설정
+                            tickValues: [0, 3000, 6000, 10000, 20000], // 0만 포함하도록 설정
                             format: value => value.toLocaleString(),
                             text: {
                                 fontSize: 10,
