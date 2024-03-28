@@ -14,7 +14,7 @@
     flex-direction: column; /* 세로로 배치 */
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    /* height: 100vh; */
     width: 100vw;
 }
 
@@ -287,14 +287,11 @@
 .day_rank_my_container{
     width: 22.4rem;
     height: 5.5rem;
-    position: absolute;
     border-radius: 0.938rem;
     align-items: center;
     justify-content: center;
     display: flex;
     background: #FFFEFC;
-    margin-top: 117.5%;
-    margin-bottom: 3%;
     box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
 }
 

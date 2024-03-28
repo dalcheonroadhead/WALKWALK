@@ -22,7 +22,7 @@ const Mypage = function () {
       {mypageInfo && (
         <>
           <img className={styles.mypage_profile_img} src={mypageInfo.profileUrl} alt="my profile img" />
-          <h2>{mypageInfo.nickname}</h2>
+          <div className={styles.mypage_profile_nickname}>{mypageInfo.nickname}</div>
           <div>{mypageInfo.comment}</div>
           <button className={styles.mypage_btn} onClick={() => {navigate('/userinfoupdate')}}>
             <span>내 정보 수정</span>

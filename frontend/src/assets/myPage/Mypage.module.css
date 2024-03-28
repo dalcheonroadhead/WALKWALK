@@ -10,8 +10,12 @@
 
 .mypage_profile_img {
     border-radius: 50%;
-    width: 30%;
-    height: 30%;
+    width: 40%;
+    /* height: 30%; */
+}
+
+.mypage_profile_nickname {
+    font-size: 2rem;
 }
 
 .mypage_btn {
