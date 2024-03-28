@@ -27,3 +27,25 @@ export const getEggMoney = async () => {
       })
       .catch((err) => {console.log(err)})
 }
+
+export const chargeMoney = async (money) => {
+  const url = '/payment/kakaoPayReady'
+  const info = {
+    "cid": "TC0ONETIME",
+    "partner_order_id": "walkwalk",
+    "partner_user_id": "h_chaenn",
+    "item_name": "money",
+    "quantity": 1, 
+    "total_amount": money,
+    "tax_free_amount": 0,
+    "approval_url":"http://localhost:5173/mywallet",
+    "fail_url":"http://localhost:5173/mywallet",
+    "cancel_url":"http://localhost:5173/mywallet"
+  }
+
+  await instance.post(url, info)
+      .then((res) => {
+        console.log('res : ', res)
+      })
+      .catch((err) => {console.log(err)})
+}

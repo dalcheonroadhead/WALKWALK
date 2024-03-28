@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./MyWallet.module.css"
-import { getEggMoney } from "../../apis/wallet";
+import { getEggMoney, chargeMoney } from "../../apis/wallet";
 
 const MyWallet = function () {
   const navigate = useNavigate();
   const [eggMoney, setEggMoney] = useState();
   const [isChargeModalOpen, setChargeModalOpen] = useState(false);
   const [isExchangeModalOpen, setExchangeModalOpen] = useState(false);
-  
+  const [inputMoney, setInputMoney] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -21,6 +21,35 @@ const MyWallet = function () {
       }
     })();
   }, [])
+
+  const handleInputChange = (e) => {
+    if (e.target.value === '') {
+      setInputMoney(0);
+    } else {
+      setInputMoney(Number(e.target.value));
+    }
+  }
+
+  const isMobile = () => {
+    // 터치 이벤트 지원 여부 및 화면 크기를 통한 모바일 환경 판별
+    return ('ontouchstart' in window || navigator.maxTouchPoints > 1 ) && window.innerWidth <= 850;
+  }
+
+  const submitMoneyCharge = async () => {
+    try {
+      console.log('inputMoney : ', inputMoney, typeof(inputMoney));
+      chargeMoney(inputMoney);
+      if (isMobile()) {
+        alert('모바일')
+        console.log("모바일 환경입니다.");
+      } else {
+        alert('모바일 아님')
+        console.log("비모바일 환경입니다.");
+      }
+    } catch (err) {
+      console.error('머니 충전 실패 : ', err)
+    }
+  }
 
   return(
     <div className={styles.mywallet_container}>
@@ -42,19 +71,35 @@ const MyWallet = function () {
                 <div>{eggMoney.money}</div>
               </div>
             </div>
+          </div>
+          <div>
             <button className={styles.mywallet_btn} onClick={() => {setChargeModalOpen(true)}}>충전</button>
             <button className={styles.mywallet_btn} onClick={() => {setExchangeModalOpen(true)}}>환전</button>
+          </div>
+          <div className={styles.mywallet_sub_container}>
+            <div className={styles.mywallet_sub_title}>거래 내역</div>
           </div>
         </>
       )}
       {isChargeModalOpen && (
         <>
           <div className={styles.mywallet_modal_background}></div>
-          <div className={styles.mywallet_modal_container}></div>
+          <div className={styles.mywallet_modal_container}>
+            <img className={styles.mywallet_close} src="/imgs/x.png" alt="" onClick={() => {setChargeModalOpen(false)}}/>
+            <h2>머니 충전하기</h2>
+            <input className={styles.mywallet_input} type="number" name="inputMoney" placeholder="금액을 입력해주세요" onChange={handleInputChange}/>
+            <button onClick={submitMoneyCharge}>충전</button>
+          </div>
         </>
       )}
       {isExchangeModalOpen && (
         <>
+          <div className={styles.mywallet_modal_background}></div>
+          <div className={styles.mywallet_modal_container}>
+            <img className={styles.mywallet_close} src="/imgs/x.png" alt="" onClick={() => {setExchangeModalOpen(false)}}/>
+            <h2>머니 환전하기</h2>
+            
+          </div>
         </>
       )}
     </div>
