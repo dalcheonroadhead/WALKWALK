@@ -73,3 +73,16 @@ export const updateMyInfo = async () => {
         })
         .catch((err) => {console.log(err)})
 }
+
+export const updateGoogleToken = async () => {
+    const url = '/members/google-refresh-token'
+    
+    return await instance.get(url)
+        .then((res) => {
+            console.log(res.data.data)
+            const tokens = JSON.parse(localStorage.getItem('tokens'));
+            tokens.Google_access_token = res.data.data;
+            localStorage.setItem('tokens', JSON.stringify(tokens));
+        })
+        .catch((err) => {console.log(err)})
+}
