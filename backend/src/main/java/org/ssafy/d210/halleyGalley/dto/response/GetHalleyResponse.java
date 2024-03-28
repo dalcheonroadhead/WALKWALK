@@ -26,7 +26,7 @@ public class GetHalleyResponse {
         return builder()
                 .profileUrl(halley.getHalleyId().getProfileUrl())
                 .nickname(halley.getHalleyId().getNickname())
-                .requestedTime(mission.getExerciseMinute())
+                .requestedTime(mission == null ? 0 : mission.getExerciseMinute())
                 .reward(halley.getReward())
                 .dayoff(halley.getDayoff())
                 .build();
