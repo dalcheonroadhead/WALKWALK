@@ -34,9 +34,9 @@ public class FriendController {
         return ApiResponseDto.of(MsgType.POST_FRIEND_REQUEST_SUCCESSFULLY, friendService.postFriend(userDetails.getMember(), request));
     }
 
-    @GetMapping("/send-list")
-    public ApiResponseDto<?> getSendList(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return ApiResponseDto.of(MsgType.GET_FRIEND_SEND_LIST_SUCCESSFULLY, friendService.getSendList(userDetails.getMember()));
+    @GetMapping("/sent-list")
+    public ApiResponseDto<?> getSentList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return ApiResponseDto.of(MsgType.GET_FRIEND_SEND_LIST_SUCCESSFULLY, friendService.getSentList(userDetails.getMember()));
     }
 
     @PutMapping("/response")
