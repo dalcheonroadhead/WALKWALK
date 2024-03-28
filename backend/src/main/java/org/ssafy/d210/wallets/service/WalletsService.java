@@ -9,13 +9,13 @@ import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
-import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
 import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
+import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
 import org.ssafy.d210.wallets.dto.response.GetEggMoneyResponse;
-import org.ssafy.d210.wallets.dto.response.PutMoneyResponse;
 import org.ssafy.d210.wallets.dto.response.PutEggResponse;
 import org.ssafy.d210.wallets.dto.response.PutHalleyGalleyMoneyResponse;
+import org.ssafy.d210.wallets.dto.response.PutMoneyResponse;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
@@ -56,7 +56,7 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        return memberAccount.putMoney(putMoneyRequest, true);
+        return PutMoneyResponse.of(memberAccount.putMoney(putMoneyRequest.getPutMoneyValue(), true));
     }
 
     public PutHalleyGalleyMoneyResponse putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest) {
@@ -69,10 +69,10 @@ public class WalletsService {
         MemberAccount halleyAccount = findMemberAccountByMembers(halley.getMemberAccountId().getId());
 
         // 할리 money 감소
-        int halleyMoney = halleyAccount.putMoney(putHalleyGalleyMoneyRequest, false);
+        int halleyMoney = halleyAccount.putMoney(putHalleyGalleyMoneyRequest.getPutMoneyValue(), false);
 
         // 갈리 money 증가
-        int galleyMoney = galleyAccount.putMoney(putHalleyGalleyMoneyRequest, true);
+        int galleyMoney = galleyAccount.putMoney(putHalleyGalleyMoneyRequest.getPutMoneyValue(), true);
 
         return PutHalleyGalleyMoneyResponse.of(halleyMoney, galleyMoney);
     }

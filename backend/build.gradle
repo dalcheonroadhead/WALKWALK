@@ -53,11 +53,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 
-
     // ⭐ SWAGGER 적용
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    // ⭐Web Socket 용
+    // ⭐ Web Socket 용
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'org.webjars:sockjs-client:1.5.1'

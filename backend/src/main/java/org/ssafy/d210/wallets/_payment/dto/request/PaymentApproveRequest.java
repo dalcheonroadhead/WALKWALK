@@ -13,5 +13,5 @@ public class PaymentApproveRequest {
     private String partner_order_id;    // 가맹점 주문 번호
     private String partner_user_id;     // 가맹점 회원 번호
     private String pg_token;            // 결제승인 요청을 인증하는 토큰
-
+    private Integer total_amount;   // 총 money량
 }

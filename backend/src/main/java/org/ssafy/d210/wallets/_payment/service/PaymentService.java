@@ -16,13 +16,13 @@ import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
-import org.ssafy.d210.wallets._payment.dto.Payment;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentExchangeResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
+import org.ssafy.d210.wallets._payment.entity.Payment;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
@@ -57,6 +57,11 @@ public class PaymentService {
     public Members findMembersByMembers(String email) {
         return membersRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
+    }
+
+    public MemberAccount findMemberAccountByMemberAccountId(Long memberAccountId) {
+        return memberAccountRepository.findMemberAccountById(memberAccountId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
     }
 
     // 결제 준비
@@ -97,6 +102,7 @@ public class PaymentService {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
+        MemberAccount memberAccount = findMemberAccountByMemberAccountId(member.getMemberAccountId().getId());
 
         // 결제 승인 요청에 필요한 정보를 설정
         Map<String, String> requestMap = new HashMap<>();
@@ -115,9 +121,13 @@ public class PaymentService {
         // 결제 승인 API를 호출하면, 결제 준비 단계에서 시작된 결제건이 승인으로 완료 처리
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestMap, headers);
         ResponseEntity<PaymentApproveResponse> response = restTemplate.postForEntity(kakaoPayApproveUrl, request, PaymentApproveResponse.class);
-        System.out.println(response);
-        return response.getBody();
 
+        if (response.getBody() != null) {
+            // DB의 money량 추가
+            memberAccount.putMoney(paymentApproveRequest.getTotal_amount(), true);
+        }
+
+        return response.getBody();
     }
 
     public PaymentExchangeResponse exchangeMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentExchangeRequest paymentExchangeRequest) {

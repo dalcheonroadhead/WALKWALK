@@ -15,7 +15,6 @@ public enum ErrorType {
     EXPIRED_TOKEN(401, "[TOKEN]의 유효기간이 끝났습니다."),
 
     //----------------------------MEMBERS----------------------------
-
     NOT_FOUND_MEMBER(404, "해당 멤버가 존재하지 않습니다."),
     CANT_PASS_SECURITY(401, "[Security Config]를 통과할 수 없습니다. 접두사로 [/api]를 붙였는지 확인해주세요"),
     THIS_MEMBER_DONT_HAVE_GRT(500, "해당 멤버는 google 첫 로그인에서 [google-refresh-token]을 발급 받지 못했습니다. " +
@@ -45,7 +44,6 @@ public enum ErrorType {
     ALREADY_SEND_FRIEND_REQUEST(401, "이미 요청을 보냈습니다."),
     NOT_FOUND_FRIEND(401, "친구가 존재하지 않습니다."),
 
-
     // --------------------------- ETC -------------------------------
     ANOTHER_ERROR(401, "[Security]는 통과 했으나, 다른 위치에서 [Error]가 발생하였습니다."),
 
@@ -58,6 +56,6 @@ public enum ErrorType {
 
     ErrorType(int code, String msg) {
         this.code = code;
-        this.msg =msg;
+        this.msg = msg;
     }
 }
