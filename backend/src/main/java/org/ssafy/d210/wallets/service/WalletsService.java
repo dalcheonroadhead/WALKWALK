@@ -42,14 +42,14 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        return PutEggResponse.of(memberAccount.putEgg(putEggRequest, true));
+        return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), true));
     }
 
     public PutEggResponse putEggSub(@AuthenticationPrincipal UserDetailsImpl userDetails, PutEggRequest putEggRequest) {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        return PutEggResponse.of(memberAccount.putEgg(putEggRequest, false));
+        return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), false));
     }
 
     public PutMoneyResponse putMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) {
