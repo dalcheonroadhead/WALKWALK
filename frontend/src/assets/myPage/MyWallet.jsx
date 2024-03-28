@@ -40,8 +40,10 @@ const MyWallet = function () {
       console.log('inputMoney : ', inputMoney, typeof(inputMoney));
       chargeMoney(inputMoney);
       if (isMobile()) {
+        alert('모바일')
         console.log("모바일 환경입니다.");
       } else {
+        alert('모바일 아님')
         console.log("비모바일 환경입니다.");
       }
     } catch (err) {
