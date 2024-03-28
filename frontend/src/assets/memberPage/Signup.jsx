@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from "./Login.module.css";
+import styles from "./Signup.module.css";
 import { createWallet } from '../../apis/wallet';
 import { submitUserInfo, checkDuplicated } from '../../apis/member';
 
