@@ -5,9 +5,7 @@ export const getGalleyList = async () => {
     
     return await instance.get(url)
         .then((res) => {
-            console.log('test1', res.data)
-            console.log('type : ', typeof(res.data.data)) // object
-            
+            console.log(res.data.data)
             if(res.data.data.length != 0){
                 let data = [];
                 res.data.data.forEach(element => {
@@ -15,7 +13,9 @@ export const getGalleyList = async () => {
                         data.push(element);
                     }
                 });
-                return data;
+                if(data.length != 0){
+                    return data;
+                }
             }
             return false;
         })
