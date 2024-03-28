@@ -13,7 +13,6 @@
     display: flex;
     flex-direction: column; /* 세로로 배치 */
     align-items: center;
-    justify-content: center;
     height: 100vh;
     width: 100vw;
 }
@@ -25,7 +24,7 @@
     align-items: center;
     position: fixed;
     justify-content: center;
-    margin-top: -200%;
+    background-color: white;
 }
 
 .back_btn{
@@ -38,6 +37,15 @@
 }
 
 .title_txt{
+    margin-top: 4%;
     font-family: "bc_b";
     font-size: 1.5rem;
+}
+
+.alarm_container{
+    background: #FFF2CB;
+    margin-top: 18%;
+    width: 24.4rem;
+    height: 51rem;
+    border-radius: 1rem;
 }
