@@ -32,6 +32,9 @@ const Alarm = function(){
                     <img src="/imgs/direct.png" alt="뒤로가기" className={styles.back_btn} onClick={moveToMainPage}></img>
                     <p className={styles.title_txt}>알림</p>
                 </div>
+                <div className={styles.alarm_container}>
+
+                </div>
             </div>
         </>
     );
