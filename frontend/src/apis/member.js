@@ -52,7 +52,6 @@ export const getMypage = async () => {
 
     return await instance.get(url)
         .then((res) => {
-            console.log(res)
             return res.data.data
         })
         .catch((err) => {console.log(err)})
@@ -64,6 +63,7 @@ export const getMyInfo = async () => {
 
     return await instance.get(url)
         .then((res) => {
+            // console.log('myinfo : ', res)
             return res.data.data
         })
         .catch((err) => {console.log(err)})

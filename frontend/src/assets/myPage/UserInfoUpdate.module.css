@@ -1,0 +1,118 @@
+.userinfoupdate_container {
+  width: 100%;
+  height: 100%;
+}
+
+.userinfoupdate_top_bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 5rem;
+  width: 100dvw;
+}
+
+.userinfoupdate_back_direct {
+  position: absolute;
+  left: 1rem;
+  transform: rotate(180deg);
+  width: 2rem;
+}
+
+.userinfoupdate_title {
+  font-size: 2rem;
+}
+
+.userinfoupdate_sub_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.userinfoupdate_profile_container {
+  position: relative;
+  width: 40%;
+  margin: auto;
+}
+
+.userinfoupdate_profile_img {
+  border-radius: 50%;
+  width: 100%;
+}
+
+.userinfoupdate_camera_img {
+  position: absolute;
+  border-radius: 50%;
+  width: 25%;
+  bottom: 8%;
+  right: 0;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.userinfoupdate_sub_title {
+  display: flex;
+  font-size: 1.7rem;
+}
+
+.userinfoupdate_2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.userinfoupdate_col {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #A4C869;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+  font-size: 1.5rem;
+}
+
+.userinfoupdate_col_img {
+  width: 1.2rem;
+  height: 1.8rem;
+}
+
+.userinfoupdate_btn {
+  width: 40%;
+  background-color: #FFCB23;
+  padding: 1rem;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin: 1rem 0.5rem;
+  font-size: 1.5rem;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.userinfoupdate_modal_background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.userinfoupdate_modal_container {
+  position: absolute;
+  width: 80dvw;
+  height: 30dvh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 0.8rem;
+  box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+  z-index: 20;
+}
+
+.userinfoupdate_close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.5rem;
+}

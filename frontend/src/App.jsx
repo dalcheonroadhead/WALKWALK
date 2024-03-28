@@ -21,6 +21,8 @@ import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
 import './App.css'
 import Galli from "./assets/halligalliPage/Galli";
 import SocketPage4Member from "./assets/exercisePage/SocketPage4Member"; 
+import MyBadege from "./assets/myPage/MyBadge";
+import MyGoalUpdate from "./assets/myPage/MyGoalUpdate";
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
         <Route path="/voice" element={<Voice />}></Route>
         <Route path="/store" element={<Store />}></Route>
         <Route path="/kakaopay/callback" element={<KakaoPayRedirect />}></Route>
+        <Route path="/mybadge" element={<MyBadege />}></Route>
+        <Route path="/mygoal/update" element={<MyGoalUpdate />}></Route>
       </Routes>
     </BrowserRouter>
   )
