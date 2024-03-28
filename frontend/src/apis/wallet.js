@@ -32,7 +32,7 @@ export const getEggMoney = async () => {
 // 에그 충전 요청
 export const requestMoneyCharge = async (money) => {
   const url = '/payment/kakaoPayReady'
-  const REDIRECT_URI = import.meta.env.VITE_NODE_ENV === 'production' ? import.meta.env.VITE_REDIRECT_URI_PROD : import.meta.env.VITE_REDIRECT_URI_DEV;
+  const REDIRECT_URI = import.meta.env.VITE_NODE_ENV === 'production' ? 'https://j10d210.p.ssafy.io' : 'http://localhost:5173';
   const info = {
     "cid": "TC0ONETIME",
     "partner_order_id": "walkwalk",
