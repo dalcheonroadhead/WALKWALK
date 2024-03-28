@@ -20,6 +20,7 @@ import Store from "./assets/storePage/Store";
 import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
 import './App.css'
 import Galli from "./assets/halligalliPage/Galli";
+import SocketPage4Member from "./assets/exercisePage/SocketPage4Member"; 
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/walking" element={<Walking />}></Route>
           <Route path="/friend" element={<Friend />}></Route>
           <Route path="/mypage" element={<Mypage />}></Route>
+          <Route path="/member/:id" element={<SocketPage4Member/>}></Route>
         </Route>
         {/* 상하단바 없는 페이지 */}
         <Route path="/" element={<Login />}></Route>
