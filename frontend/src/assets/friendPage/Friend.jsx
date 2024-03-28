@@ -2,7 +2,7 @@ import { useState, useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Friend.module.css";
 import Sidebar from "../common/sidebar/Sidebar";
-import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList, getFriendReceivedList } from "../../apis/friend";
+import { searchMemberList, sendFriendRequest, getFriendList, getFriendSentList, getFriendReceivedList, putFriendRequest } from "../../apis/friend";
 
 const Friend = function(){
 
@@ -21,7 +21,8 @@ const Friend = function(){
 
     const tabClickHandler = function(index){
         if(index == 0){
-
+            getFriendList()
+            .then(res=>setFriendList(res));
         }
         else if(index == 1){
             getFriendSentList()
@@ -42,6 +43,10 @@ const Friend = function(){
         else{
             getFriendList()
                 .then(res=>setFriendList(res));
+            getFriendSentList()
+                .then(res=>setSentFriendList(res))
+            getFriendReceivedList()
+                .then(res=>setReceivedFriendList(res))
         }
         setFindFriend(!findFriend)
     }
@@ -52,7 +57,18 @@ const Friend = function(){
 
     const sendFriendRequestHandler = (memberId)=>{
         sendFriendRequest(memberId)
-            .then(res=>{alert("친구 요청에 성공했습니다."); searchedFriendList([]); setFindFriend(false);});
+            .then(res=>{alert("친구 요청에 성공했습니다."); setSearchedFriendList([]); openFindFriendModal();});
+    }
+
+    const putFriendRequestHandler = (memberId, isAccept) =>{
+        putFriendRequest({memberId: memberId, isAccept: isAccept})
+            .then(res=>{
+                alert("친구 요청 수락/거절에 성공했습니다."); 
+                getFriendReceivedList()
+                    .then(resp=>setReceivedFriendList(resp))
+                getFriendSentList()
+                    .then(resp=>setSentFriendList(resp))
+                })
     }
 
     const tabArr=[{
@@ -65,15 +81,13 @@ const Friend = function(){
             <div className={styles.friend_list_content}>
                 {friendList.map((data, index) => {
                     return(
-                        <>
-                            <div key={index} className={styles.friend_container}>
-                                <img src={data.profileUrl} alt="프로필 사진" className={styles.friend_img_container} ></img>
-                                <div className={styles.friend_info_container}>
-                                    <p className={styles.friend_name_txt}>{data.nickname}</p>
-                                    <p className={styles.friend_intro}>{data.comment}</p>
-                                </div>
-                            </div>  
-                        </>
+                        <div key={index} className={styles.friend_container}>
+                            <img src={data.profileUrl} alt="프로필 사진" className={styles.friend_img_container} ></img>
+                            <div className={styles.friend_info_container}>
+                                <p className={styles.friend_name_txt}>{data.nickname}</p>
+                                <p className={styles.friend_intro}>{data.comment}</p>
+                            </div>
+                        </div>  
                     )
                 })}
             </div>
@@ -89,17 +103,15 @@ const Friend = function(){
             <div className={styles.send_list_content}>
                 {sentFriendList.map((data, index) => {
                     return(
-                        <>
-                            <div key={index} className={styles.send_friend_container}>
-                                <img src={data.profileUrl} alt="프로필 사진" className={styles.send_friend_img_container} ></img>
-                                <div className={styles.send_friend_info_container}>
-                                    <p className={styles.send_friend_name_txt}>{data.nickname}</p>
-                                    <div className={styles.send_cancel_btn}>
-                                        <p className={styles.cancel_btn_txt}>취소</p>
-                                    </div>
+                        <div key={index} className={styles.send_friend_container}>
+                            <img src={data.profileUrl} alt="프로필 사진" className={styles.send_friend_img_container} ></img>
+                            <div className={styles.send_friend_info_container}>
+                                <p className={styles.send_friend_name_txt}>{data.nickname}</p>
+                                <div className={styles.send_cancel_btn}>
+                                    <p className={styles.cancel_btn_txt} onClick={()=>{putFriendRequestHandler(data.memberId, false)}}>취소</p>
                                 </div>
-                            </div>  
-                        </>
+                            </div>
+                        </div>  
                     )
                 })}
             </div>
@@ -115,22 +127,20 @@ const Friend = function(){
             <div className={styles.receive_list_content}>
                 {receivedFriendList.map((data, index) => {
                     return(
-                        <>
-                            <div key={index} className={styles.receive_friend_container}>
-                                <img src={data.profileUrl} alt="프로필 사진" className={styles.receive_friend_img_container} ></img>
-                                <div className={styles.receive_friend_info_container}>
-                                    <p className={styles.receive_friend_name_txt}>{data.nickname}</p>
-                                    <div className={styles.receive_btn_container}>
-                                        <div className={styles.receive_ok_btn}>
-                                            <p className={styles.receive_ok_btn_txt}>수락</p>
-                                        </div>
-                                        <div className={styles.receive_cancel_btn}>
-                                            <p className={styles.receive_cancel_btn_txt}>거절</p>
-                                        </div>
+                        <div key={index} className={styles.receive_friend_container}>
+                            <img src={data.profileUrl} alt="프로필 사진" className={styles.receive_friend_img_container} ></img>
+                            <div className={styles.receive_friend_info_container}>
+                                <p className={styles.receive_friend_name_txt}>{data.nickname}</p>
+                                <div className={styles.receive_btn_container}>
+                                    <div className={styles.receive_ok_btn}>
+                                        <p className={styles.receive_ok_btn_txt} onClick={()=>{putFriendRequestHandler(data.memberId, true)}}>수락</p>
+                                    </div>
+                                    <div className={styles.receive_cancel_btn}>
+                                        <p className={styles.receive_cancel_btn_txt} onClick={()=>{putFriendRequestHandler(data.memberId, false)}}>거절</p>
                                     </div>
                                 </div>
-                            </div>  
-                        </>
+                            </div>
+                        </div>  
                     )
                 })}
             </div>
@@ -159,17 +169,15 @@ const Friend = function(){
 
                                 {searchedFriendList.map((data, index) => {
                                     return(
-                                        <>
-                                            <div key={index} className={styles.find_friend_name_container}>
-                                                <img src={data.profileUrl} alt="프로필 사진" className={styles.find_friend_img_container} ></img>
-                                                <p className={styles.find_friend_name_txt}>{data.nickname}</p>
-                                                <div className={styles.find_friend_modal_btn_container}>
-                                                    <div className={styles.find_friend_put_btn}>
-                                                        <p className={styles.find_friend_btn_txt} onClick={()=>{sendFriendRequestHandler(data.memberId)}}>신청</p>
-                                                    </div>
+                                        <div key={index} className={styles.find_friend_name_container}>
+                                            <img src={data.profileUrl} alt="프로필 사진" className={styles.find_friend_img_container} ></img>
+                                            <p className={styles.find_friend_name_txt}>{data.nickname}</p>
+                                            <div className={styles.find_friend_modal_btn_container}>
+                                                <div className={styles.find_friend_put_btn}>
+                                                    <p className={styles.find_friend_btn_txt} onClick={()=>{sendFriendRequestHandler(data.memberId)}}>신청</p>
                                                 </div>
-                                            </div>  
-                                        </>
+                                            </div>
+                                        </div>  
                                     )
                                 })}
                             </div>
@@ -186,7 +194,7 @@ const Friend = function(){
                 <div className={styles.tab_container}>
                     <div className={styles.mode_tabs}>
                         {tabArr.map((mode, index)=>{
-                            return mode.tabTitle
+                            return <div key={index}>{mode.tabTitle}</div>
                         })}
                     </div>
 
