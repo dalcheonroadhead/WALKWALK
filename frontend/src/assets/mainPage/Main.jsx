@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
-import { getGalleyList } from "../../apis/halleygalley";
-import { getHalleyList } from "../../apis/halleygalley";
+import { getGalleyList, getHalleyList, postGalleyRequest } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
 import Sidebar from "../common/sidebar/Sidebar";
 
@@ -52,7 +51,6 @@ const Main = function(){
     const handleSearchClick = ()=>{
         searchGalleyMemberList(keyword)
         .then((res)=>{
-            alert(res)
             setMemberList(res);
         })  
         .catch((err)=>{
@@ -152,22 +150,6 @@ const Main = function(){
         },
         msg: "할리 목록 조회 성공",
     }
-
-    // 갈리 모달
-    const 갈리API요청결과 = {
-        data: [
-                {
-                    timeStamp: '2024-03-19 11:12:13',
-                    memberId: 1,    // 갈리 아이디
-                    nickname: '김규리', // 갈리 닉네임
-                    exerciseTime: 40,   // 실시간 운동시간
-                    requestedTime: 60,  // 할당한 운동시간
-                },
-            ],
-        msg: "갈리 목록 조회 성공",
-    }
-    //===========================================================================
-    //===========================================================================
 
     const namelist = [
         {
@@ -361,6 +343,7 @@ const Main = function(){
     ]
     return(
         <>
+        <Sidebar/>
         <div>
             {isHalliOpen && (
                 <>
@@ -420,7 +403,10 @@ const Main = function(){
                                                 <p className={styles.galli_name_txt}>{data.nickname}</p>
                                                 <div className={styles.galli_btn_container}>
                                                     <div className={styles.galli_put_btn}>
-                                                        <p className={styles.btn_txt}>신청</p>
+                                                        <p className={styles.btn_txt} onClick={()=>{
+                                                            postGalleyRequest({'memberId': data.memberId});
+                                                            setIsGalliOpen(false);
+                                                            }}>신청</p>
                                                     </div>
                                                 </div>
                                             </div>  
