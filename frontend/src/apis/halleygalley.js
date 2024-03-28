@@ -7,8 +7,15 @@ export const getGalleyList = async () => {
         .then((res) => {
             console.log('test1', res.data)
             console.log('type : ', typeof(res.data.data)) // object
+            
             if(res.data.data.length != 0){
-                return res.data.data;
+                let data = [];
+                res.data.data.forEach(element => {
+                    if(element.isAccepted){
+                        data.push(element);
+                    }
+                });
+                return data;
             }
             return false;
         })
@@ -43,4 +50,15 @@ export const getHalleyReauestList = async () => {
             return false;
         })
         .catch((err) => {console.log(err)})
+}
+
+export const postGalleyRequest = async (request) => {
+    const url = '/halleygalley/galley-request';
+
+    return await instance.post(url, request)
+        .then((res) => {
+            console.log('postGalleyRequest: ', res.data.msg)
+            alert(res.data.msg);
+        })
+        .catch(err => console.log(err))
 }
