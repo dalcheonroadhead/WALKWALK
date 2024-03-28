@@ -72,3 +72,15 @@ export const getHalley = async (memberId) => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 갈리 세부정보 조회
+export const getGalley = async (memberId) => {
+    const url = `/halleygalley/galley?memberId=${memberId}`;
+    
+    return await instance.get(url)
+        .then((res) => {
+            console.log(res)
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}

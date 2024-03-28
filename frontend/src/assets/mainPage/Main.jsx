@@ -23,9 +23,14 @@ const Main = function(){
     const navigate = useNavigate();
     
 
-    const moveToHalliGalliPage = function (memberId) {
+    const moveToHalliPage = function (memberId) {
         setMemberId(memberId);
-        navigate("/halligalli")
+        navigate("/halli")
+    }
+
+    const moveToGalliPage = function (memberId) {
+        setMemberId(memberId);
+        navigate("/galli")
     }
 
     const handleInputChange = (e) => {
@@ -291,10 +296,10 @@ const Main = function(){
                         <div className={styles.galli_expanded} style={{height: 240 * galliList.length, overflow: !expanded && 'scroll'}}>
                         {galliList.map((data, index) => {
                             return(
-                                <div key={index} className={styles.my_galli_list_container}>
+                                <div key={index} className={styles.my_galli_list_container} onClick={()=>moveToGalliPage(data.memberId)}>
                                     <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
                                     <div className={styles.galli_time_progress_container}>
-                                        {data.requestedTime == null ? <p>설정안됨</p> :<div className={styles.galli_time_progress_base}>
+                                        {data.requestedTime == null ? <p>등록한 미션이 없습니다...</p> :<div className={styles.galli_time_progress_base}>
                                             <div className={styles.galli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>
                                             <div className={styles.galli_time_ori_container} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}>
                                                 <p className={styles.galli_time_mine} style={{color: 프로그래스바2.calculatedTime > 300 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
@@ -423,7 +428,7 @@ const Main = function(){
                                 {halliList.map((data, index) => {
                                     console.log(data)
                                     return(
-                                        <div key={index} className={styles.my_halli_list_name_container} onClick={()=>moveToHalliGalliPage(data.memberId)}>
+                                        <div key={index} className={styles.my_halli_list_name_container} onClick={()=>moveToHalliPage(data.memberId)}>
                                             <img src={data.profileUrl} alt="프로필 사진" className={styles.my_halli_list_img_container} ></img>
                                             <p className={styles.my_halli_list_name_txt}>{data.nickname}</p>
                                             <div className={styles.my_halli_list_btn_container}>
