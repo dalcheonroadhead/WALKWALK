@@ -4,7 +4,7 @@ import Main from "./assets/mainPage/Main";
 import Login from "./assets/memberPage/Login";
 import LoginRedirect from "./assets/memberPage/LoginRedirect";
 import Signup from "./assets/memberPage/Signup";
-import HalliGalli from "./assets/halligalliPage/HalliGalli";
+import Halli from "./assets/halligalliPage/Halli";
 import Rank from "./assets/rankPage/Rank";
 import Walking from "./assets/walkingPage/Walking";
 import Friend from "./assets/friendPage/Friend";
@@ -14,6 +14,7 @@ import UserInfoUpdate from "./assets/myPage/UserInfoUpdate";
 import Alarm from "./assets/alarmPage/Alarm";
 import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
 import './App.css'
+import Galli from "./assets/halligalliPage/Galli";
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
         <Route path="/" element={<Login />}></Route>
         <Route path="/oauth/callback/google/token" element={<LoginRedirect />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/halligalli" element={<HalliGalli />}></Route>
+        <Route path="/halli" element={<Halli />}></Route>
+        <Route path="/galli" element={<Galli />}></Route>
         <Route path="/mywallet" element={<MyWallet />}></Route>
         <Route path="/userinfo/update" element={<UserInfoUpdate />}></Route>
         <Route path="/alarm" element={<Alarm />}></Route>
