@@ -20,9 +20,9 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
     Optional<List<FriendList>> findFriendListsBySenderIdAndIsFriendIsTrue(Members member);
     Optional<FriendList> findFriendListBySenderIdAndReceiverId(Members member1, Members member2);
 
-    Optional<List<FriendList>> findFriendListsBySenderIdAndIsAcceptedIsTrue(Members member);
+    Optional<List<FriendList>> findFriendListsBySenderIdAndIsAcceptedIsTrueAndIsFriendIsFalse(Members member);
 
-    Optional<List<FriendList>> findFriendListsByReceiverIdAndIsAcceptedIsTrue(Members member);
+    Optional<List<FriendList>> findFriendListsByReceiverIdAndIsAcceptedIsTrueAndIsFriendIsFalse(Members member);
 
     @Query(value =
             "SELECT m.member_id as memberId, m.profile_url as profileUrl, m.nickname as nickname, f.is_friend as isFriend, f.is_accepted as isAccepted " +
