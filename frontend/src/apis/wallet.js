@@ -41,9 +41,9 @@ export const requestMoneyCharge = async (money) => {
     "quantity": 1,
     "total_amount": money,
     "tax_free_amount": 0,
-    "approval_url":"http://localhost:5173/mywallet?status=approval",
-    "fail_url":"http://localhost:5173/mywallet?status=fail",
-    "cancel_url":"http://localhost:5173/mywallet?status=cancel"
+    "approval_url":"http://localhost:5173/kakaopay/callback?status=approval",
+    "fail_url":"http://localhost:5173/kakaopay/callback?status=fail",
+    "cancel_url":"http://localhost:5173/kakaopay/callback?status=cancel"
   }
 
   return await instance.post(url, info)
@@ -55,37 +55,24 @@ export const requestMoneyCharge = async (money) => {
 }
 
 // 에그 충전 승인
-export const approveMoneyCharge = async (tid) => {
-  const url = '/payment/kakaoPayReady'
-  const info = {
-    "cid": "TC0ONETIME",
+export const approveMoneyCharge = async (info) => {
+  const url = '/payment/kakaoPayApprove'
+  const chargeInfo = {
+    "cid" : "TC0ONETIME",
+    "tid" : info.tid,
     "partner_order_id": "walkwalk",
     "partner_user_id": "walkwalk",
-    "item_name": "머니",
-    "quantity": 1,
-    "total_amount": money,
-    "tax_free_amount": 0,
-    "approval_url":"http://localhost:5173/mywallet?status=approval",
-    "fail_url":"http://localhost:5173/mywallet?status=fail",
-    "cancel_url":"http://localhost:5173/mywallet?status=cancel"
+    "pg_token" : info.pgToken,
+    "total_amount": info.inputMoney
   }
 
-  const isMobile = () => {
-    // 터치 이벤트 지원 여부 및 화면 크기를 통한 모바일 환경 판별
-    return 'ontouchstart' in window || navigator.maxTouchPoints > 1 ;
-    // return ('ontouchstart' in window || navigator.maxTouchPoints > 1 ) && window.innerWidth <= 800;
-  }
-
-  await instance.post(url, info)
+  return await instance.post(url, chargeInfo)
       .then((res) => {
-        console.log('res : ', res.data)
-        if (isMobile()) {
-          console.log("모바일");
-          return res.data.next_redirect_mobile_url
-        } else {
-          console.log("비모바일");
-          return res.data.next_redirect_pc_url
-        }
+        console.log('res : ', res)
+        return true
       })
-      .catch((err) => {console.log(err)})
+      .catch((err) => {
+        console.log(err)
+        return false
+      })
 }

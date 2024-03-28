@@ -12,6 +12,7 @@ import Mypage from "./assets/myPage/Mypage";
 import MyWallet from "./assets/myPage/MyWallet";
 import UserInfoUpdate from "./assets/myPage/UserInfoUpdate";
 import Alarm from "./assets/alarmPage/Alarm";
+import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
 import './App.css'
 
 function App() {
@@ -32,8 +33,9 @@ function App() {
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/halligalli" element={<HalliGalli />}></Route>
         <Route path="/mywallet" element={<MyWallet />}></Route>
-        <Route path="/userinfoupdate" element={<UserInfoUpdate />}></Route>
+        <Route path="/userinfo/update" element={<UserInfoUpdate />}></Route>
         <Route path="/alarm" element={<Alarm />}></Route>
+        <Route path="/kakaopay/callback" element={<KakaoPayRedirect />}></Route>
       </Routes>
     </BrowserRouter>
   )

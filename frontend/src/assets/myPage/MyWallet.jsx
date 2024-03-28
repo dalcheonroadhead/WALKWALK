@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./MyWallet.module.css"
-import { getEggMoney, chargeMoney } from "../../apis/wallet";
+import { getEggMoney, requestMoneyCharge } from "../../apis/wallet";
+import useWalletStore from "../../stores/wallet";
 
 const MyWallet = function () {
   const navigate = useNavigate();
   const [eggMoney, setEggMoney] = useState();
   const [isChargeModalOpen, setChargeModalOpen] = useState(false);
   const [isExchangeModalOpen, setExchangeModalOpen] = useState(false);
-  const [inputMoney, setInputMoney] = useState(0);
+  const { inputMoney, tid, setInputMoney, setTid} = useWalletStore();
 
   useEffect(() => {
     (async () => {
       try {
         const data = await getEggMoney();
-        console.log('eggmoney : ', data)
-        setEggMoney(data)
+        setEggMoney(data);
       } catch (err) {
         console.error('eggmoney 정보를 가져오는 중 에러 발생:', err);
       }
@@ -38,7 +38,9 @@ const MyWallet = function () {
 
   const submitMoneyCharge = async () => {
     try {
-      const res = await requestMoneyCharge(inputMoney.trim());
+      const res = await requestMoneyCharge(inputMoney);
+      setTid(res.tid);
+      console.log('tid : ', tid)
       if (isMobile()) {
         window.location.href = res.next_redirect_mobile_url
       } else {
