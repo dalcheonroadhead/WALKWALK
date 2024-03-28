@@ -2,7 +2,17 @@ import styles from "./Toolbar.module.css";
 import Sidebar from "../sidebar/Sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 
+
 const Toolbar = function(){
+
+    
+    const navigate = useNavigate();
+    
+
+    const moveToAlarmPage = function () {
+        navigate("/Alarm")
+    }
+
 
     return(
         <> 
@@ -17,7 +27,7 @@ const Toolbar = function(){
                         <p className={styles.money_txt}>300000</p>
                     </div>
                 </div>
-                <img src="/imgs/bell.png" alt="알람" className={styles.bell}></img>
+                <img src="/imgs/bell.png" alt="알람" className={styles.bell} onClick={moveToAlarmPage}></img>
             </div>
         </>
     );

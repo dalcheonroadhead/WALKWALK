@@ -1,21 +1,12 @@
 .layoutContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  width: 100dvw;
-}
-
-.toolbar {
-  height: 5rem;
-}
-
-.navbar {
-  height: 4rem;
+  /* height: 100vh; */
+  width: 100vw;
 }
 
 .content {
-  flex: 1;
-  /* overflow-y: auto; */
-  /* padding: 2rem 0; */
-  margin: auto 0;
+  height: 100vh;
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+  margin: 0 auto;
+  overflow-y: auto;
 }

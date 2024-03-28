@@ -351,7 +351,6 @@ const Main = function(){
     ]
     return(
         <>
-        <Sidebar/>
         <div>
             {isHalliOpen && (
                 <>

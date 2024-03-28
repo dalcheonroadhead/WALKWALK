@@ -11,6 +11,7 @@ import Friend from "./assets/friendPage/Friend";
 import Mypage from "./assets/myPage/Mypage";
 import MyWallet from "./assets/myPage/MyWallet";
 import UserInfoUpdate from "./assets/myPage/UserInfoUpdate";
+import Alarm from "./assets/alarmPage/Alarm";
 import './App.css'
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/halligalli" element={<HalliGalli />}></Route>
         <Route path="/mywallet" element={<MyWallet />}></Route>
         <Route path="/userinfoupdate" element={<UserInfoUpdate />}></Route>
+        <Route path="/alarm" element={<Alarm />}></Route>
       </Routes>
     </BrowserRouter>
   )
