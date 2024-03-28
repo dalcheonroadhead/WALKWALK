@@ -2,7 +2,17 @@ import styles from "./Toolbar.module.css";
 import Sidebar from "../sidebar/Sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 
+
 const Toolbar = function(){
+
+    
+    const navigate = useNavigate();
+    
+
+    const moveToAlarmPage = function () {
+        navigate("/halligalli")
+    }
+
 
     return(
         <> 
