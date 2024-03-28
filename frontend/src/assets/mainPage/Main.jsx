@@ -5,12 +5,14 @@ import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 import { getGalleyList, getHalleyList, postGalleyRequest, getHalley } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
-import { getRealtimeExerciseData, getWeeklyExerciseData } from "../../apis/exercise";
+import { getRealtimeExerciseData, getWeeklyExerciseData, getExerciseCriteria } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
 
 const Main = function(){
     const {memberId, setMemberId} = useStore();
     useEffect(()=>{
+        getExerciseCriteria()
+            .then(res=>setCriteriaData(res))
         getWeeklyExerciseData()
             .then(res=>{setWeeklyExerciseData(res);})
         getRealtimeExerciseData()
@@ -63,6 +65,7 @@ const Main = function(){
     const [realtimeExerciseData, setRealtimeExerciseData] = useState({});
     const [halliRoadmapList, setHalliRoadmapList] = useState([]);
     const [weeklyExerciseData, setWeeklyExerciseData] = useState({avg:0, content:[{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},]});
+    const [criteriaData, setCriteriaData] = useState({steps:0, exerciseMinute:0});
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -145,13 +148,13 @@ const Main = function(){
         criteriaSteps: 6000,    // 기준 걸음수
     };
     const 프로그래스바 = {
-        calculatedTime: realtimeExerciseData.time/운동데이터.criteriaTime*320 < 70 ? 70 : realtimeExerciseData.time/운동데이터.criteriaTime*320,
-        calculatedSteps: realtimeExerciseData.steps/운동데이터.criteriaSteps*320 < 90 ? 90 : realtimeExerciseData.steps/운동데이터.criteriaSteps*320,
+        calculatedTime: realtimeExerciseData.time/criteriaData.exerciseMinute*320 < 70 ? 70 : realtimeExerciseData.time/criteriaData.exerciseMinute*320,
+        calculatedSteps: realtimeExerciseData.steps/criteriaData.steps*320 < 90 ? 90 : realtimeExerciseData.steps/criteriaData.steps*320,
     }
 
     const 프로그래스바2 = {
-        calculatedTime: realtimeExerciseData.time/운동데이터.criteriaTime*300 < 70 ? 70 : realtimeExerciseData.time/운동데이터.criteriaTime*300,
-        calculatedSteps: realtimeExerciseData.steps/운동데이터.criteriaSteps*300 < 90 ? 90 : realtimeExerciseData.steps/운동데이터.criteriaSteps*300,
+        calculatedTime: realtimeExerciseData.time/criteriaData.exerciseMinute*300 < 70 ? 70 : realtimeExerciseData.time/criteriaData.exerciseMinute*300,
+        calculatedSteps: realtimeExerciseData.steps/criteriaData.steps*300 < 90 ? 90 : realtimeExerciseData.steps/criteriaData.steps*300,
     }
     
 
@@ -162,10 +165,6 @@ const Main = function(){
             exerciseTime: 10,
             maxExerciseTime: 120,
             
-            creteriaContent: { // 기준
-                timeStamp: "2024-12-11 21:10:10", // LocalDateTime
-                exerciseTime: 19, // Long(minute) (기준 할당량)
-            },
         },
     }
 
@@ -189,7 +188,7 @@ const Main = function(){
                                 </div>
                                 <div className={styles.my_time_number_base}>
                                     <p className={styles.my_time_min}>0분</p>
-                                    <p className={styles.my_time_min2}>{운동데이터.criteriaTime}분</p>
+                                    <p className={styles.my_time_min2}>{criteriaData.exerciseMinute}분</p>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +205,7 @@ const Main = function(){
                                 </div>
                                 <div className={styles.my_walk_number_base}>
                                     <p className={styles.my_walk_min}>0보</p>
-                                    <p className={styles.my_walk_min2}>{운동데이터.criteriaSteps}보</p>
+                                    <p className={styles.my_walk_min2}>{criteriaData.steps}보</p>
                                 </div>
                             </div>
                         </div>
@@ -296,8 +295,8 @@ const Main = function(){
                         <div className={styles.galli_expanded} style={{height: 240 * galliList.length, overflow: !expanded && 'scroll'}}>
                         {galliList.map((data, index) => {
                             return(
-                                <div key={index} className={styles.my_galli_list_container} onClick={()=>moveToGalliPage(data.memberId)}>
-                                    <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
+                                <div key={index} className={styles.my_galli_list_container}>
+                                    <p className={styles.galli_goal_title} onClick={()=>moveToGalliPage(data.memberId)}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
                                     <div className={styles.galli_time_progress_container}>
                                         {data.requestedTime == null ? <p>등록한 미션이 없습니다...</p> :<div className={styles.galli_time_progress_base}>
                                             <div className={styles.galli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>

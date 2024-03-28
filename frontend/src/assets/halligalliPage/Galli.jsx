@@ -32,7 +32,7 @@ const Galli = function(){
                     <p className={styles.profile_name_txt}>{galleyInfo.nickname}</p>
                 </div>
                 <div className={styles.mission_container}>
-                    <p className={styles.mission_title}><span style={{color: "#186647", fontFamily: "bc_b"}}>{galleyInfo.nickname}</span>님이 등록한 미션</p>
+                    <p className={styles.mission_title}>내가 건 미션</p>
                     
                     <div className={styles.mission_back}>
                         { galleyInfo.requestedTime != -1 ?
