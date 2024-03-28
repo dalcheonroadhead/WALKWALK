@@ -5,21 +5,29 @@ import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
 import { getGalleyList, getHalleyList, postGalleyRequest } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
-import Sidebar from "../common/sidebar/Sidebar";
+import {updateGoogleToken} from "../../apis/member";
+import {getRealtimeExerciseData} from "../../apis/exercise";
 
 const Main = function(){
 
     useEffect(()=>{
-        getHalleyList().then((res)=>{
-            if(res){
-                // setHalliList(getHalleyListResponse);
-                setHalli(true);
-            }
-            else{
-                setHalliList([])
-                setHalli(false);
-            }
-        })
+        getHalleyList()
+            .then((res)=>{
+                if(res){
+                    // setHalliList(getHalleyListResponse);
+                    setHalli(true);
+                }
+                else{
+                    setHalliList([])
+                    setHalli(false);
+                }
+            })
+
+        getRealtimeExerciseData()
+            .then((res)=>{
+              setRealtimeExerciseData(res);
+              console.log(res)
+            })
     }, [])
 
     const navigate = useNavigate();
@@ -56,6 +64,7 @@ const Main = function(){
     const [memberList, setMemberList] = useState([]);
     const [galliList, setGalliList] = useState([]);
     const [halliList, setHalliList] = useState([]);
+    const [realtimeExerciseData, setRealtimeExerciseData] = useState({});
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
@@ -103,20 +112,16 @@ const Main = function(){
     // 나 모달
     const 운동데이터 = {
         criteriaTime: 120,       // 기준 운동시간
-        currentTime: 100,        // 오늘 운동시간
         criteriaSteps: 6000,    // 기준 걸음수
-        currentSteps: 5000,     // 오늘 걸음수
-        
-        
     };
     const 프로그래스바 = {
-        calculatedTime: 운동데이터.currentTime/운동데이터.criteriaTime*320 < 70 ? 70 : 운동데이터.currentTime/운동데이터.criteriaTime*320,
-        calculatedSteps: 운동데이터.currentSteps/운동데이터.criteriaSteps*320 < 90 ? 90 : 운동데이터.currentSteps/운동데이터.criteriaSteps*320,
+        calculatedTime: realtimeExerciseData.time/운동데이터.criteriaTime*320 < 70 ? 70 : realtimeExerciseData.time/운동데이터.criteriaTime*320,
+        calculatedSteps: realtimeExerciseData.steps/운동데이터.criteriaSteps*320 < 90 ? 90 : realtimeExerciseData.steps/운동데이터.criteriaSteps*320,
     }
 
     const 프로그래스바2 = {
-        calculatedTime: 운동데이터.currentTime/운동데이터.criteriaTime*300 < 70 ? 70 : 운동데이터.currentTime/운동데이터.criteriaTime*300,
-        calculatedSteps: 운동데이터.currentSteps/운동데이터.criteriaSteps*300 < 90 ? 90 : 운동데이터.currentSteps/운동데이터.criteriaSteps*300,
+        calculatedTime: realtimeExerciseData.time/운동데이터.criteriaTime*300 < 70 ? 70 : realtimeExerciseData.time/운동데이터.criteriaTime*300,
+        calculatedSteps: realtimeExerciseData.steps/운동데이터.criteriaSteps*300 < 90 ? 90 : realtimeExerciseData.steps/운동데이터.criteriaSteps*300,
     }
     
 
@@ -197,7 +202,7 @@ const Main = function(){
                             <div className={styles.my_time_progress_base}>
                                 <div className={styles.my_time_progress_move} style={{width: 프로그래스바.calculatedTime > 320 ? 320 : 프로그래스바.calculatedTime}}></div>
                                 <div className={styles.my_time_ori_container} style={{width: 프로그래스바.calculatedTime > 320 ? 320 : 프로그래스바.calculatedTime}}>
-                                    <p className={styles.my_time_mine} style={{color: 프로그래스바.calculatedTime > 320 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
+                                    <p className={styles.my_time_mine} style={{color: 프로그래스바.calculatedTime > 320 ? 'red' : 'white'}}>{realtimeExerciseData.time}분</p>
                                     <img src={프로그래스바.calculatedTime > 320 ? "/imgs/ch1_bol_samerun.gif" : "/imgs/ch1_bol_samewalk.gif"} alt="제자리걸음 오리" className={styles.ch1_2}></img>
                                 </div>
                                 <div className={styles.my_time_number_base}>
@@ -214,7 +219,7 @@ const Main = function(){
                             <div className={styles.my_walk_progress_base}>
                                 <div className={styles.my_walk_progress_move} style={{width: 프로그래스바.calculatedSteps > 320 ? 320 : 프로그래스바.calculatedSteps}}></div>
                                 <div className={styles.my_walk_ori_container} style={{width: 프로그래스바.calculatedSteps > 320 ? 320 : 프로그래스바.calculatedSteps}}>
-                                    <p className={styles.my_walk_mine} style={{color: 프로그래스바.calculatedSteps > 320 ? 'red' : 'white'}}>{운동데이터.currentSteps}보</p>
+                                    <p className={styles.my_walk_mine} style={{color: 프로그래스바.calculatedSteps > 320 ? 'red' : 'white'}}>{realtimeExerciseData.steps}보</p>
                                     <img src={프로그래스바.calculatedSteps > 320 ? "/imgs/ch1_bol_samerun.gif" : "/imgs/ch1_bol_samewalk.gif"} alt="제자리걸음 오리" className={styles.ch1_2}></img>
                                 </div>
                                 <div className={styles.my_walk_number_base}>

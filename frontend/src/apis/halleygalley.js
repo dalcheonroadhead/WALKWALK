@@ -5,7 +5,6 @@ export const getGalleyList = async () => {
     
     return await instance.get(url)
         .then((res) => {
-            console.log(res.data.data)
             if(res.data.data.length != 0){
                 let data = [];
                 res.data.data.forEach(element => {
@@ -27,8 +26,6 @@ export const getHalleyList = async () => {
     
     return await instance.get(url)
         .then((res) => {
-            console.log('test2', res.data)
-            console.log('type2 : ', typeof(res.data.data)) // object
             if(res.data.data.requestContent.length != 0){
                 return res.data.data.requestContent;
             }
@@ -42,8 +39,6 @@ export const getHalleyReauestList = async () => {
     
     return await instance.get(url)
         .then((res) => {
-            console.log('test2', res.data)
-            console.log('type2 : ', typeof(res.data.data)) // object
             if(res.data.data.length != 0){
                 return res.data.data;
             }
@@ -57,7 +52,6 @@ export const postGalleyRequest = async (request) => {
 
     return await instance.post(url, request)
         .then((res) => {
-            console.log('postGalleyRequest: ', res.data.msg)
             alert(res.data.msg);
         })
         .catch(err => console.log(err))
