@@ -1,59 +1,59 @@
 .tool_container{
-    /* position: fixed; */
     display: flex;
-    /* top: 3.5%; */
-    /* left: 50%; */
-    /* transform: translate(-50%, -50%); */
-    z-index: 5;
-    width: 412px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
     height: 4rem;
+    width: 100%;
+    max-width: 412px;
+    margin: 0 auto;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     background: white;
-
 }
 
-.all_money_container{
+.tool_all_money_container{
     width: 5.5rem;
     height: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-left: 54%;
     margin-top: 1rem;
 }
 
-.egg_container{
+.tool_egg_container{
     width: 5.5rem;
     height: 1.5rem;
     display: flex;
     align-items: center;
 }
 
-.egg{
+.tool_egg{
     height: 1.1rem;
     width: auto;
 }
 
-.egg_txt{
+.tool_egg_txt{
     font-size: 1rem;
     margin-left: 8.5%;
 }
 
-.money_container{
+.tool_money_container{
     width: 5.5rem;
     height: 1.5rem;
     display: flex;
     align-items: center;
 }
 
-.money{
+.tool_money{
     height: 1.1rem;
     width: auto;
 }
 
-.money_txt{
+.tool_money_txt{
     font-size: 1rem;
     margin-left: 5%;
 }
@@ -62,4 +62,290 @@
     margin-top: 1rem;
     height: 3.5rem;
     width: auto;
+    margin-right: 1.5rem;
+}
+
+
+
+.sidebar_container{
+    background-color: rgba(0, 0,0,0);
+    height: 100vh;
+    width: 70vw;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    position: absolute;
+    transition: 0.5s all;
+    z-index: 7;
+    background-color:  #FFFBF3;
+    transform: translateX(-21.8rem);
+}
+
+.sidebar_container_opened{
+    border-top-right-radius: 1.2rem;
+    border-bottom-right-radius: 1.2rem;
+    transform: translateX(-3.9rem);
+    z-index: 10;
+}
+.tool_hamburger_container{
+    display: flex;
+    flex-direction: column;
+    transition: 0.01s all;
+    margin-top: 1rem;
+    margin-right: 11rem;
+}
+
+.tool_hamburger{
+    width: 2.3rem;
+    height: 0.1rem;
+    border: 2px solid black;
+    background-color: black;
+    margin: 0.2rem;
+    transition: 0.01s all;
+}
+
+.change_opacity_0{
+    transition: 0.01s all;
+    opacity: 0;
+}
+.change_opacity_1{
+    transition: 5s all;
+    opacity: 1;
+}
+
+.hamburger_container{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin: 1.4rem;
+    transition: 0.5s all;
+}
+.hamburger_container_opened{
+    transition: 0.5s all;
+}
+.hamburger{
+    width: 2.3rem;
+    height: 0.1rem;
+    border: 2px solid black;
+    background-color: black;
+    margin: 0.2rem;
+    transition: 0.5s all;
+    border-radius: 1rem;
+}
+
+.hamburger_1_opened{
+    transform: translateY(0.5rem) rotate(-45deg);
+    transition: 0.5s all;
+}
+.hamburger_2_opened{
+    opacity: 0;
+    transition: 0.1s all;
+}
+.hamburger_3_opened{
+    transform: translateY(-0.9rem) rotate(45deg) ;
+    transition: 0.5s all;
+}
+
+.profile_container{
+    width: 100%;
+    height: 18rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile_img_container{
+    width: 100%;
+    height: 8rem;
+    border-radius: 20rem;
+    display: flex;
+    align-items: center;
+}
+
+.profile_img{
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 20rem;
+    margin-left: 5%;
+    margin-top: 24%;
+}
+
+.profile_detail_container{
+    width: 11rem;
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15%;
+}
+
+.profile_name{
+    font-size: 1.25rem;
+    font-family: "bc_b";
+    margin-top: -15%;
+    position: fixed;
+}
+
+.profile_intro{
+    width: 11rem;
+    height: 5rem;
+    font-size: 1rem;
+    margin-top: 30%;
+    top: 50;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    font-family: "bc_l";
+    margin-left: 0.8rem;
+}
+
+
+.all_money_container{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5rem;
+    margin-left: 15%;
+}
+
+.egg_container{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.egg{
+    height: 2rem;
+    width: auto;
+}
+
+.egg_txt{
+    font-size: 1.2rem;
+    margin-left: 8.5%;
+}
+
+.money_container{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.money{
+    height: 2rem;
+    width: auto;
+}
+
+.money_txt{
+    font-size: 1.2rem;
+    margin-left: 6.5%;
+}
+
+.bar{
+    width: 100%;
+    height: 0.5rem;
+    border-radius: 1rem;
+    background: #E4DDC6;
+}
+
+.page_container{
+    width: 100%;
+    height: 30rem;
+}
+
+.report_container{
+    width: 100%;
+    height: 4rem;
+    margin-top: 10%;
+    display: flex;
+    align-items: center;
+}
+
+.report_icon{
+    height: 2rem;
+    width: auto;
+    margin-left: 7%;
+}
+
+.report_txt{
+    font-size: 1.2rem;
+    margin-left: 7%;
+}
+
+.yesterday_container{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+}
+
+.yesterday_icon{
+    height: 2rem;
+    width: auto;
+    margin-left: 7%;
+}
+
+.yesterday_txt{
+    font-size: 1.2rem;
+    margin-left: 7%;
+}
+
+.treasure_container{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+}
+
+.treasure_icon{
+    height: 2rem;
+    width: auto;
+    margin-left: 7%;
+}
+
+.treasure_txt{
+    font-size: 1.2rem;
+    margin-left: 7%;
+}
+
+.voice_container{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+}
+
+.voice_icon{
+    height: 2rem;
+    width: auto;
+    margin-left: 7%;
+}
+
+.voice_txt{
+    font-size: 1.2rem;
+    margin-left: 7%;
+}
+
+.store_container{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+}
+
+.store_icon{
+    height: 2.5rem;
+    width: auto;
+    margin-left: 5.5%;
+}
+
+.store_txt{
+    font-size: 1.2rem;
+    margin-left: 6%;
 }

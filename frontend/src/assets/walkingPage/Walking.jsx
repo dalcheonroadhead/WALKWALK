@@ -1,4 +1,3 @@
-import Sidebar from "../common/sidebar/Sidebar";
 import styles from "./Walking.module.css"
 
 const Walking = function(){
