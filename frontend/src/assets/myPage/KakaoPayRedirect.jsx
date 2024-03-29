@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from "./KakaoPayRedirect.module.css";
 import { approveMoneyCharge } from "../../apis/wallet";
 import useWalletStore from "../../stores/wallet";
+import Loading from "../common/loading/Loading";
 
 const KakaoPayRedirect = function () {
   const navigate = useNavigate();
@@ -41,10 +42,7 @@ const KakaoPayRedirect = function () {
   }, [])
   
   return (
-    <div className={styles.kakaopay_redirect_container}>
-      <img className={styles.kakaopay_loading_img} src="/imgs/ch1_bol_normal_run.gif" alt="loading" />
-      <div className={styles.kakaopay_loading_txt} >결제 중...</div>
-    </div>
+    <Loading text='결제 중...'></Loading>
   )
 }
 
