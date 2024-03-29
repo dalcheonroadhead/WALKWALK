@@ -18,7 +18,7 @@ import Treasure from "./assets/treasurePage/Treasure";
 import Voice from "./assets/voicePage/Voice";
 import Store from "./assets/storePage/Store";
 import KakaoPayRedirect from "./assets/myPage/KakaoPayRedirect";
-// import './App.css'
+import './App.css'
 import Galli from "./assets/halligalliPage/Galli";
 import SocketPage4Member from "./assets/exercisePage/SocketPage4Member"; 
 import MyBadege from "./assets/myPage/MyBadge";
