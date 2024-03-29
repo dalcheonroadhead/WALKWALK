@@ -86,10 +86,10 @@ const AudioRecord = () => {
   }, [audioUrl]);
 
   return (
-    <>
-      <button onClick={onRec ? onRecAudio : offRecAudio}>녹음</button>
-      <button onClick={onSubmitAudioFile}>결과 확인</button>
-    </>
+    <div style={{display: "flex", flexDirection: "column"}}>
+      <button className="btn glass" onClick={onRec ? onRecAudio : offRecAudio}> 웹 녹음</button>
+      <button className="btn glass" onClick={onSubmitAudioFile}>보내기</button>
+    </div>
   );
 };
 

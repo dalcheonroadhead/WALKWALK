@@ -7,7 +7,7 @@ import SockJS from "sockjs-client/dist/sockjs";
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
 import AudioRecord from './AudioRecord';
-import { instance } from "../../apis/axiosModule";
+import './FileUploader.module.css';
 import axios from 'axios';
 
 let stompClient;
@@ -138,7 +138,7 @@ const SocketPage4Member = () => {
 
   // B-3 페이지 오너 정보 가져오기 
   const getPageOwner = async () =>{
-    axios.get("https://j10d210.p.ssafy.io/api/members/1", clientHeader)
+    axios.get(`https://j10d210.p.ssafy.io/api/members/${pageOwnerId}`, clientHeader)
     .then((res)=> {
       console.log(res.data.data)
      setPageOwner({...res.data.data});
@@ -214,7 +214,7 @@ const SocketPage4Member = () => {
     <div className="chat"
         ref={chatContainerRef}>
       <div className="chat-box">
-        <div style={{fontWeight: 'bold', alignSelf: 'center'}}> 🏃 {currentMember.member_nickname} 🤸님의 방</div> 
+        <div style={{fontWeight: 'bold', alignSelf: 'center'}}> 🏃{pageOwner.nickname}🤸님 응원하기</div> 
 
         {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
         <MessageList
@@ -224,8 +224,10 @@ const SocketPage4Member = () => {
           pageOwnerId={pageOwnerId}
         />
         {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
-        <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
-        <AudioRecord/>
+        <div style={{display: 'flex'}}>
+          <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
+          <AudioRecord/>
+        </div>
         <MessageForm onSendMessage={handleSendMessage} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
       </div>
     </div>
@@ -289,11 +291,12 @@ const FileUploader = ({currentMember, pageOwnerId, clientHeader}) => {
    };
 
  return(
-   <div className="button" style={{display: "inline"}}>
-     <input type='file' onChange={handleFileChange}/>
-   </div>
+   <form style={{display: 'flex', flexDirection: 'row'}}>
+    <label className='btn glass' htmlFor="file-input">녹음하기</label>
+     <input id='file-input' type='file' onChange={handleFileChange}/>
+   </form>
  )
-
 }
+
 
 export default SocketPage4Member;
