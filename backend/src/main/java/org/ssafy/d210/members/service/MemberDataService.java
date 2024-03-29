@@ -32,6 +32,7 @@ import org.ssafy.d210.members.repository.BadgeRepository;
 import org.ssafy.d210.members.repository.MemberBadgeRepository;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.repository.VoiceMessageRepository;
+import org.ssafy.d210.walk.service.ExerciseCriteriaService;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
@@ -48,6 +49,7 @@ public class MemberDataService {
     private final MemberAccountRepository memberAccountRepository;
     private final VoiceMessageRepository voiceMessageRepository;
     private final BadgeRepository badgeRepository;
+    private final ExerciseCriteriaService exerciseCriteriaService;
     private final GrtRepository grtRepository;
     private final GatRepository gatRepository;
 
@@ -93,6 +95,7 @@ public class MemberDataService {
                 member = addInfo.toEntity(member, member.getMemberAccountId());
             }
 
+            exerciseCriteriaService.setDefaultExerciseCriteria(member);
 
 
        }
