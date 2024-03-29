@@ -37,6 +37,9 @@ public class SecurityConfig {
     private final AccessDeniedHandler accessDeniedHandler;
     private final JwtUtil jwtUtil;
 
+    private final String [] whiteList = {"/api/**", "/ws-stomp/**", "/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**"
+    ,"/oauth2/**", "/error"};
+
 
     @Bean
     // 1. 비밀번호를 안전하게 저장할 수 있도록 비밀번호의 단방향 암호화를 지원하는 인터페이스
@@ -87,18 +90,15 @@ public class SecurityConfig {
                                 auth
                                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                                         .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
-                                        .requestMatchers("/api/**").permitAll()
-                                        .requestMatchers("/ws-stomp/**").permitAll()
-                                        .requestMatchers("/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**" ).permitAll()
-//                                        .requestMatchers("/api/oauth/authorize").permitAll()
-                                        .requestMatchers("/oauth2/**").permitAll() //모든 소셜 로그인 후 인가코드 Redirect URL는 다음과 같이 설정
-//                                        .requestMatchers("/api/hello").permitAll()
+
+                                        .requestMatchers(whiteList).permitAll()
+//                                      .requestMatchers("/api/oauth/authorize").permitAll()
                                         .anyRequest().authenticated()
 
                 )
-//                .exceptionHandling(authentication ->        // 7)
-//                        authentication.authenticationEntryPoint(authenticationEntryPoint)
-//                                .accessDeniedHandler(accessDeniedHandler))
+                   .exceptionHandling(authentication ->        // 7)
+                           authentication.authenticationEntryPoint(authenticationEntryPoint)
+                                  .accessDeniedHandler(accessDeniedHandler))
 
                 // 8)
                 .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

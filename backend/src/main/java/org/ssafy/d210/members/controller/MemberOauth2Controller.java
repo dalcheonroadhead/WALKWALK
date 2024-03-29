@@ -27,6 +27,7 @@ import org.ssafy.d210.members.service.MemberService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @RestController
@@ -102,7 +103,13 @@ public class MemberOauth2Controller {
         ret.put("Authorization", jwtAccessToken);
         ret.put("Refresh_Token", jwtRefreshToken);
         ret.put("Google_access_token", gti.getAccess_token());
-        ret.put("Google_refresh_token",gti.getRefresh_token());
+
+        if(grt.getRefresh_token() == null){
+            ret.put("Google_refresh_token", Objects.requireNonNull(grtRepository.findById(Long.parseLong(memberId)).orElse(null)).getRefreshToken());
+        }else{
+            ret.put("Google_refresh_token",gti.getRefresh_token());
+        }
+
         ret.put("member_id", memberId);
         ret.put("member_nickname", memberNickname);
         ret.put("member_profile_url",memberProfileUrl);
