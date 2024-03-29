@@ -8,7 +8,6 @@ const Layout = function () {
   return(
     <div className={styles.layoutContainer}>
       <Toolbar></Toolbar>
-      <Sidebar/>
       <div className={styles.content}><Outlet /></div>
       <Navbar></Navbar>
     </div>
