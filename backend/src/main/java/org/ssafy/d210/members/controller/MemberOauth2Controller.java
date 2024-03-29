@@ -103,20 +103,15 @@ public class MemberOauth2Controller {
         ret.put("Authorization", jwtAccessToken);
         ret.put("Refresh_Token", jwtRefreshToken);
         ret.put("Google_access_token", gti.getAccess_token());
-
-        if(grt.getRefresh_token() == null){
-            ret.put("Google_refresh_token", Objects.requireNonNull(grtRepository.findById(Long.parseLong(memberId)).orElse(null)).getRefreshToken());
-        }else{
-            ret.put("Google_refresh_token",gti.getRefresh_token());
-        }
-
         ret.put("member_id", memberId);
         ret.put("member_nickname", memberNickname);
         ret.put("member_profile_url",memberProfileUrl);
 
 
         if(gti.getRefresh_token() == null){
-            ret.put("Google_refresh_token", grt.getRefresh_token());
+            ret.put("Google_refresh_token", Objects.requireNonNull(grtRepository.findById(Long.parseLong(memberId)).orElse(null)).getRefreshToken());
+        }else{
+            ret.put("Google_refresh_token",gti.getRefresh_token());
         }
 
         return ResponseUtils.ok(ret, MsgType.GENERATE_TOKEN_SUCCESSFULLY);
