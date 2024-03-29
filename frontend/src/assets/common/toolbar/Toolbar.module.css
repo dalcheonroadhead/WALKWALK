@@ -1,16 +1,17 @@
 .tool_container{
-    /* position: fixed; */
     display: flex;
-    /* top: 3.5%; */
-    /* left: 50%; */
-    /* transform: translate(-50%, -50%); */
-    z-index: 5;
-    width: 412px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
     height: 4rem;
+    width: 100%;
+    max-width: 412px;
+    margin: 0 auto;
     align-items: center;
     justify-content: center;
     background: white;
-
 }
 
 .all_money_container{
