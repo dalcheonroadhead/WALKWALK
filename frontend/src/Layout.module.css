@@ -1,8 +1,9 @@
 .layoutContainer {
-  width: 100vw;
+  width: 100%;
 }
 
 .content {
+  width: 100%;
   height: auto;
   padding-top: 4.5rem;
   padding-bottom: 4.5rem;
