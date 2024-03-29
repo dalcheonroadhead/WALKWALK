@@ -1,7 +1,7 @@
 .mywallet_container {
   position: relative;
-  width: 100%;
   height: 100%;
+  border: 2px solid red;
 }
 
 .mywallet_top_bar {
@@ -10,20 +10,21 @@
   align-items: center;
   position: relative;
   height: 5rem;
-  width: 100dvw;
 }
 
 .mywallet_back_direct {
   position: absolute;
-  left: 1rem;
+  left: 0.5rem;
   transform: rotate(180deg);
   width: 2rem;
 }
 
 .mywallet_title {
   font-size: 2rem;
+  line-height: 1;
 }
 
+/* 여기부터 수정하기 */
 .mywallet_sub_container {
   margin: 1rem 1.5rem;
 }

@@ -32,8 +32,8 @@ const MyWallet = function () {
 
   const isMobile = () => {
     // 터치 이벤트 지원 여부 및 화면 크기를 통한 모바일 환경 판별
-    return navigator.maxTouchPoints > 1 ;
-    // return ('ontouchstart' in window || navigator.maxTouchPoints > 1 ) && window.innerWidth <= 800;
+    return navigator.maxTouchPoints > 0 ;
+    // return ('ontouchstart' in window || navigator.maxTouchPoints > 1 );
   }
 
   const submitMoneyCharge = async () => {
