@@ -9,23 +9,23 @@ const Login = function () {
     window.location.href = AUTH_URL
   }
 
-  useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const appUrl = ''; // 앱 URL 스키마
-    const androidStoreUrl = 'https://play.google.com/store/apps/details?id=com.google.android.apps.fitness'; // 앱 스토어 URL
-    const appleStoreUrl = 'https://apps.apple.com/kr/app/google-%ED%94%BC%ED%8A%B8%EB%8B%88%EC%8A%A4-%ED%99%9C%EB%8F%99-%EC%B6%94%EC%A0%81%EA%B8%B0/id1433864494'; // 앱 스토어 URL
+  // useEffect(() => {
+  //   const userAgent = navigator.userAgent.toLowerCase();
+  //   const appUrl = ''; // 앱 URL 스키마
+  //   const androidStoreUrl = 'https://play.google.com/store/apps/details?id=com.google.android.apps.fitness'; // 앱 스토어 URL
+  //   const appleStoreUrl = 'https://apps.apple.com/kr/app/google-%ED%94%BC%ED%8A%B8%EB%8B%88%EC%8A%A4-%ED%99%9C%EB%8F%99-%EC%B6%94%EC%A0%81%EA%B8%B0/id1433864494'; // 앱 스토어 URL
 
-    if (/iphone|ipad|ipod/.test(userAgent)) {
-      // iOS에서 실행 중
-      alert('ios', navigator.userAgent)
-    } else if (/android/.test(userAgent)) {
-      // 안드로이드에서 실행 중
-      alert('android', navigator.userAgent)
-    } else {
-      // 모바일 기기가 아닌 경우
-      alert('not mobile', navigator.userAgent)
-    }
-  }, []);
+  //   if (/iphone|ipad|ipod/.test(userAgent)) {
+  //     // iOS에서 실행 중
+  //     alert('ios', navigator.userAgent)
+  //   } else if (/android/.test(userAgent)) {
+  //     // 안드로이드에서 실행 중
+  //     alert('android', navigator.userAgent)
+  //   } else {
+  //     // 모바일 기기가 아닌 경우
+  //     alert('not mobile', navigator.userAgent)
+  //   }
+  // }, []);
   
   return (
     <div className={styles.login_container}>
