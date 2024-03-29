@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./UserInfoUpdate.module.css";
-import { getMyInfo } from "../../apis/member";
+import { getMyInfo, updateMyInfo } from "../../apis/member";
 
 const UserInfoUpdate = function () {
   const navigate = useNavigate();
