@@ -52,6 +52,7 @@ const AudioRecord = () => {
       };
     });
   };
+  
 
   // 사용자가 음성 녹음을 중지했을 때
   const offRecAudio = () => {

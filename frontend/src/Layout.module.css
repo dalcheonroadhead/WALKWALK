@@ -1,11 +1,26 @@
 .layoutContainer {
-  width: 100vw;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.toolBar {
+  display: fixed;
+  top: 0;
+  margin: 0 auto;
+  display: flex;
+
+}
+
+.navBar {
+  display: fixed;
+  bottom: 0;
+  display: flex;
 }
 
 .content {
-  height: auto;
-  padding-top: 4.5rem;
-  padding-bottom: 4.5rem;
-  margin: 0 auto;
-  overflow-y: auto;
+  width: 100%;
+  padding: 4.5rem auto;
 }
