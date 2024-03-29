@@ -71,10 +71,12 @@
     background-color: rgba(0, 0,0,0);
     height: 100vh;
     width: 70vw;
+    max-width: 288.4px;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
-    position: absolute;
-    transition: 0.5s all;
+    position: fixed;
+    transition: 0.5s transform, 2s opacity;
+    opacity: 0;
     z-index: 7;
     background-color:  #FFFBF3;
     transform: translateX(-21.8rem);
@@ -85,6 +87,8 @@
     border-bottom-right-radius: 1.2rem;
     transform: translateX(-3.9rem);
     z-index: 10;
+    opacity: 1;
+    transition: 0.5s all;
 }
 .tool_hamburger_container{
     display: flex;
@@ -100,7 +104,7 @@
     border: 2px solid black;
     background-color: black;
     margin: 0.2rem;
-    transition: 0.01s all;
+    transition: 1s all;
 }
 
 .change_opacity_0{
@@ -117,10 +121,10 @@
     flex-direction: column;
     align-items: end;
     margin: 1.4rem;
-    transition: 0.5s all;
+    transition: 1s all;
 }
 .hamburger_container_opened{
-    transition: 0.5s all;
+    transition: 1s all;
 }
 .hamburger{
     width: 2.3rem;
@@ -128,21 +132,22 @@
     border: 2px solid black;
     background-color: black;
     margin: 0.2rem;
-    transition: 0.5s all;
+    transition: 1s all;
     border-radius: 1rem;
 }
 
 .hamburger_1_opened{
     transform: translateY(0.5rem) rotate(-45deg);
-    transition: 0.5s all;
+    transition: 1s all;
+    transition: 1s all;
 }
 .hamburger_2_opened{
     opacity: 0;
-    transition: 0.1s all;
+    transition: 1s all;
 }
 .hamburger_3_opened{
     transform: translateY(-0.9rem) rotate(45deg) ;
-    transition: 0.5s all;
+    transition: 1s all;
 }
 
 .profile_container{
