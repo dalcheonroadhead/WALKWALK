@@ -14,6 +14,7 @@ const UserInfoUpdate = function () {
       try {
         const data = await getMyInfo();
         setNewInfo(data);
+        console.log('myInfo : ', myInfo)
       } catch (err) {
         console.error('userInfo 정보를 가져오는 중 에러 발생:', err);
       }
@@ -30,7 +31,7 @@ const UserInfoUpdate = function () {
 
   return(
     <div className={styles.userinfoupdate_container}>
-      {myInfo && (
+      {newInfo && (
         <>
           <div className={styles.userinfoupdate_top_bar}>
             <img className={styles.userinfoupdate_back_direct} src="/imgs/direct.png" alt="back_direct" onClick={() => {navigate('/mypage')}}/>
