@@ -11,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.ssafy.d210.items.entity.ItemsType;
+import org.ssafy.d210.items.entity.MemberItemHistory;
+import org.ssafy.d210.items.repository.MemberItemHistoryRepository;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
@@ -21,6 +24,8 @@ import org.ssafy.d210.walk.repository.ExerciseRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
@@ -32,8 +37,7 @@ public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
     private final ExerciseCriteriaService exerciseCriteriaService;
-    private final MembersRepository membersRepository;
-    private final MemberDataService memberDataService;
+    private final MemberItemHistoryRepository memberItemHistoryRepository;
 
 
     // db에 저장된 마지막 날짜
@@ -158,7 +162,8 @@ public class ExerciseService {
     public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member) {
         Exercise exercise = new Exercise();
         exercise.setMember(member);
-        exercise.setExerciseDay(LocalDate.now().minusDays(1)); // 어제 날짜로 설정
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        exercise.setExerciseDay(yesterday); // 어제 날짜로 설정
 
         for (FitnessResponse.Bucket bucket : fitnessResponse.getBucket()) {
             for (FitnessResponse.DataSet dataSet : bucket.getDataset()) {
@@ -185,8 +190,12 @@ public class ExerciseService {
         }
 
         MainCriteriaResponseDto criteria = exerciseCriteriaService.findMyCriteria(member);
-//        System.out.println("criteria : " + criteria.getExerciseMinute());
-        if (criteria.getExerciseMinute() <= exercise.getExerciseMinute()) {
+
+        LocalDateTime startOfYesterday = yesterday.atStartOfDay();
+        LocalDateTime endOfYesterday = yesterday.atTime(LocalTime.MAX);
+        Optional<MemberItemHistory> memberItemHistory = memberItemHistoryRepository.findFirstByMemberAndCreatedAtBetweenAndItemType(member, startOfYesterday, endOfYesterday, ItemsType.STREAK);
+
+        if (criteria.getExerciseMinute() <= exercise.getExerciseMinute() || memberItemHistory.isPresent()) {
             exercise.setIsAchieved(true);
             Optional<Exercise> lastExercise = exerciseRepository.findExerciseByMemberAndExerciseDay(member, LocalDate.now().minusDays(2));
             lastExercise.ifPresentOrElse(
@@ -200,7 +209,5 @@ public class ExerciseService {
 
         return exerciseRepository.save(exercise);
     }
-
-
 
 }
