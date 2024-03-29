@@ -1,0 +1,23 @@
+.mybadge_container {
+  height: 100%;
+}
+
+.mybadge_top_bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 5rem;
+}
+
+.mybadge_back_direct {
+  position: absolute;
+  left: 0.5rem;
+  transform: rotate(180deg);
+  width: 2rem;
+}
+
+.mybadge_title {
+  font-size: 2rem;
+  line-height: 1;
+}
