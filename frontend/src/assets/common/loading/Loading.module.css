@@ -4,16 +4,16 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  transform: translateY(-3rem);
+  border: 2px solid red;
 }
 
 .loading_img {
   width: 80%;
   max-width: 25rem;
-  transform: translateX(-1.5rem);
+  transform: translate(-1.5rem, -3rem);
 }
 
 .loading_txt {
   font-size: xx-large;
-  transform: translateY(-3rem);
+  transform: translateY(-6rem);
 }
