@@ -7,6 +7,7 @@ import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.friends.dto.request.PostFriendRequest;
+import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
 import org.ssafy.d210.friends.dto.request.PutFriendRequest;
 import org.ssafy.d210.friends.service.FriendService;
 
@@ -35,5 +36,15 @@ public class FriendController {
     @PutMapping("/response")
     public ApiResponseDto<?> putFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PutFriendRequest request){
         return ApiResponseDto.of(MsgType.PUT_FRIEND_REQUEST_SUCCESSFULLY, friendService.putFriend(userDetails.getMember(), request));
+    }
+
+    @PostMapping("/search")
+    public ApiResponseDto<?> searchMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostSearchMemberListRequest request){
+        return ApiResponseDto.of(MsgType.POST_MEMBER_LIST_SUCCESSFULLY, friendService.getSearchedMemberList(userDetails.getMember(), request));
+    }
+
+    @PostMapping("/search-galley")
+    public ApiResponseDto<?> searchGalleyMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostSearchMemberListRequest request){
+        return ApiResponseDto.of(MsgType.POST_MEMBER_LIST_SUCCESSFULLY, friendService.getSearchedGalleyMemberList(userDetails.getMember(), request));
     }
 }

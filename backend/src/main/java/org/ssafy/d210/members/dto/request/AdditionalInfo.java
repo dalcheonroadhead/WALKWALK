@@ -24,27 +24,26 @@ public class AdditionalInfo {
     String gender;
 
     @NotNull
-    Long height;
+    Double height;
 
     @NotNull
-    Long weight;
+    Double weight;
 
     @NotNull
     @Size(min = 1, max = 500)
     String location;
 
     @NotNull
-    Double longitude;
+    double longitude;
 
     @NotNull
-    Double latitude;
+    double latitude;
 
 
     @NotNull
     Long birthYear;
 
     @NotNull
-    @Size(min = 1)
     String comment;
 
     @NotBlank

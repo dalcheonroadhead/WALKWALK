@@ -52,11 +52,11 @@ public class HalleyGalleyController {
 
     @GetMapping("/halley")
     public ApiResponseDto<?> getGalley(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Long memberId){
-        return ApiResponseDto.of(MsgType.GET_GALLEY_SUCCESSFULLY, halleyGalleyService.getHalley(userDetails.getMember(), memberId));
+        return ApiResponseDto.of(MsgType.GET_HALLEY_SUCCESSFULLY, halleyGalleyService.getHalley(userDetails.getMember(), memberId));
     }
 
     @GetMapping("/galley")
     public ApiResponseDto<?> getHalley(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Long memberId){
-        return ApiResponseDto.of(MsgType.GET_HALLEY_SUCCESSFULLY, halleyGalleyService.getGalley(userDetails.getMember(), memberId));
+        return ApiResponseDto.of(MsgType.GET_GALLEY_SUCCESSFULLY, halleyGalleyService.getGalley(userDetails.getMember(), memberId));
     }
 }
