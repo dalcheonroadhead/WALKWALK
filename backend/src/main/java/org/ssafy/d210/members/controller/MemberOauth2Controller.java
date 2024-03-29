@@ -114,6 +114,9 @@ public class MemberOauth2Controller {
             ret.put("Google_refresh_token",gti.getRefresh_token());
         }
 
+        log.info("입력으로 들어온 GRT가 NULL 인가요? {}", gti.getRefresh_token() == null);
+        log.info("Response Body의 내용 {}", ret.values());
+
         return ResponseUtils.ok(ret, MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }
 }
