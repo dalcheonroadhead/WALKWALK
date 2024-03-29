@@ -1,5 +1,6 @@
 package org.ssafy.d210._common.config;
 
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -84,6 +85,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) ->
                                 auth
+                                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                                        .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                                         .requestMatchers("/api/**").permitAll()
                                         .requestMatchers("/ws-stomp/**").permitAll()
                                         .requestMatchers("/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**" ).permitAll()
@@ -97,8 +100,8 @@ public class SecurityConfig {
 //                        authentication.authenticationEntryPoint(authenticationEntryPoint)
 //                                .accessDeniedHandler(accessDeniedHandler))
 
-                                                            // 8)
-               .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                // 8)
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 

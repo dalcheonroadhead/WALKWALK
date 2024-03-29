@@ -61,10 +61,10 @@ public class Members extends BaseTime {
     private GenderType gender;
 
     @Column(name = "height")
-    private double height;
+    private Double height;
 
     @Column(name = "weight")
-    private double weight;
+    private Double weight;
 
     @Column(name = "location", length = 500)
     private String location;
