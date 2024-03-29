@@ -7,10 +7,10 @@ import styles from "./Layout.module.css"
 const Layout = function () {
   return(
     <div className={styles.layoutContainer}>
-      <Toolbar className={styles.toolBar}></Toolbar>
+      <Toolbar></Toolbar>
       <Sidebar/>
       <div className={styles.content}><Outlet /></div>
-      <Navbar className={styles.navBar}></Navbar>
+      <Navbar></Navbar>
     </div>
   )
 }

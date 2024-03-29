@@ -1,26 +1,13 @@
 .layoutContainer {
-  width: 100%;
+  min-width: 412px;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 auto;
-}
-
-.toolBar {
-  display: fixed;
-  top: 0;
-  margin: 0 auto;
-  display: flex;
-
-}
-
-.navBar {
-  display: fixed;
-  bottom: 0;
-  display: flex;
 }
 
 .content {
   width: 100%;
-  padding: 4.5rem auto;
+  padding: 4.5rem 0;
+  overflow-y: auto;
 }
