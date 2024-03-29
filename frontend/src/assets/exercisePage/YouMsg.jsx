@@ -5,13 +5,13 @@ export default function YouMsg({ data }) {
       minute: "2-digit",
     });
     // console.log("youMsg");
-    // console.log(data);
+    console.log(data);
     return (
       <>
-        <div className="flex">
+        <div className="flex" style={{flexDirection: "row"}}>
           {/* 상대방 프사 */}
           <img
-            src={data.senderprofileUrl}
+            src={data.senderProfileUrl}
             className="h-[45px] w-[45px] mt-1 rounded-full mx-2 shadow-md"
           />
           <div>
