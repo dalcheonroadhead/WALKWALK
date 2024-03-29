@@ -53,6 +53,7 @@ public class MemberDataController {
         }
 
         log.info("객체 바인딩이 잘 되었을까요? 바인딩된 객체는 {}",addInfo);
+        log.info("userDetails: {}", userDetails);
 
         Members member = memberDataService.addAdditionalInfo(addInfo, userDetails);
 
@@ -113,7 +114,7 @@ public class MemberDataController {
     @GetMapping("/google-refresh-token")
     public ApiResponseDto<?> getAccessToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return ResponseUtils.ok(memberDataService.refreshAccessToken(userDetails), MsgType.GENERATE_TOKEN_SUCCESSFULLY);
+        return ResponseUtils.ok(memberDataService.refreshAccessToken(userDetails.getMember()), MsgType.GENERATE_TOKEN_SUCCESSFULLY);
     }
 
 

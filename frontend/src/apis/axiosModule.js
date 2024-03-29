@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: 'https://j10d210.p.ssafy.io/api',
-  // baseURL: 'http://localhost:8081/api',
+  // baseURL: 'http://localhost:8081/api'
 });
 
 const tokens = JSON.parse(localStorage.getItem('tokens')) || {};

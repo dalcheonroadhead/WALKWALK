@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Struct;
 import org.ssafy.d210._common.entity.BaseTime;
+import org.ssafy.d210.items.entity.MemberItemHistory;
 import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.entity.ExerciseAcc;
+import org.ssafy.d210.wallets._payment.entity.Payment;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 
@@ -59,10 +59,10 @@ public class Members extends BaseTime {
     private GenderType gender;
 
     @Column(name = "height")
-    private Long height;
+    private double height;
 
     @Column(name = "weight")
-    private Long weight;
+    private double weight;
 
     @Column(name = "location", length = 500)
     private String location;
@@ -91,8 +91,11 @@ public class Members extends BaseTime {
     @Column(name = "daily_criteria")
     private Long dailyCriteria;
 
-    @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<BlockAddress> blockAddresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Payment> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Exercise> exercises = new ArrayList<>();
@@ -103,16 +106,17 @@ public class Members extends BaseTime {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberBadge> memberBadges = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberItemHistory> memberItemHistories = new ArrayList<>();
 
     @Builder
     public Members(
             String email, String nickname, String profileUrl, Role role,
-            GenderType gender, Long height, Long weight, String location,
+            GenderType gender, double height, double weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
 
-    ){
+    ) {
         this.email = email;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
@@ -132,7 +136,7 @@ public class Members extends BaseTime {
         this.memberAccountId = memberAccountId;
     }
 
-    public static Members of(String email, String nickname, String profileUrl, Role role){
+    public static Members of(String email, String nickname, String profileUrl, Role role) {
         return builder()
                 .email(email)
                 .nickname(nickname)
@@ -142,11 +146,9 @@ public class Members extends BaseTime {
     }
 
 
-
-
     public static Members of(
             String email, String nickname, String profileUrl, Role role,
-            GenderType gender, Long height, Long weight, String location,
+            GenderType gender, double height, double weight, String location,
             Long birthYear, double longitude, double latitude, boolean isNew,
             String streakColor, String comment, String phoneNumber, Long dailyCriteria, MemberAccount memberAccountId
     ) {
@@ -173,11 +175,41 @@ public class Members extends BaseTime {
 
     }
 
-    public Members update (String nickname, String profileUrl) {
+    public Members update(String nickname, String profileUrl) {
         this.nickname = nickname;
         this.profileUrl = profileUrl;
 
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Members{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", memberAccountId=" + memberAccountId +
+                ", nickname='" + nickname + '\'' +
+                ", profileUrl='" + profileUrl + '\'' +
+                ", role=" + role +
+                ", mainBadge='" + mainBadge + '\'' +
+                ", gender=" + gender +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", location='" + location + '\'' +
+                ", birthYear=" + birthYear +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", isNew=" + isNew +
+                ", streakColor='" + streakColor + '\'' +
+                ", comment='" + comment + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", dailyCriteria=" + dailyCriteria +
+                ", blockAddresses=" + blockAddresses +
+                ", exercises=" + exercises +
+                ", exerciseAcc=" + exerciseAcc +
+                ", memberBadges=" + memberBadges +
+                '}';
     }
 
     public String getRoleKey() {

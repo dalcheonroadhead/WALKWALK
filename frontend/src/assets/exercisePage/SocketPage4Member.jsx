@@ -7,19 +7,19 @@ import SockJS from "sockjs-client/dist/sockjs";
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
 import AudioRecord from './AudioRecord';
+import { instance } from "../../apis/axiosModule";
+import axios from 'axios';
 
 let stompClient;
 var pageOwnerId;
 
 // Static variable For Test
-const currentMember = {
-  memberId: 1,
-  email: "wjsaos2081@gmail.com",
-  memberAccountId: "0xfaCCc553dc302Fb9C49F8525782d51B812C350DA" ,
-  nickname: "책 읽는 남자 전수민",
-  profileUrl: "https://lh3.googleusercontent.com/a/ACg8ocJRi2en1YGof4VbnYEB3r-wQBZEw_B2k-eLTZSJ_a-fM10=s96-c",
-  mainBadge: "https://d210.s3.ap-northeast-2.amazonaws.com/test_badge.png",
-}
+const currentMember =  JSON.parse(localStorage.getItem('tokens')) || {
+  member_id: 1,
+  member_nickname: "책 읽는 남자 전수민",
+  member_profile_url: "https://lh3.googleusercontent.com/a/ACg8ocJRi2en1YGof4VbnYEB3r-wQBZEw_B2k-eLTZSJ_a-fM10=s96-c",
+  Authorization: null
+};
 
 
 const SocketPage4Member = () => {
@@ -29,7 +29,7 @@ const SocketPage4Member = () => {
   //⭐ VARIABLES 
   
   // A. LocalStorage에 있는 Authorization 가져오기 
-  const authorization = localStorage.getItem("Authorization");
+  var authorization = currentMember.Authorization;
   
   // B. 화면 이동하면서 현 사용자의 정보 가져오기 
   const location = useLocation();
@@ -49,6 +49,9 @@ const SocketPage4Member = () => {
   // G. 현재 소켓의 주인이 되는 사용자의 ID 가져오기 
   const params = useParams();
   pageOwnerId = params.id;
+
+  // H. 현재 페이지 주인의 정보 
+  const [pageOwner, setPageOwner] = useState({})
    
 
   //⭐ CHAT FOCUS ALWAYS ON BOTTOM
@@ -83,7 +86,7 @@ const SocketPage4Member = () => {
   // A-1. 최초 연결 함수 
   const connect = () => {
     // const socketURL = "http://localhost:8081/ws-stomp";
-    const socketURL = "https://j10d210.p.ssafy.io/ws-stomp" ;
+    const socketURL = "https://j10d210.p.ssafy.io/ws-stomp";
     var sockJS = new SockJS(socketURL);
     stompClient = Stomp.over(sockJS);
     console.log(stompClient);
@@ -112,10 +115,10 @@ const SocketPage4Member = () => {
       messageType: content !== null? 'TTS' : "VOICE",
       textContent: content,
       voiceURL: "",
-      senderId: currentMember.memberId,
-      senderProfileUrl: currentMember.profileUrl,
+      senderId: currentMember.member_id,
+      senderProfileUrl: currentMember.member_profile_url,
       receiverId: pageOwnerId,
-      senderNickname: currentMember.nickname,
+      senderNickname: currentMember.member_nickname,
       isOpened: false
     }
 
@@ -133,8 +136,22 @@ const SocketPage4Member = () => {
     setMessages((preMessages) => [...preMessages, receivedMsg]);
   }
 
+  // B-3 페이지 오너 정보 가져오기 
+  const getPageOwner = async () =>{
+    axios.get("https://j10d210.p.ssafy.io/api/members/1", clientHeader)
+    .then((res)=> {
+      console.log(res.data.data)
+     setPageOwner({...res.data.data});
+    })
+    .catch((err) => {console.log(err)})
+  }
+
+
   // [ C. 페이지 접근 시 소켓 연결, 페이지 퇴장 시 소켓 종료를 세팅]
   useEffect(() => {
+
+    getPageOwner();
+
     connect();
 
     // C-1 첫 입장 시 스크롤을 맨 밑으로 떙긴다. 
@@ -144,16 +161,18 @@ const SocketPage4Member = () => {
 
     // C-2 이전 메세지 불러오기 - 공사 중 
 
+
+
     return () => {
       setTimeout(() => {
         var messageInfo = {
           messageType: "VOICE",
           textContent: currentMember.nickname +"님이 퇴장 하였습니다.",
           voiceURL: null,
-          senderId: currentMember.memberId,
+          senderId: currentMember.member_id,
           receiverId: pageOwnerId,
-          senderNickname: currentMember.nickname,
-          senderProfileUrl: currentMember.profileUrl,
+          senderNickname: currentMember.member_nickname,
+          senderProfileUrl: currentMember.member_profile_url,
           isOpened: false
         }
         stompClient.send("/pub/api/socket/quit", clientHeader, JSON.stringify(messageInfo));
@@ -195,7 +214,7 @@ const SocketPage4Member = () => {
     <div className="chat"
         ref={chatContainerRef}>
       <div className="chat-box">
-        <div style={{fontWeight: 'bold'}}> 전수민 </div> 
+        <div style={{fontWeight: 'bold', alignSelf: 'center'}}> 🏃 {currentMember.member_nickname} 🤸님의 방</div> 
 
         {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
         <MessageList
@@ -243,10 +262,10 @@ const FileUploader = ({currentMember, pageOwnerId, clientHeader}) => {
        messageType: 'VOICE',
        textContent: null,
        voiceURL: base64,
-       senderId: currentMember.memberId,
-       senderProfileUrl: currentMember.profileUrl,
+       senderId: currentMember.member_id,
+       senderProfileUrl: currentMember.member_profile_url,
        receiverId: pageOwnerId,
-       senderNickname: currentMember.nickname,
+       senderNickname: currentMember.member_nickname,
        isOpened: false
      };
  

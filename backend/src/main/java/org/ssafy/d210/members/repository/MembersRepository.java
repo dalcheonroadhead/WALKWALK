@@ -15,6 +15,8 @@ public interface MembersRepository extends JpaRepository<Members, Long> {
 
     Optional<Members> findByEmail(String email);
 
+    Optional<Members> findById(Long id);
+
     Optional<Members> findByEmailAndDeletedAtIsNull(String googleEmail);
 
     @Query(value = "UPDATE members set updated_at = now() where member_id = :id", nativeQuery = true)
@@ -22,5 +24,6 @@ public interface MembersRepository extends JpaRepository<Members, Long> {
 
     Optional<Members> findByNicknameAndDeletedAtIsNull(String nickname);
 
-    
+    Optional<Members> findMembersById(Long memberId);
+
 }

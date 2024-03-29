@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -34,4 +37,7 @@ public class Items {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private ItemsType type;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<MemberItemHistory> memberItemHistories = new ArrayList<>();
 }
