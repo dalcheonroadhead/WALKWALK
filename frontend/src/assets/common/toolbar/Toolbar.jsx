@@ -55,7 +55,7 @@ const Toolbar = function(){
         <> 
 
                 <div className={`${styles.sidebar_container} ${opened && styles.sidebar_container_opened}`}>
-                <div className={`${styles.hamburger_container} ${opened && styles.hamburger_container_opened}`} onClick={handleSidebarClickEvent}>
+                <div className={`${styles.hamburger_container} ${opened ? styles.hamburger_container_opened : styles.change_opacity_0}`} onClick={handleSidebarClickEvent}>
                     <div className={`${styles.hamburger} ${opened && styles.hamburger_1_opened}`}></div>
                     <div className={`${styles.hamburger} ${opened && styles.hamburger_2_opened}`}></div>
                     <div className={`${styles.hamburger} ${opened && styles.hamburger_3_opened}`}></div>
@@ -111,20 +111,20 @@ const Toolbar = function(){
         
             <div className={styles.tool_container}>          
 
-                <div className={`${styles.hamburger_container} ${opened && styles.hamburger_container_opened}`} onClick={handleSidebarClickEvent}>
-                    <div className={`${styles.hamburger} ${opened && styles.hamburger_1_opened}`}></div>
-                    <div className={`${styles.hamburger} ${opened && styles.hamburger_2_opened}`}></div>
-                    <div className={`${styles.hamburger} ${opened && styles.hamburger_3_opened}`}></div>
+                <div className={`${styles.tool_hamburger_container} ${opened ? styles.hamburger_container_opened : styles.change_opacity_1}`} onClick={handleSidebarClickEvent}>
+                    <div className={`${styles.tool_hamburger} ${opened && styles.hamburger_1_opened}`}></div>
+                    <div className={`${styles.tool_hamburger} ${opened && styles.hamburger_2_opened}`}></div>
+                    <div className={`${styles.tool_hamburger} ${opened && styles.hamburger_3_opened}`}></div>
                 </div>
 
-                <div className={styles.all_money_container} style={{border:'1px solid red'}}>
-                    <div className={styles.egg_container}>
-                        <img src="/imgs/egg.png" alt="황금알" className={styles.egg}></img>
-                        <p className={styles.egg_txt}>{egg}</p>
+                <div className={styles.tool_all_money_container} >
+                    <div className={styles.tool_egg_container}>
+                        <img src="/imgs/egg.png" alt="황금알" className={styles.tool_egg}></img>
+                        <p className={styles.tool_egg_txt}>{egg}</p>
                     </div>
-                    <div className={styles.money_container}>
-                        <img src="/imgs/money.png" alt="황금알" className={styles.money}></img>
-                        <p className={styles.money_txt}>{money}</p>
+                    <div className={styles.tool_money_container}>
+                        <img src="/imgs/money.png" alt="황금알" className={styles.tool_money}></img>
+                        <p className={styles.tool_money_txt}>{money}</p>
                     </div>
                 </div>
                 <img src="/imgs/bell.png" alt="알람" className={styles.bell} onClick={moveToAlarmPage}></img>
