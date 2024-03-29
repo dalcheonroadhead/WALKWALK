@@ -15,7 +15,6 @@ import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
-import org.ssafy.d210.wallets._payment.Repository.PaymentRepository;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentApproveRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
 import org.ssafy.d210.wallets._payment.dto.request.PaymentReadyRequest;
@@ -23,14 +22,14 @@ import org.ssafy.d210.wallets._payment.dto.response.PaymentApproveResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentExchangeResponse;
 import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
 import org.ssafy.d210.wallets._payment.entity.Payment;
+import org.ssafy.d210.wallets._payment.repository.PaymentRepository;
 import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
-import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER_ACCOUNT;
+import static org.ssafy.d210._common.exception.ErrorType.*;
 
 @Slf4j
 @Service
@@ -54,31 +53,12 @@ public class PaymentService {
         this.memberAccountRepository = memberAccountRepository;
     }
 
-    public Members findMembersByMembers(String email) {
-        return membersRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
-    }
-
-    public MemberAccount findMemberAccountByMemberAccountId(Long memberAccountId) {
-        return memberAccountRepository.findMemberAccountById(memberAccountId)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
-    }
-
     // 결제 준비
     // 모바일 혹은 pc로 카톡 결제 후 DB에 결제 내역 저장
     public PaymentReadyResponse preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequest paymentReadyRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
-
-        // 결제 정보 생성 및 DB 저장
-        Payment payment = new Payment();
-        payment.setCid("TC0ONETIME");
-        payment.setPartner_order_id(paymentReadyRequest.getPartner_order_id());
-        payment.setPartner_user_id(paymentReadyRequest.getPartner_user_id());
-        payment.setTotal_amount(Math.toIntExact(paymentReadyRequest.getTotal_amount()));
-        payment.setMember(member);
-        paymentRepository.save(payment);
 
         // 카카오페이 결제를 시작하기 위해 결제정보를 카카오페이 서버에 전달하고 결제 고유번호(TID)와 URL을 응답받는 단계
         // Secret key를 헤더에 담아 파라미터 값들과 함께 POST로 요청
@@ -93,6 +73,18 @@ public class PaymentService {
 
         log.info("======================KakaoPay Payment Response: Status Code = {}, Body = {}", response.getStatusCode(), response.getBody());
 
+        // 결제 정보 생성 및 DB 저장
+        Payment payment = new Payment();
+        payment.setCid("TC0ONETIME");
+        payment.setPartner_order_id(paymentReadyRequest.getPartner_order_id());
+        payment.setPartner_user_id(paymentReadyRequest.getPartner_user_id());
+        payment.setTotal_amount(Math.toIntExact(paymentReadyRequest.getTotal_amount()));
+        payment.setMember(member);
+        payment.setTid(response.getBody().getTid());
+        payment.setIsApprove(false);
+        paymentRepository.save(payment);
+
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {}", response.getBody().getTid());
         return response.getBody();
     }
 
@@ -103,6 +95,7 @@ public class PaymentService {
         // 사용자 정보 가져오기(Token 유효성 검사)
         Members member = findMembersByMembers(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMemberAccountId(member.getMemberAccountId().getId());
+        Payment payment = findPaymentByTid(paymentApproveRequest.getTid());
 
         // 결제 승인 요청에 필요한 정보를 설정
         Map<String, String> requestMap = new HashMap<>();
@@ -125,6 +118,7 @@ public class PaymentService {
         if (response.getBody() != null) {
             // DB의 money량 추가
             memberAccount.putMoney(paymentApproveRequest.getTotal_amount(), true);
+            payment.updateIsApprove(true);
         }
 
         return response.getBody();
@@ -139,5 +133,20 @@ public class PaymentService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
 
         return PaymentExchangeResponse.of(memberAccount.exchangeMoney(paymentExchangeRequest));
+    }
+
+    public Members findMembersByMembers(String email) {
+        return membersRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
+    }
+
+    public MemberAccount findMemberAccountByMemberAccountId(Long memberAccountId) {
+        return memberAccountRepository.findMemberAccountById(memberAccountId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
+    }
+
+    public Payment findPaymentByTid(String tid) {
+        return paymentRepository.findPaymentByTid(tid)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_PAYMENT));
     }
 }
