@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from "./Signup.module.css";
 import { createWallet } from '../../apis/wallet';
 import { submitUserInfo, checkDuplicated } from '../../apis/member';
+import LoadingModal from '../common/loading/LoadingModal';
 
 const Signup = function () {
   const navigate = useNavigate();
@@ -12,28 +13,31 @@ const Signup = function () {
   const [nicknameErrorType, setNicknameErrorType] = useState(false);
   const [debounce, setDebounce] = useState(null);
   const [selectedYear, setSelectedYear] = useState('');
+  const startYear = 1900;
   const currentYear = new Date().getFullYear();
-  const years = Array.from({length:101}, (val, index) => currentYear - index); // 연도 목록 생성: 현재 연도부터 100년 전까지
+  const years = Array.from({length: currentYear - startYear + 1}, (val, index) => currentYear - index); // 연도 목록 생성: 1900년부터 현재까지
   const [userInfo, setUserInfo] = useState({
     nickname: '',
-    gender: '',
-    height: 0,
-    weight: 0,
+    birthYear: 1990, // 임의의 초기값
+    gender: '', // 초기값
     location: '',
-    longitude: 0,
-    latitude: 0,
-    birthYear: 0,
-    comment: '',
     eoa: '',
-    phoneNumber: '',
     publicKey: '',
+    comment: '', // 추후 입력
+    phoneNumber: '', // 추후 입력
+    height: 165, // 한국인 전체 평균값
+    weight: 65, // 한국인 전체 평균값
+    longitude: 0, // 사용안함
+    latitude: 0, // 사용안함
   });
+  const [isLoading, setIsLoading] = useState(false);
   
+  // selectedYear가 변경될 때마다 userInfo의 birthYear를 업데이트합니다.
   useEffect(() => {
-    // selectedYear가 변경될 때마다 userInfo의 birthYear를 업데이트합니다.
     setUserInfo(prevInfo => ({...prevInfo, birthYear: parseInt(selectedYear)}));
   }, [selectedYear]);
 
+  // 유저가 입력 후 시간차를 두고 닉네임 중복 여부 확인
   useEffect(() => {
     if (debounce) clearTimeout(debounce);
     setDebounce(setTimeout(() => {
@@ -41,8 +45,8 @@ const Signup = function () {
     }, 700))
   }, [userInfo.nickname]);
 
+  // 입력값마다 유효성 검사하고 버튼 활성화
   useEffect(() => {
-    // 입력값마다 유효성 검사하기
     if (step === 2) {
       if (selectedYear !== '') {
         setIsButtonDisabled(false);
@@ -58,30 +62,16 @@ const Signup = function () {
       }
     }
     else if (step === 4) {
-      if (userInfo.height !== '' && userInfo.weight !== '') {
-        setIsButtonDisabled(false);
-      } else {
-        setIsButtonDisabled(true);
-      }
-    }
-    else if (step === 5) {
-      if (userInfo.phoneNumber !== '') {
-        setIsButtonDisabled(false);
-      } else {
-        setIsButtonDisabled(true);
-      }
-    }
-    else if (step === 0) {
       if (userInfo.location !== '') {
         setIsButtonDisabled(false);
       } else {
         setIsButtonDisabled(true);
       }
     }
-  }, [step, selectedYear, userInfo.gender, userInfo.height, userInfo.weight, userInfo.phoneNumber, userInfo.location]);
+  }, [step, selectedYear, userInfo.gender, userInfo.location]);
 
+  // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
   const checkNickname = useCallback(async (nickname) => {
-      // 닉네임의 유효성 검사를 실행하고 에러 메시지 상태를 업데이트
       const trimmedNickname = nickname.trim()
       if (!trimmedNickname || trimmedNickname.length > 10) {
         setNicknameError('닉네임은 1자 이상 10자 이하여야 합니다.');
@@ -116,6 +106,7 @@ const Signup = function () {
     setUserInfo(prevInfo => ({...prevInfo, location: address}));
   };
 
+  // 다음 주소 API
   const daumPost = () => {
     new daum.Postcode({
       oncomplete: function(data) {
@@ -137,70 +128,93 @@ const Signup = function () {
     }
   };
 
-  const handleClick = async () => {
-    setNicknameError('');
-    if (step === 5) {
-      setStep(0);
-    } else if (step === 0) {
-      // 블록체인 지갑 생성 API
+  // 지갑 생성 API 호출 재시도
+  const retryWalletCreate = async () => {
+    const maxRetries = 3 // 최대 3번 재시도
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      console.log('시도 횟수 :', attempt);
       try {
-        const walletInfo = await createWallet();
+        const response = await createWallet();
+
+        // 지갑 생성 응답 유효성 검사
+        if (response.eoa && response.eoa !== "" && response.publicKey && response.publicKey !== "") {
+          return response; // 유효한 경우 response 반환
+        } else {
+          lastError = new Error("eoa 또는 publicKey가 유효하지 않습니다.");
+          throw lastError;
+        }
+      } catch (error) {
+        lastError = error;
+        // 마지막 시도가 아니면 재시도 대기
+        if (attempt < maxRetries) {
+          await new Promise((resolve) => setTimeout(resolve, 5000 * attempt));
+        }
+      } 
+    }
+
+    setIsLoading(false); // 모든 시도 후 로딩 모달 숨김
+    // 모든 시도 후 유효한 response가 없으면 마지막 에러 throw
+    throw lastError;
+  };
+
+  const handleClick = async () => {
+    if (step === 5) {
+      setIsLoading(true); // 로딩 모달 표시 시작
+      try {
+        // 블록체인 지갑 생성 API 및 재시도
+        const walletInfo = await retryWalletCreate();
+        
         const updatedUserInfo = {
           ...userInfo,
           eoa: walletInfo.eoa,
           publicKey: walletInfo.publicKey,
         }
         setUserInfo(updatedUserInfo);
+        console.log('최종 정보 :', updatedUserInfo)
 
         await submitUserInfo(updatedUserInfo);
         navigate('/main')
       } catch (error) {
-        console.log('지갑 생성 중 에러 발생', error)
+        console.log('회원가입 중 에러 발생', error);
+        // 유효한 응답을 얻지 못했을 때 안내창 표시 및 루트 경로로 이동
+        alert('회원가입 중 오류가 발생했습니다. 10초 후 로그인 화면으로 돌아갑니다.');
+        setTimeout(() => {
+          navigate('/');
+        }, 10000); // 10초 후 루트 경로로 이동
+      } finally {
+        setIsLoading(false); // 로딩 모달 숨김
       }
     } else {
       setStep(step + 1);
       setIsButtonDisabled(true);
-    }
+    } 
   };
 
   return(
     <div className={styles.signup_container}>
-      {step === 0 && (
-        <div>
+      {isLoading && <LoadingModal text="회원가입 중..."></LoadingModal>}
+      {step === 4 && (
+        <div className={styles.signup_sub_container}>
           <div className={styles.signup_title}>지역정보</div>
           <input className={styles.signup_input} type="text" placeholder='주소를 입력해주세요' name="location" onClick={daumPost} value={userInfo.location} readOnly/>
-        </div>
-      )}
-      {step >= 5 && (
-        <div>
-          <div className={styles.signup_title}>전화번호</div>
-          <input className={styles.signup_input} type="text" placeholder='ex) 01011111111' name="phoneNumber" onChange={handleInputChange}/>
-        </div>
-      )}
-      {step >= 4 && (
-        <div className={styles.signup_2col}>
-          <div>
-            <div className={styles.signup_title}>키</div>
-            <input className={styles.signup_input} type="number" placeholder='ex) 111.1 (단위 : cm)' name="height" onChange={handleInputChange}/>
-          </div>
-          <div>
-            <div className={styles.signup_title}>몸무게</div>
-            <input className={styles.signup_input} type="number" placeholder='ex) 11.1 (단위 : kg)' name="weight" onChange={handleInputChange}/>
-          </div>
+          <img className={styles.signup_search_img} src="/imgs/search_gray.png" alt="dropdown_img" />
         </div>
       )}
       {step >= 3 && (
-        <div>
+        <div className={styles.signup_sub_container}>
           <div className={styles.signup_title}>성별</div>
           <select className={styles.signup_input} name="gender" defaultValue="" onChange={handleInputChange}>
             <option value="" disabled>성별을 선택해주세요</option>
             <option value="MALE">남성</option>
             <option value="FEMALE">여성</option>
           </select>
+          <img className={styles.signup_dropdown_img} src="/imgs/direct_gray.png" alt="dropdown_img" />
         </div>
       )}
       {step >= 2 && (
-        <div>
+        <div className={styles.signup_sub_container}>
           <div className={styles.signup_title}>출생연도</div>
           <select className={styles.signup_input} name="selectedYear" value={selectedYear} onChange={handleInputChange}>
             <option value="" disabled>출생연도를 선택해주세요</option>
@@ -208,16 +222,17 @@ const Signup = function () {
               <option key={year} value={year}>{year}</option>
             ))}
           </select>
+          <img className={styles.signup_dropdown_img} src="/imgs/direct_gray.png" alt="dropdown_img" />
         </div>
       )}
       {step >= 1 && (
-        <div>
+        <div className={styles.signup_sub_container}>
           <div className={styles.signup_title}>닉네임</div>
           <input className={styles.signup_input} type="text" placeholder='닉네임을 입력해주세요' name="nickname" value={userInfo.nickname} onChange={handleInputChange}/>
           {nicknameError && <p className={styles.signup_error} style={{color: nicknameErrorType ? 'green' : 'red'}}>{nicknameError}</p>}
         </div>
       )}
-      <button className={styles.signup_btn} disabled={isButtonDisabled} onClick={handleClick}>{step === 0 ? "가입 완료" : "다 음"}</button>
+      <button className={styles.signup_btn} disabled={isButtonDisabled} onClick={handleClick}>{step === 4 ? "가입 완료" : "다 음"}</button>
     </div>
   )
 }
