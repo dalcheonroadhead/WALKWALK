@@ -149,6 +149,16 @@ const SocketPage4Member = () => {
     .catch((err) => {console.log(err)})
   }
 
+  // B-4 해당 방 메세지 전부 불러오기 
+  const getloadMessage = async () =>{
+    axios.get(`https://j10d210.p.ssafy.io/api/members/load/${pageOwnerId}`, clientHeader)
+    .then((res)=> {
+      console.log(res.data.data.content)
+     setMessages([...res.data.data.content]);
+    })
+    .catch((err) => {console.log(err)})
+  }
+
 
   // [ C. 페이지 접근 시 소켓 연결, 페이지 퇴장 시 소켓 종료를 세팅]
   useEffect(() => {
@@ -162,8 +172,8 @@ const SocketPage4Member = () => {
       window.scrollTo(0, document.body.scrollHeight);
     },0);
 
-    // C-2 이전 메세지 불러오기 - 공사 중 
-
+    // C-2 이전 메세지 불러오기 
+    getloadMessage();
 
     // D. 모바일인지 아닌지 확인 
     console.log(window.innerWidth)
