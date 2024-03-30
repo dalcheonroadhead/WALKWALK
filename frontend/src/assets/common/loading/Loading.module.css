@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  border: 2px solid red;
 }
 
 .loading_img {
@@ -15,5 +14,5 @@
 
 .loading_txt {
   font-size: xx-large;
-  transform: translateY(-6rem);
+  transform: translateY(-7rem);
 }
