@@ -7,6 +7,9 @@ import { getGalleyList, getHalleyList, postGalleyRequest, getHalley, responseGal
 import { searchGalleyMemberList } from "../../apis/friend";
 import { getRealtimeExerciseData, getWeeklyExerciseData, getExerciseCriteria } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
+import { useSignupStore } from "../../stores/member";
+import Lottie from 'react-lottie';
+import confetti from '../../lotties/confetti_full.json';
 
 const Main = function(){
     const {memberId, setMemberId} = useStore();
@@ -416,12 +419,56 @@ const Main = function(){
                 )}
             </>
         )
-    }
-        
+    }    
     ]
+
+    const { isFirstVisit, setIsFirstVisit } = useSignupStore();
+    const handleFirstVisit = (isGoing) => {
+        // 이동 여부 상관없이 isFirstVisit 변경
+        setIsFirstVisit(false);
+
+        if (isGoing) {
+            // ios 디바이스인지 확인
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isIOS = /iphone|ipad|ipod/.test(userAgent);
+            
+            if (isIOS) {
+                window.location.href = 'https://apps.apple.com/kr/app/google-%ED%94%BC%ED%8A%B8%EB%8B%88%EC%8A%A4-%ED%99%9C%EB%8F%99-%EC%B6%94%EC%A0%81%EA%B8%B0/id1433864494';
+            } else {
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.google.android.apps.fitness';
+            }
+        }
+    };
+    // lottifiles 옵션
+    const defaultOptions = {
+        loop: false,
+        autoplay: true,
+        animationData: confetti,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice"
+        }
+    }
+    
     return(
         <>
         <div>
+            {isFirstVisit && (
+                <div className={styles.first_visit_container}>
+                    <div className={styles.first_visit_lottie}>
+                        <Lottie options={defaultOptions}/>
+                    </div>
+                    <div className={styles.first_visit_modal_container}>
+                        <h2>회원가입을 환영합니다!</h2>
+                        <div>운동데이터를 연동하려면</div>
+                        <div>Google 피트니스 앱이 필요합니다</div>
+                        <div>앱 스토어로 이동하시겠어요?</div>
+                        <div className={styles.first_visit_btn_container}>
+                            <button className={styles.first_visit_yes_btn} onClick={() => handleFirstVisit(true)}>네</button>
+                            <button className={styles.first_visit_no_btn} onClick={() => handleFirstVisit(false)}>아니오</button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {isHalliOpen && (
                 <>
                     <div className={styles.modal_background}></div>
