@@ -35,6 +35,9 @@ const Login = function () {
 
       getNickname();
       
+    } else if (userInfo?.Authorization && userInfo?.isNew === "true") {
+      localStorage.clear();
+      console.log('로컬스토리지 지움')
     } else {
       // 로그인 화면 유지
       console.log('자동 로그인 실패')

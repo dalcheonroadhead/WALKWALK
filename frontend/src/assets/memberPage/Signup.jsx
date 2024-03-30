@@ -42,7 +42,7 @@ const Signup = function () {
     if (debounce) clearTimeout(debounce);
     setDebounce(setTimeout(() => {
       checkNickname(userInfo.nickname);
-    }, 700))
+    }, 1000))
   }, [userInfo.nickname]);
 
   // 입력값마다 유효성 검사하고 버튼 활성화
