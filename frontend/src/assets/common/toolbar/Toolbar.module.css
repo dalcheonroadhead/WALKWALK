@@ -91,11 +91,13 @@
     transition: 0.5s all;
 }
 .tool_hamburger_container{
+    position: absolute;
     display: flex;
+    left: 1.5rem;
     flex-direction: column;
     transition: 0.01s all;
     margin-top: 1rem;
-    margin-right: 11rem;
+    margin-right: 9.5rem;
 }
 
 .tool_hamburger{
