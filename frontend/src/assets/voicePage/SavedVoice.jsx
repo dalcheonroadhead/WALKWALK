@@ -116,10 +116,8 @@ const Store = function(){
                 <div className={styles.voice_list_container}>
                     {voiceList.map((data, index) => {
                         return(
-                            <>
-                                <div key={index} className={`${styles.voice_container} ${selectedVoiceIndex === index ? styles.select_voice_container : ''}`} onClick={() => {handleVoiceClick(index); openVoiceModal(data.voice, data.sendName)}}>
-                                </div>  
-                            </>
+                            <div key={index} className={`${styles.voice_container} ${selectedVoiceIndex === index ? styles.select_voice_container : ''}`} onClick={() => {handleVoiceClick(index); openVoiceModal(data.voice, data.sendName)}}>
+                            </div>  
                         )
                     })}
                 </div>
