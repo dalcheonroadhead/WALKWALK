@@ -84,3 +84,15 @@ export const getGalley = async (memberId) => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 갈리 요청 수락/거절
+export const responseGalley = async (data) => {
+    const url = `/halleygalley/galley-response`;
+    
+    return await instance.put(url, data)
+        .then((res) => {
+            console.log(res)
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
