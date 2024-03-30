@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Alarm.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getAlarmList } from "../../apis/alarm";
 
 
 const Alarm = function(){
 
+    useEffect(()=>{
+        getAlarmList();
+    }, [])
     
     const navigate = useNavigate();    
 
