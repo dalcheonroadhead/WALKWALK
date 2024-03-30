@@ -52,6 +52,9 @@ const SocketPage4Member = () => {
 
   // H. 현재 페이지 주인의 정보 
   const [pageOwner, setPageOwner] = useState({})
+
+  // I. 현재 유저가 들어온 환경이 모바일인지 아닌지 
+  const [isMobile, setIsMobile] = useState(false);
    
 
   //⭐ CHAT FOCUS ALWAYS ON BOTTOM
@@ -146,6 +149,16 @@ const SocketPage4Member = () => {
     .catch((err) => {console.log(err)})
   }
 
+  // B-4 해당 방 메세지 전부 불러오기 
+  const getloadMessage = async () =>{
+    axios.get(`https://j10d210.p.ssafy.io/api/members/load/${pageOwnerId}`, clientHeader)
+    .then((res)=> {
+      console.log(res.data.data.content)
+     setMessages([...res.data.data.content]);
+    })
+    .catch((err) => {console.log(err)})
+  }
+
 
   // [ C. 페이지 접근 시 소켓 연결, 페이지 퇴장 시 소켓 종료를 세팅]
   useEffect(() => {
@@ -159,8 +172,20 @@ const SocketPage4Member = () => {
       window.scrollTo(0, document.body.scrollHeight);
     },0);
 
-    // C-2 이전 메세지 불러오기 - 공사 중 
+    // C-2 이전 메세지 불러오기 
+    getloadMessage();
 
+    // D. 모바일인지 아닌지 확인 
+    console.log(window.innerWidth)
+
+    if(typeof window !== "undefined"){
+      if(window.innerWidth > 412){ 
+        setIsMobile(false);
+    } else {
+      setIsMobile(true);
+    }
+
+    }
 
 
     return () => {
@@ -222,13 +247,20 @@ const SocketPage4Member = () => {
           currentTypingId={currentTypingId}
           onEndTyping={handleEndTyping}
           pageOwnerId={pageOwnerId}
+          currentMember={currentMember}
         />
         {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
         <div style={{display: 'flex'}}>
-          <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
-          <AudioRecord/>
+          {/* 모바일 환경인지 아닌지에 따라 버튼 다르게 구현 */}
+          {isMobile?(
+            <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
+          ):(
+            <AudioRecord stompClient={stompClient} currentMember = {currentMember} pageOwnerId={pageOwnerId}/>
+          )}
+          
+         
         </div>
-        <MessageForm onSendMessage={handleSendMessage} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
+        <MessageForm onSendMessage={handleSendMessage} clientHeader={clientHeader} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
       </div>
     </div>
   );
