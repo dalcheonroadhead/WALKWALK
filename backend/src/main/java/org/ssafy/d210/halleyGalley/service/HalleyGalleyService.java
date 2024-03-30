@@ -59,7 +59,12 @@ public class HalleyGalleyService {
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY_GALLEY));
 
         halleyGalley.updateIsAccepted(isAccept);
-        halleyGalleyRepository.save(halleyGalley);
+        if(!isAccept){
+            halleyGalleyRepository.delete(halleyGalley);
+        }
+        else{
+            halleyGalleyRepository.save(halleyGalley);
+        }
 
         return PutGalleyResponseResponse.of(isAccept);
     }
