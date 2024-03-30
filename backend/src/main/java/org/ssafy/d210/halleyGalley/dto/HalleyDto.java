@@ -13,14 +13,16 @@ public class HalleyDto {
     private Long memberId;
     private String nickname;
     private Long requestedTime;
+    private Boolean isAccepted;
 
     @Builder
-    private HalleyDto(String profileUrl, LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime){
+    private HalleyDto(String profileUrl, LocalDateTime timeStamp, Long memberId, String nickname, Long requestedTime, Boolean isAccepted){
         this.profileUrl = profileUrl;
         this.timeStamp = timeStamp;
         this.memberId = memberId;
         this.nickname = nickname;
         this.requestedTime = requestedTime;
+        this.isAccepted = isAccepted;
     }
 
     public static HalleyDto from(HalleyGalley halleyGalley){
@@ -30,6 +32,7 @@ public class HalleyDto {
                 .memberId(halleyGalley.getHalleyId().getId())
                 .nickname(halleyGalley.getHalleyId().getNickname())
                 .requestedTime(halleyGalley.getMissionId() == null ? null : halleyGalley.getMissionId().getExerciseMinute())
+                .isAccepted(halleyGalley.getIsAccepted())
                 .build();
     }
 }
