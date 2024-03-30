@@ -4,9 +4,11 @@ import styles from "./Signup.module.css";
 import { createWallet } from '../../apis/wallet';
 import { submitUserInfo, checkDuplicated } from '../../apis/member';
 import LoadingModal from '../common/loading/LoadingModal';
+import { useSignupStore } from '../../stores/member';
 
 const Signup = function () {
   const navigate = useNavigate();
+  const { setIsFirstVisit } = useSignupStore();
   const [step, setStep] = useState(1);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [nicknameError, setNicknameError] = useState('');
@@ -175,6 +177,7 @@ const Signup = function () {
         console.log('최종 정보 :', updatedUserInfo)
 
         await submitUserInfo(updatedUserInfo);
+        setIsFirstVisit(true);
         navigate('/main')
       } catch (error) {
         console.log('회원가입 중 에러 발생', error);

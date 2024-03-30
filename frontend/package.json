@@ -20,6 +20,7 @@
     "react-bootstrap": "^2.10.2",
     "react-datepicker": "^6.6.0",
     "react-dom": "^18.2.0",
+    "react-lottie": "^1.2.4",
     "react-router-dom": "^6.22.3",
     "sockjs-client": "^1.6.1",
     "typeit-react": "^2.7.1",
