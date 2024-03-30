@@ -226,9 +226,9 @@ const SocketPage4Member = () => {
         {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
         <div style={{display: 'flex'}}>
           <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
-          <AudioRecord/>
+          <AudioRecord stompClient={stompClient} currentMember = {currentMember} pageOwnerId={pageOwnerId}/>
         </div>
-        <MessageForm onSendMessage={handleSendMessage} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
+        <MessageForm onSendMessage={handleSendMessage} clientHeader={clientHeader} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
       </div>
     </div>
   );
