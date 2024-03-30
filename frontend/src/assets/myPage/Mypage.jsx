@@ -17,6 +17,13 @@ const Mypage = function () {
     })();
   }, []);
 
+  const handleLogout = () => {
+    // 로컬 스토리지 값 비우기
+    localStorage.clear()
+    // 로그인화면으로 이동
+    navigate('/')
+  }
+
   return(
     <div className={styles.mypage_container}>
       {mypageInfo && (
@@ -42,6 +49,8 @@ const Mypage = function () {
             <span>내 배지</span>
             <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
           </button>
+
+          <button className={styles.mypage_logout_btn} onClick={handleLogout}>로그아웃</button>
         </>
       )}
     </div>

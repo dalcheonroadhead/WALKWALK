@@ -1,6 +1,5 @@
 import axios from "axios";
 import { instance } from "./axiosModule";
-import { getMypage } from "./member";
 
 // 블록체인 지갑 생성
 export const createWallet = async () => {
