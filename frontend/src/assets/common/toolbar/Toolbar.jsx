@@ -110,7 +110,6 @@ const Toolbar = function(){
 
         
             <div className={styles.tool_container}>          
-
                 <div className={`${styles.tool_hamburger_container}`} onClick={handleSidebarClickEvent}>
                     <div className={`${styles.tool_hamburger} ${opened && styles.hamburger_1_opened}`}></div>
                     <div className={`${styles.tool_hamburger} ${opened && styles.hamburger_2_opened}`}></div>
