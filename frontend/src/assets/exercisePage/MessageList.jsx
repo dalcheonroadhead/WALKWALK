@@ -1,6 +1,6 @@
 import Stack from 'react-bootstrap/Stack';
 import Message from './Message';
- const MessageList = ({ messages, currentTypingId, onEndTyping, pageOwnerId }) => (
+ const MessageList = ({ messages, currentTypingId, onEndTyping, pageOwnerId, currentMember }) => (
     <Stack className="messages-list">
       {/* 메세지 배열을 map 함수 돌려서 Message 배열에 넣고 있다. */}
       {messages.map((message, index) => (
@@ -11,6 +11,7 @@ import Message from './Message';
           onEndTyping={onEndTyping}
           currentTypingId={index}
           pageOwnerId={pageOwnerId}
+          currentMember={currentMember}
         />
       ))}
     </Stack>

@@ -237,6 +237,7 @@ const SocketPage4Member = () => {
           currentTypingId={currentTypingId}
           onEndTyping={handleEndTyping}
           pageOwnerId={pageOwnerId}
+          currentMember={currentMember}
         />
         {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
         <div style={{display: 'flex'}}>
