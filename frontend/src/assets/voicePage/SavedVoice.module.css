@@ -11,7 +11,7 @@
 .main_container {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* 세로로 배치 */
     align-items: center;
     height: 100%;
     width: 100%;
@@ -36,10 +36,10 @@
 .title_txt{
     font-family: "bc_b";
     font-size: 1.5rem;
-    margin-left: 33%;
+    margin-left: 17.5%;
 }
 
-.alarm_list_container{
+.voice_list_container{
     background: #FFF2CB;
     margin-top: 19.5%;
     width: 22.4rem;
@@ -53,8 +53,7 @@
     overflow-y: auto;
 }
 
-
-.alarm_container{
+.voice_container{
     width: 22rem;
     height: 6rem;
     margin: 0.7rem;
@@ -67,7 +66,7 @@
     box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
 }
 
-.select_alarm_container{
+.select_voice_container{
     width: 22rem;
     height: 6rem;
     margin: 0.7rem;
@@ -76,34 +75,8 @@
     align-items: center;
     display: flex;
     cursor: pointer;
-    filter: brightness(0.8);
-    background: #FFFEFC;
+    background: #FFDC6A;
     box-shadow: 0.01rem 0.01rem 0.5rem 0 rgba(0, 0, 0, 0.2);
-}
-
-.alarm_img_container{
-    width: 3.5rem;
-    height: auto;
-    border-radius: 50px;
-    margin-left: 2.5%;
-    cursor: pointer;
-    transition: 0.5s all;
-}
-
-.alarm_txt{
-    width: 16.2rem;
-    height: 4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    font-family: "bc_b";
-    margin-left: 2.5%;
-    text-align: left;
-    font-size: 1.1rem;
-}
-
-.alarm_container:hover {
-    filter: brightness(0.8);
 }
 
 .modal_background{
@@ -116,7 +89,7 @@
 
 }
 
-.alarm_modal_container{
+.voice_modal_container{
     width: 22rem;
     height: 25rem;
     top: 50%;
@@ -129,17 +102,14 @@
 
 }
 
-.alarm_title_container{
+.voice_title_container{
     position: relative;
     display: flex;
-    top: 10%;
-    left: 50%;
     width: 22rem;
     height: 4rem ;
-    transform: translate(-50%, -50%);
 }
 
-.alarm_modal_title{
+.voice_modal_title{
     width: 13rem;
     font-family: "bc_b";
     font-size: 1.6rem;
@@ -149,7 +119,7 @@
     position: absolute;
 }
 
-.alarm_modal_x{
+.voice_modal_x{
     position: absolute;
     top: 40%;
     left: 90%;
@@ -158,7 +128,7 @@
     height: 2rem;
 }
 
-.alarm_content{
+.voice_content{
     width: 20rem;
     height: 19rem;
     top: 57.5%;
@@ -175,18 +145,8 @@
     background: #FFFBF3;
 }
 
-.alarm_img{
+.voice_img{
     height: 5rem;
     width: auto;
     margin-top: 5%;
-}
-
-.alarm_detail{
-    width: 18rem;
-    height: 10rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: "bc_b";
-    font-size: 1.7rem;
 }
