@@ -14,6 +14,7 @@ import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.dto.request.AdditionalInfo;
 import org.ssafy.d210.members.dto.request.LastLoginInfo;
 import org.ssafy.d210.members.dto.request.ReqMyPageDetailInfo;
+import org.ssafy.d210.members.dto.response.JustEoa;
 import org.ssafy.d210.members.dto.response.ResMyPageDetailInfo;
 import org.ssafy.d210.members.dto.request.MyPageInfo;
 import org.ssafy.d210.members.dto.response.ResAdditionalInfo;
@@ -121,6 +122,12 @@ public class MemberDataController {
     public ApiResponseDto<?> getTargetMemberDetails(@PathVariable("id") Long id){
 
         return ResponseUtils.ok(memberDataService.getTargetMemberDetail(id), MsgType.SEARCH_SUCCESSFULLY);
+    }
+
+    @GetMapping("/eoa")
+    public ApiResponseDto<?> getMyAccountId(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        JustEoa ans = memberDataService.getJustEoa(userDetails);
+        return ResponseUtils.ok(ans, MsgType.SEARCH_SUCCESSFULLY);
     }
 
 
