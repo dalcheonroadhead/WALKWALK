@@ -725,13 +725,28 @@
     top: 5%; 
     align-items: center;
 }
-
+.halli_box{
+    display: flex;
+}
 .halli_detail{
     position: absolute;
     left: 6%;
     top: -10%;
     font-family: "bc_b";
     font-size: 1.4rem;
+}
+
+.halli_add{
+    position: absolute;
+    width: 4.5rem;
+    height: 2.5rem;
+    right: 5%;
+    top: 0%;
+    background-color: #FFCB23;
+    border-radius: 1rem;
+}
+.halli_add p{
+    margin: 0.5rem 0;
 }
 
 .my_halli_list_container{

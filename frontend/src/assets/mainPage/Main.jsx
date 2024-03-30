@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
-import { getGalleyList, getHalleyList, postGalleyRequest, getHalley } from "../../apis/halleygalley";
+import { getGalleyList, getHalleyList, postGalleyRequest, getHalley, responseGalley } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
 import { getRealtimeExerciseData, getWeeklyExerciseData, getExerciseCriteria } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
@@ -66,9 +66,41 @@ const Main = function(){
     const [halliRoadmapList, setHalliRoadmapList] = useState([]);
     const [weeklyExerciseData, setWeeklyExerciseData] = useState({avg:0, content:[{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},]});
     const [criteriaData, setCriteriaData] = useState({steps:0, exerciseMinute:0});
+    const [halliRequestList, setHalliRequestList] = useState([]);
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
+        getHalleyList()
+            .then((res)=>{
+                if(res){
+                    let data1 = [];
+                    let data2 = [];
+                    let data3 = [];
+                    res.forEach(element => {
+                        if(element.requestedTime != null){
+                            data1.push(element);
+                        }
+                        if(element.isAccepted){
+                            data2.push(element);
+                        } else{
+                            data3.push(element);
+                        }
+                    });
+                    setHalliRoadmapList(data1);
+                    setHalliList(data2);
+                    setHalliRequestList(data3);
+                    if(data2.length == 0){
+                        setHalli(false);
+                    }
+                    else{
+                        setHalli(true);
+                    }
+                }
+                else{
+                    setHalliList([])
+                    setHalli(false);
+                }
+            })
     }
 
     const openGalliModal = function(){
@@ -86,17 +118,28 @@ const Main = function(){
             getHalleyList()
             .then((res)=>{
                 if(res){
-                    setHalliList(res);
-                    console.log(res)
-                    let data = [];
+                    let data1 = [];
+                    let data2 = [];
+                    let data3 = [];
                     res.forEach(element => {
                         if(element.requestedTime != null){
-                            data.push(element);
+                            data1.push(element);
+                        }
+                        if(element.isAccepted){
+                            data2.push(element);
+                        } else{
+                            data3.push(element);
                         }
                     });
-                    setHalliRoadmapList(data);
-                    console.log(data)
-                    setHalli(true);
+                    setHalliRoadmapList(data1);
+                    setHalliList(data2);
+                    setHalliRequestList(data3);
+                    if(data2.length == 0){
+                        setHalli(false);
+                    }
+                    else{
+                        setHalli(true);
+                    }
                 }
                 else{
                     setHalliList([])
@@ -125,8 +168,28 @@ const Main = function(){
         getHalleyList()
             .then((res)=>{
                 if(res){
-                    setHalliList(res);
-                    setHalli(true);
+                    let data1 = [];
+                    let data2 = [];
+                    let data3 = [];
+                    res.forEach(element => {
+                        if(element.requestedTime != null){
+                            data1.push(element);
+                        }
+                        if(element.isAccepted){
+                            data2.push(element);
+                        } else{
+                            data3.push(element);
+                        }
+                    });
+                    setHalliRoadmapList(data1);
+                    setHalliList(data2);
+                    setHalliRequestList(data3);
+                    if(data2.length == 0){
+                        setHalli(false);
+                    }
+                    else{
+                        setHalli(true);
+                    }
                 }
                 else{
                     setHalliList([])
@@ -138,6 +201,21 @@ const Main = function(){
 
     const longGalliList = function(){
         setExpanded(!expanded)
+    }
+
+    const responseToRequest = (data)=>{
+        if(data.isAccept){
+            alert("요청을 수락했습니다.")
+        }
+        else{
+            alert('요청을 거절했습니다.')
+        }
+        responseGalley(data)
+            .then(res=>{
+                openHalliModal();
+            });
+
+        
     }
 
     //===========================================================================
@@ -225,7 +303,12 @@ const Main = function(){
                 {halli ? (
                     <div className={styles.halli_content}>
                         <div className={styles.halli_container}>
-                            <p className={styles.halli_detail}>나의 할리 목록</p> 
+                            <div className={styles.halli_box}>
+                                <p className={styles.halli_detail}>나의 할리 목록</p>
+                                <div className={styles.halli_add} onClick={openHalliModal}>
+                                    <p>요청목록</p>
+                                </div> 
+                            </div>
                             <div className={styles.my_halli_list_container} onClick={openHalliListModal}>
                                 <p className={styles.halli_goal_title}>목표 걷기 시간</p>
                                 { halliRoadmapList.length != 0 ?
@@ -348,7 +431,7 @@ const Main = function(){
                             <img src="/imgs/x.png" alt="x" className={styles.halli_modal_x} onClick={openHalliModal}></img>
                         </div>
                         <div className={styles.halli_list_container}>
-                                {halliList.map((data, index) => {
+                                {halliRequestList.map((data, index) => {
                                     console.log(data)
                                     return(
                                         <>
@@ -357,10 +440,10 @@ const Main = function(){
                                                 <p className={styles.halli_name_txt}>{data.nickname}</p>
                                                 <div className={styles.halli_btn_container}>
                                                     <div className={styles.halli_ok_btn}>
-                                                        <p className={styles.btn_txt}>수락</p>
+                                                        <p className={styles.btn_txt} onClick={()=>responseToRequest({memberId: data.memberId, isAccept: true})}>수락</p>
                                                     </div>
                                                     <div className={styles.halli_no_btn}>
-                                                        <p className={styles.btn_txt}>거절</p>
+                                                        <p className={styles.btn_txt} onClick={()=>responseToRequest({memberId: data.memberId, isAccept: false})}>거절</p>
                                                     </div>
                                                 </div>
                                             </div>  
