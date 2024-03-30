@@ -94,11 +94,11 @@ const Store = function(){
                     <div className={styles.modal_background}></div>
                     <div className={styles.voice_modal_container}>
                         <div className={styles.voice_title_container}>
-                            <p className={styles.voice_modal_title}>{voiceName}님의 메시지</p>
+                            <p className={styles.voice_modal_title}>{voiceName}님의<br></br>응원 메시지</p>
                             <img src="/imgs/x.png" alt="x" className={styles.voice_modal_x} onClick={openVoiceModal}></img>
                         </div>
                         <div className={styles.voice_content}>
-                            <img src="/imgs/alarm.png" alt="알림" className={styles.voice_img}></img>
+                            <img src="/imgs/mike.png" alt="마이크" className={styles.voice_img}></img>
                             <audio controls>
                                         <source src={voiceSrc} type="audio/mpeg"></source>
                             </audio>
@@ -116,7 +116,10 @@ const Store = function(){
                 <div className={styles.voice_list_container}>
                     {voiceList.map((data, index) => {
                         return(
-                            <div key={index} className={`${styles.voice_container} ${selectedVoiceIndex === index ? styles.select_voice_container : ''}`} onClick={() => {handleVoiceClick(index); openVoiceModal(data.voice, data.sendName)}}>
+                            <div key={index} className={`${styles.voice_container} ${selectedVoiceIndex === index ? styles.select_voice_container : ''}`} onClick={() => {handleVoiceClick(index);}}>
+                                <p className={styles.voice_date}>{data.date}</p>
+                                <p className={styles.voice_sendname}>{data.sendName}</p>
+                                <img src="/imgs/play.png" alt="플레이" className={styles.voice_play} onClick={() => {openVoiceModal(data.voice, data.sendName)}}></img>
                             </div>  
                         )
                     })}
