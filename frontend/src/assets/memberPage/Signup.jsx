@@ -24,7 +24,7 @@ const Signup = function () {
     eoa: '',
     publicKey: '',
     comment: '', // 추후 입력
-    phoneNumber: '', // 추후 입력
+    phoneNumber: '01000000000', // 추후 입력
     height: 165, // 한국인 전체 평균값
     weight: 65, // 한국인 전체 평균값
     longitude: 0, // 사용안함
@@ -160,7 +160,7 @@ const Signup = function () {
   };
 
   const handleClick = async () => {
-    if (step === 5) {
+    if (step === 4) {
       setIsLoading(true); // 로딩 모달 표시 시작
       try {
         // 블록체인 지갑 생성 API 및 재시도
@@ -195,7 +195,7 @@ const Signup = function () {
   return(
     <div className={styles.signup_container}>
       {isLoading && <LoadingModal text="회원가입 중..."></LoadingModal>}
-      {step === 4 && (
+      {step >= 4 && (
         <div className={styles.signup_sub_container}>
           <div className={styles.signup_title}>지역정보</div>
           <input className={styles.signup_input} type="text" placeholder='주소를 입력해주세요' name="location" onClick={daumPost} value={userInfo.location} readOnly/>
