@@ -10,8 +10,11 @@ import { useStore } from "../../stores/member";
 import { useSignupStore } from "../../stores/member";
 import Lottie from 'react-lottie';
 import confetti from '../../lotties/confetti_full.json';
+import useAlarmStore from "../../stores/alarm";
 
 const Main = function(){
+    
+    const { notification, setSubscriptionId } = useAlarmStore();
     const {memberId, setMemberId} = useStore();
     useEffect(()=>{
         getExerciseCriteria()
@@ -22,6 +25,8 @@ const Main = function(){
             .then((res)=>{
               setRealtimeExerciseData(res);
               console.log(res)
+
+              setSubscriptionId(JSON.parse(localStorage.getItem('tokens')).member_id);
             })
     }, [])
 
@@ -395,6 +400,7 @@ const Main = function(){
     return(
         <>
         <div>
+            {notification && <div style={{position: 'fixed', zIndex:'100',width: '300px', height: '400px', background: 'black'}}>ㅁㄴㅇㄻ너리;아ㅓㄴㅇ</div>}
             {isFirstVisit && (
                 <div className={styles.first_visit_container}>
                     <div className={styles.first_visit_lottie}>
