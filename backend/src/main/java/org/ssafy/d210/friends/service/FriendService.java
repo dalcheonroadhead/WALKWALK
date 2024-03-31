@@ -82,7 +82,7 @@ public class FriendService {
                     .receiverId(receiver)
                     .isChecked(false)
                     .notiType(NotiType.FRIEND)
-                    .notiContent("친구 요청이 왔습니다.")
+                    .notiContent(member.getNickname()+"님으로부터 친구 요청이 왔습니다")
                     .build();
             notificationService.insertNotification(notification);
             notificationService.notify(receiver.getId(), notification);
