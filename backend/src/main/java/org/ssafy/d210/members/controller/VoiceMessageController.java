@@ -25,4 +25,6 @@ public class VoiceMessageController {
     ){
         return ResponseUtils.ok(voiceMessageService.loadVoiceMessage(memberId,pageNo,criteria), MsgType.SEARCH_SUCCESSFULLY);
     }
+
+
 }
