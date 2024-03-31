@@ -16,9 +16,9 @@ var pageOwnerId;
 
 // Static variable For Test
 const currentMember =  JSON.parse(localStorage.getItem('tokens')) || {
-  member_id: 1,
-  member_nickname: "책 읽는 남자 전수민",
-  member_profile_url: "https://lh3.googleusercontent.com/a/ACg8ocJRi2en1YGof4VbnYEB3r-wQBZEw_B2k-eLTZSJ_a-fM10=s96-c",
+  member_id: 1000,
+  member_nickname: "지나가는 오리 1 ",
+  member_profile_url: "https://d210.s3.ap-northeast-2.amazonaws.com/duck.gif",
   Authorization: null
 };
 
@@ -137,7 +137,9 @@ const SocketPage4Member = () => {
 
     // 메세지 스택에 저장 
     console.log("들어온 메세지:", receivedMsg);
-    getSpeech(receivedMsg.textContent);
+    if(Number(pageOwnerId) === Number(currentMember.member_id)){
+      getSpeech(`${currentMember.member_nickname} 님의 응원메세지!:  `+receivedMsg.textContent);
+    }
     setMessages((preMessages) => [...preMessages, receivedMsg]);
   }
 
