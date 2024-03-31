@@ -37,7 +37,6 @@ function App() {
           <Route path="/walking" element={<Walking />}></Route>
           <Route path="/friend" element={<Friend />}></Route>
           <Route path="/mypage" element={<Mypage />}></Route>
-          <Route path="/member/:id" element={<SocketPage4Member/>}></Route>
         </Route>
         {/* 상하단바 없는 페이지 */}
         <Route path="/" element={<Login />}></Route>
@@ -58,6 +57,7 @@ function App() {
         <Route path="/mygoal/update" element={<MyGoalUpdate />}></Route>
         <Route path="/voice/savedvoice" element={<SavedVoice />}></Route>
         <Route path="/voice/sendvoice" element={<SendVoice />}></Route>
+        <Route path="/member/:id" element={<SocketPage4Member/>}></Route>
       </Routes>
     </BrowserRouter>
   )
