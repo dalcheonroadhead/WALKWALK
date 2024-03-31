@@ -25,10 +25,39 @@ import MyBadege from "./assets/myPage/MyBadge";
 import MyGoalUpdate from "./assets/myPage/MyGoalUpdate";
 import SavedVoice from "./assets/voicePage/SavedVoice";
 import SendVoice from "./assets/voicePage/SendVoice";
+import useAlarmStore from "./stores/alarm";
+import { useEffect, useState } from "react";
 
 function App() {
+  const { subscriptionId } = useAlarmStore();
+  const [alramFlag, setAlarmFlag] = useState(false);
+  const [alarmInfo, setAlarmInfo] = useState(null);
+
+  const AlarmFlagHandler = () => {
+    setAlarmFlag(!alramFlag);
+  }
+
+  useEffect(()=>{
+    // EventSource 생성 및 설정
+    if (subscriptionId !== null) {
+      const source = new EventSource(`${import.meta.env.VITE_API_URI}/notifications/subscribe/${subscriptionId}`);
+      
+      source.addEventListener('sse', event => {
+        const notificationData = JSON.parse(event.data);
+        setAlarmInfo(notificationData)
+        setAlarmFlag(true);
+      });
+
+      // 컴포넌트가 언마운트될 때 EventSource 종료
+      return () => {
+        source.close();
+      };
+    }
+  }, [subscriptionId]);
+
   return (
     <BrowserRouter>
+    {alramFlag && <div className="modal-background"><div className="modal-content-box"><p>{alarmInfo.notiContent}</p> <button onClick={AlarmFlagHandler}>닫기</button></div></div>}
       <Routes>
         {/* 상하단바 보이는 페이지 */}
         <Route element={<Layout />}>

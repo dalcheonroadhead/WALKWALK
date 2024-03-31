@@ -1,8 +1,12 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 const useAlarmStore = create((set) => ({
-  selectAlarmIndex: [],
-  setSelectAlarmIndex: (index) => set({ selectAlarmIndex: index }),
+  notification: null,
+  subscriptionId: null,
+  hasArrived: false,
+  setNotification: (notification) => set({ notification }),
+  setSubscriptionId: (id) => set({ subscriptionId: id }),
+  setHasArrived: (b) => set(b)
 }));
 
 export default useAlarmStore;
