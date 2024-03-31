@@ -104,3 +104,15 @@ export const uploadImgFile = async (formData) => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 내 배지 조회
+export const getMyBadge = async () => {
+    const url = '/members/badge'
+
+    return await instance.get(url)
+        .then((res) => {
+            console.log('배지api', res)
+            // return res.data.data
+        })
+        .catch((err) => {console.log(err)})
+}

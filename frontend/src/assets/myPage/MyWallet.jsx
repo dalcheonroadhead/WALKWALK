@@ -60,34 +60,38 @@ const MyWallet = function () {
 
   return(
     <div className={styles.mywallet_container}>
-      {eggMoney && (
-        <>
-          <div className={styles.mywallet_top_bar}>
-            <img className={styles.mywallet_back_direct} src="/imgs/direct.png" alt="back_direct" onClick={() => {navigate('/mypage')}}/>
-            <span className={styles.mywallet_title}>내 금고</span>
-          </div>
-          <div className={styles.mywallet_sub_container}>
-            <div className={styles.mywallet_sub_title}>내 자산</div>
-            <div className={styles.mywallet_2col}>
-              <div className={styles.mywallet_col}>
-                <img className={styles.mywallet_col_img} src="/imgs/egg.png" alt="" />
-                <div>{eggMoney.egg}</div>
+      <>
+        <div className={styles.mywallet_top_bar}>
+          <img className={styles.mywallet_back_direct} src="/imgs/direct.png" alt="back_direct" onClick={() => {navigate('/mypage')}}/>
+          <span className={styles.mywallet_title}>내 금고</span>
+        </div>
+        {eggMoney && (
+          <>
+            <div className={styles.mywallet_sub_container}>
+              <div className={styles.mywallet_field_container}>
+                <div className={styles.mywallet_sub_title}>내 자산</div>
+                <div className={styles.mywallet_2col}>
+                  <div className={styles.mywallet_col}>
+                    <img className={styles.mywallet_col_img} src="/imgs/egg.png" alt="" />
+                    <div>{eggMoney.egg}</div>
+                  </div>
+                  <div className={styles.mywallet_col}>
+                    <img className={styles.mywallet_col_img} src="/imgs/money.png" alt="" />
+                    <div>{eggMoney.money}</div>
+                  </div>
+                </div>
+                <div>
+                  <button className={styles.mywallet_btn} onClick={() => {setChargeModalOpen(true)}}>충전</button>
+                  <button className={styles.mywallet_btn} onClick={() => {setExchangeModalOpen(true)}}>환전</button>
+                </div>
               </div>
-              <div className={styles.mywallet_col}>
-                <img className={styles.mywallet_col_img} src="/imgs/money.png" alt="" />
-                <div>{eggMoney.money}</div>
+              <div className={styles.mywallet_field_container}>
+                <div className={styles.mywallet_sub_title}>거래 내역</div>
               </div>
             </div>
-          </div>
-          <div>
-            <button className={styles.mywallet_btn} onClick={() => {setChargeModalOpen(true)}}>충전</button>
-            <button className={styles.mywallet_btn} onClick={() => {setExchangeModalOpen(true)}}>환전</button>
-          </div>
-          <div className={styles.mywallet_sub_container}>
-            <div className={styles.mywallet_sub_title}>거래 내역</div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </>
       {isChargeModalOpen && (
         <>
           <div className={styles.mywallet_modal_background}></div>
