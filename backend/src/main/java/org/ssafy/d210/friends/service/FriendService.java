@@ -59,7 +59,6 @@ public class FriendService {
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
 
         FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver).orElse(null);
-
         if(friendList == null) {
             friendListRepository.save(
                     FriendList.builder()

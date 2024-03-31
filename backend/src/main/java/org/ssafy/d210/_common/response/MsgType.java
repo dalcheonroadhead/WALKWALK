@@ -62,6 +62,7 @@ public enum MsgType {
     SUBSCRIBE_SUCCESSFULLY("SSE 구독에 성공하였습니다."),
     GET_NOTIFICATION_LIST_SUCCESSFULLY("모든 알림 조회에 성공하였습니다."),
     PUT_NOTIFICATION_SUCCESSFULLY("알림 확인에 성공하였습니다."),
+    GET_NOTIFICATION_SUBSCRIBE_SUCCESSFULLY("알림 구독에 성공하였습니다."),
     ;
 
     private final String msg;

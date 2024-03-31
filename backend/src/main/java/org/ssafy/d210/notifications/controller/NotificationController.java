@@ -17,9 +17,9 @@ import org.ssafy.d210.notifications.service.NotificationService;
 public class NotificationController {
     private final NotificationService notificationService;
 
-    @GetMapping(value = "/subscribe")
-    public ApiResponseDto<?> subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ApiResponseDto.of(MsgType.SUBSCRIBE_SUCCESSFULLY, notificationService.subscribe(userDetails.getMember().getId()));
+    @GetMapping(value = "/subscribe/{memberId}")
+    public SseEmitter subscribe(@PathVariable Long memberId) {
+        return notificationService.subscribe(memberId);
     }
 
     @GetMapping("/")
