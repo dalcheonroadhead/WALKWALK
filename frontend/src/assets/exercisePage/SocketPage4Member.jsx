@@ -9,6 +9,7 @@ import MessageForm from './MessageForm';
 import AudioRecord from './AudioRecord';
 import './FileUploader.module.css';
 import axios from 'axios';
+import { getSpeech } from './getSpeech';
 
 let stompClient;
 var pageOwnerId;
@@ -88,8 +89,8 @@ const SocketPage4Member = () => {
 
   // A-1. 최초 연결 함수 
   const connect = () => {
-    // const socketURL = "http://localhost:8081/ws-stomp";
-    const socketURL = "https://j10d210.p.ssafy.io/ws-stomp";
+    const socketURL = "http://localhost:8081/ws-stomp";
+    // const socketURL = "https://j10d210.p.ssafy.io/ws-stomp";
     var sockJS = new SockJS(socketURL);
     stompClient = Stomp.over(sockJS);
     console.log(stompClient);
@@ -136,6 +137,7 @@ const SocketPage4Member = () => {
 
     // 메세지 스택에 저장 
     console.log("들어온 메세지:", receivedMsg);
+    getSpeech(receivedMsg.textContent);
     setMessages((preMessages) => [...preMessages, receivedMsg]);
   }
 
