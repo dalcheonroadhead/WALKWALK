@@ -19,6 +19,7 @@ import org.ssafy.d210.members.dto.response.ResMyPageDetailInfo;
 import org.ssafy.d210.members.dto.request.MyPageInfo;
 import org.ssafy.d210.members.dto.response.ResAdditionalInfo;
 import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.members.service.MemberService;
 
@@ -33,6 +34,9 @@ public class MemberDataController {
 
     private final MemberService memberService;
     private final MemberDataService memberDataService;
+    private final MembersRepository membersRepository;
+
+
     @GetMapping("/check-duplicated")
     public ApiResponseDto<Map<String, Boolean>> checkDuplicated (@RequestParam("nickname")String nickname) {
         boolean isDuplicated = memberService.isDuplicatedID(nickname);
@@ -96,7 +100,9 @@ public class MemberDataController {
         }
 
 
-        rmdl.ToEntity(userDetails.getMember());
+        Members me = rmdl.ToEntity(userDetails.getMember());
+
+        membersRepository.save(me);
 
         return ResponseUtils.ok(rmdl, MsgType.ADD_INFO_SUCCESSFULLY);
     }
