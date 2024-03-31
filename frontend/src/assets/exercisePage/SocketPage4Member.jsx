@@ -89,8 +89,8 @@ const SocketPage4Member = () => {
 
   // A-1. 최초 연결 함수 
   const connect = () => {
-    const socketURL = "http://localhost:8081/ws-stomp";
-    // const socketURL = "https://j10d210.p.ssafy.io/ws-stomp";
+    // const socketURL = "http://localhost:8081/ws-stomp";
+    const socketURL = "https://j10d210.p.ssafy.io/ws-stomp";
     var sockJS = new SockJS(socketURL);
     stompClient = Stomp.over(sockJS);
     console.log(stompClient);
