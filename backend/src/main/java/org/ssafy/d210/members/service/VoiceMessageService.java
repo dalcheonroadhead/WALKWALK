@@ -23,7 +23,7 @@ public class VoiceMessageService {
     public Page<MessageInfo> loadVoiceMessage(Long receiverId, int pageNo, String criteria){
 
         // 1) 페이지 네이션을 해주는 객체 Pageable 선언 (PageNumber, pageSize, 기준)
-        Pageable pageable = PageRequest.of(pageNo, 100, Sort.by(Sort.Direction.ASC,criteria));
+        Pageable pageable = PageRequest.of(pageNo, 100, Sort.by(Sort.Direction.DESC,criteria));
 
         // 2)
         Page<VoiceMessage> messages = voiceMessageRepository.findAllByReceiver_Id(receiverId, pageable);
