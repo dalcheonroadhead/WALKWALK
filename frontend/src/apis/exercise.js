@@ -80,7 +80,6 @@ export const getExerciseCriteria = async () => {
     
     return await instance.get(url)
         .then((res) => {
-            console.log(res.data.data);
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
@@ -92,7 +91,6 @@ export const getExerciseCriteriaByAge = async () => {
     
     return await instance.get(url)
         .then((res) => {
-            console.log(res.data.data);
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
@@ -104,8 +102,7 @@ export const updateExerciseCriteria = async (data) => {
     
     return await instance.post(url, data)
         .then((res) => {
-            console.log(res.data.data);
-            // return res.data.data;
+            return res.data.data;
         })
         .catch((err) => {console.log(err)})
 }

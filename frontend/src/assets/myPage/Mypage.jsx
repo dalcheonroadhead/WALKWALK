@@ -36,7 +36,9 @@ const Mypage = function () {
       {mypageInfo && (
         <>
           <div className={styles.mypage_profile_container}>
-            <img className={styles.mypage_profile_img} src={mypageInfo.profileUrl} alt="my profile img" />
+            <div className={styles.mypage_profile_img_container}>
+              <img className={styles.mypage_profile_img} src={mypageInfo.profileUrl} alt="my profile img" />
+            </div>
             <div className={styles.mypage_profile_nickname}>{mypageInfo.nickname}</div>
             <div>{mypageInfo.comment}</div>
           </div>
