@@ -9,6 +9,7 @@ import MessageForm from './MessageForm';
 import AudioRecord from './AudioRecord';
 import './FileUploader.module.css';
 import axios from 'axios';
+import { getSpeech } from './getSpeech';
 
 let stompClient;
 var pageOwnerId;
@@ -136,6 +137,7 @@ const SocketPage4Member = () => {
 
     // 메세지 스택에 저장 
     console.log("들어온 메세지:", receivedMsg);
+    getSpeech(receivedMsg.textContent);
     setMessages((preMessages) => [...preMessages, receivedMsg]);
   }
 
