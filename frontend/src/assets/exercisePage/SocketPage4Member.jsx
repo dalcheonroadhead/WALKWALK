@@ -156,7 +156,7 @@ const SocketPage4Member = () => {
     axios.get(`https://j10d210.p.ssafy.io/api/members/load/${pageOwnerId}`, clientHeader)
     .then((res)=> {
       console.log(res.data.data.content)
-     setMessages([...res.data.data.content]);
+     setMessages([...res.data.data.content].reverse());
     })
     .catch((err) => {console.log(err)})
   }
@@ -211,8 +211,16 @@ const SocketPage4Member = () => {
 
   },[pageOwnerId])
 
+  useEffect(() => {
+    if(chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  },[messages])
+
 
   // E. 기타 
+
+  // 버튼 누를 시 맨 밑으로 
   const goBottomChat = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -245,6 +253,7 @@ const SocketPage4Member = () => {
 
         {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
         <MessageList
+          chatContainerRef={chatContainerRef}
           messages={messages}
           currentTypingId={currentTypingId}
           onEndTyping={handleEndTyping}
