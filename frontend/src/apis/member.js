@@ -104,3 +104,15 @@ export const uploadImgFile = async (formData) => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 유저 프로필 조회
+export const getUserDetail = async (memberId) => {
+    const url = `/members/${memberId}`
+
+    return await instance.get(url)
+        .then((res) => {
+            // console.log('myinfo : ', res)
+            return res.data.data
+        })
+        .catch((err) => {console.log(err)})
+}
