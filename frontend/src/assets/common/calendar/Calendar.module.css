@@ -10,10 +10,11 @@
 .calendar {
   font-family: 'bc_b';
   width: 20rem;
-  border: 1px solid #ccc;
   border-radius: 1rem;
   padding: 0 10px 13px 10px;
   background-color: #EDDEC3;
+  box-shadow: 0.113rem 0.425rem 0.5rem 0 rgba(0, 0, 0, 0.3);
+
 }
 .month {
   text-align: center;
