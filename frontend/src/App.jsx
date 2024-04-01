@@ -29,11 +29,11 @@ import SendingVoice from "./assets/voicePage/SendingVoice";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [alramFlag, setAlarmFlag] = useState(false);
+  const [alarmFlag, setAlarmFlag] = useState(false);
   const [alarmInfo, setAlarmInfo] = useState(null);
 
   const AlarmFlagHandler = () => {
-    setAlarmFlag(!alramFlag);
+    setAlarmFlag(!alarmFlag);
   }
 
   useEffect(()=>{
@@ -57,7 +57,21 @@ function App() {
 
   return (
     <BrowserRouter>
-    {alramFlag && <div className="modal-background"><div className="modal-content-box"><p>{alarmInfo.notiContent}</p> <button onClick={AlarmFlagHandler}>닫기</button></div></div>}
+    {alarmFlag && (
+                <>
+                    <div className='modal_background'></div>
+                    <div className='alarm_modal_container'>
+                        <div className='alarm_title_container'>
+                            <p className='alarm_modal_title'>알림</p>
+                        </div>
+                        <div className='alarm_content'>
+                            <img src="/imgs/alarm.png" alt="알림" className='alarm_img'></img>
+                            <p className='alarm_detail'>{alarmInfo.notiContent}</p>
+                        </div>
+                        <button className='alarm_btn' onClick={AlarmFlagHandler}>닫기</button>
+                    </div>
+                </>
+            )}
       <Routes>
         {/* 상하단바 보이는 페이지 */}
         <Route element={<Layout />}>
