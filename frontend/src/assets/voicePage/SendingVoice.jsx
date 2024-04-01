@@ -168,9 +168,8 @@ const SendingVoice = function(){
     const [galliName, setGalliName] = useState("응원 메시지를 보낼 갈리찾기");
     const [keyword, setKeyword] = useState('');
 
-    const openGalliListModal = function(name){
-        setGalli(!galli)
-        // setGalliName(name)
+    const openGalliListModal = function(){
+        setGalli(!galli);
     }
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -196,7 +195,7 @@ const SendingVoice = function(){
                     <div className={styles.modal_background}></div>
                     <div className={styles.galli_modal_container}>
                         <div className={styles.galli_title_container}>
-                            <p className={styles.galli_modal_title}>갈리 요청하기</p>
+                            <p className={styles.galli_modal_title}>응원 메시지 보낼 갈리 선택하기</p>
                             <img src="/imgs/x.png" alt="x" className={styles.galli_modal_x} onClick={openGalliListModal}></img>
                         </div>                                
                         
@@ -215,7 +214,7 @@ const SendingVoice = function(){
                                             <p className={styles.galli_name_txt}>{data.nickname}</p>
                                             <div className={styles.galli_btn_container}>
                                                 <div className={styles.galli_put_btn}>
-                                                    <p className={styles.btn_txt} onClick={()=>{openGalliListModal(data.nickname)}}>신청</p>
+                                                    <p className={styles.btn_txt} onClick={()=>{setGalliName(data.nickname)}}>선택</p>
                                                 </div>
                                             </div>
                                         </div>  
@@ -247,9 +246,20 @@ const SendingVoice = function(){
                     <p className={styles.recieve_txt}>받는 사람</p>
                     <div className={styles.select_container}>
                         <p className={styles.select_name}>{galliName}</p>
-                        <img src="/imgs/search.png" alt="찾기" className={styles.galli_search_icon} onClick={openGalliListModal}></img>
+                        <img src="/imgs/search.png" alt="찾기" className={styles.galli_select_search_icon} onClick={openGalliListModal}></img>
                     </div>
                     
+                    <div className={styles.send_btn_container}>
+                        <p>보내기</p>
+                    </div>
+
+                    <img src="/imgs/calendar_bottom.png" alt="풀밭" className={styles.ch_ground}></img>
+                    <div className={styles.img_container}>
+                        <img src="/imgs/ch2_bol_hil.png" alt="할리 오리" className={styles.ch_img}></img>
+                        <img src="/imgs/mike.png" alt="오리 마이크" className={styles.ch_mike}></img>
+                        
+                    </div>
+                
                 </div>
 
             </div>
