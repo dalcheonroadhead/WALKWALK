@@ -26,6 +26,7 @@ import MyGoalUpdate from "./assets/myPage/MyGoalUpdate";
 import SavedVoice from "./assets/voicePage/SavedVoice";
 import SendVoice from "./assets/voicePage/SendVoice";
 import SendingVoice from "./assets/voicePage/SendingVoice";
+import Mission from "./assets/halligalliPage/Mission";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -102,6 +103,7 @@ function App() {
         <Route path="/voice/sendvoice" element={<SendVoice />}></Route>
         <Route path="/member/:id" element={<SocketPage4Member/>}></Route>
         <Route path="/voice/sendvoice/sendingvoice" element={<SendingVoice />}></Route>
+        <Route path="/galli/mission" element={<Mission />}></Route>
       </Routes>
     </BrowserRouter>
   )

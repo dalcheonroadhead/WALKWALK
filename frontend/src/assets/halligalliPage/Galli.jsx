@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./HalliGalli.module.css";
-import { gray } from "d3-color";
 import { getGalley } from "../../apis/halleygalley";
 import { useStore } from "../../stores/member";
 import Calendar from "../common/calendar/Calendar";
@@ -17,11 +16,38 @@ const Galli = function(){
     const moveToMainPage = function () {
         navigate("/main")
     }
+
+    const moveToMissionPage = function () {
+        navigate("/galli/mission")
+    }
     const [galleyInfo, setGalleyInfo] = useState({});
+    const[rest, setRest] = useState(false);
     
+
+    const openRestModal = function(){
+        setRest(!rest);
+    }
 
     return(
         <>
+            {rest && (
+                <>
+                    <div className={styles.modal_background}></div>
+                    <div className={styles.rest_modal_container}>
+                        <div className={styles.rest_title_container}>
+                            <img src="/imgs/x.png" alt="x" className={styles.rest_modal_x} onClick={openRestModal}></img>
+                        </div>
+                        <div className={styles.rest_content}>
+                            <p className={styles.rest_detail}>휴일권을 정말<br></br>사용하시겠습니까?</p>
+                            <img src="/imgs/ch2_bol_q.png" alt="할리 물음표" className={styles.rest_img}></img>
+                        </div>
+                        <div className={styles.rest_ok_container} onClick={openRestModal}>
+                            <p>확인</p>
+                        </div>
+                       
+                    </div>
+                </>
+            )}
             <div className={styles.main_container}>
                 <div className={styles.title_container}>
                     <img src="/imgs/direct.png" alt="뒤로가기" className={styles.back_btn} onClick={moveToMainPage}></img>
@@ -56,7 +82,7 @@ const Galli = function(){
                         </div>
                     </div>
 
-                    <div className={styles.mission_btn}>
+                    <div className={styles.mission_btn} onClick={moveToMissionPage}>
                         <p>미션 설정하기</p>
                     </div>
                 </div>
@@ -65,7 +91,12 @@ const Galli = function(){
                     <p className={styles.mission_title2}>회원님이 등록한 미션 현황</p>
                     <Calendar></Calendar>
                     <div className={styles.days_content_box_container}>
-                        <p className={styles.calen_title}>3월 12일</p>
+                        <div className={styles.content_title_container}>
+                            <p className={styles.calen_title}>3월 12일</p>
+                            <div className={styles.rest_btn_container} onClick={openRestModal}>
+                                <p>휴식권 사용</p>
+                            </div>
+                        </div>
                         <div className={styles.ff_btn_container}>
                             <div className={styles.walk_cnt_btn_container}>
                                 <img src="/imgs/foot.png" alt="걸음 수 아이콘" className={styles.foot_icon}></img>
