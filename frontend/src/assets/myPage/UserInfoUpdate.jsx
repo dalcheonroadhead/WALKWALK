@@ -74,6 +74,7 @@ const UserInfoUpdate = function () {
       const updatedInfo = {...newInfo, profileUrl: imgUrl};
       const response = await updateMyInfo(updatedInfo);
       console.log('유저정보수정화면', response)
+      alert('수정되었습니다!');
       navigate('/mypage')
     } catch (error) {
       console.error('업데이트 중 에러 발생:', error);
@@ -160,10 +161,12 @@ const UserInfoUpdate = function () {
 
           <div className={styles.userinfoupdate_sub_container}>
             <div className={styles.userinfoupdate_profile_container}>
-              <label htmlFor="profileInput">
-                <img className={styles.userinfoupdate_profile_img} src={newInfo.profileUrl} alt="profile_img"/>
-                <img className={styles.userinfoupdate_camera_img} src="/imgs/camera.png" alt="camera_img" />
-              </label>
+              <div className={styles.userinfoupdate_img_container}>
+                <label htmlFor="profileInput">
+                  <img className={styles.userinfoupdate_profile_img} src={newInfo.profileUrl} alt="profile_img"/>
+                </label>
+              </div>
+              <img className={styles.userinfoupdate_camera_img} src="/imgs/camera.png" alt="camera_img" />
               <input id="profileInput" type="file" style={{'display': 'none'}} accept=".png, .jpg, .jpeg" onChange={handleFileChange}/>
             </div>
 

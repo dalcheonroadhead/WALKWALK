@@ -10,8 +10,11 @@ import { useStore } from "../../stores/member";
 import { useSignupStore } from "../../stores/member";
 import Lottie from 'react-lottie';
 import confetti from '../../lotties/confetti_full.json';
+import useAlarmStore from "../../stores/alarm";
 
 const Main = function(){
+    
+    const { notification, setSubscriptionId } = useAlarmStore();
     const {memberId, setMemberId} = useStore();
     useEffect(()=>{
         getExerciseCriteria()
@@ -22,6 +25,8 @@ const Main = function(){
             .then((res)=>{
               setRealtimeExerciseData(res);
               console.log(res)
+
+              setSubscriptionId(JSON.parse(localStorage.getItem('tokens')).member_id);
             })
     }, [])
 
@@ -71,39 +76,43 @@ const Main = function(){
     const [criteriaData, setCriteriaData] = useState({steps:0, exerciseMinute:0});
     const [halliRequestList, setHalliRequestList] = useState([]);
 
-    const openHalliModal = function() {
-        setIsHalliOpen(!isHalliOpen);
+    const updateHalliGalliList = () => {
         getHalleyList()
-            .then((res)=>{
-                if(res){
-                    let data1 = [];
-                    let data2 = [];
-                    let data3 = [];
-                    res.forEach(element => {
-                        if(element.requestedTime != null){
-                            data1.push(element);
-                        }
-                        if(element.isAccepted){
-                            data2.push(element);
-                        } else{
-                            data3.push(element);
-                        }
-                    });
-                    setHalliRoadmapList(data1);
-                    setHalliList(data2);
-                    setHalliRequestList(data3);
-                    if(data2.length == 0){
-                        setHalli(false);
+        .then((res)=>{
+            if(res){
+                let data1 = [];
+                let data2 = [];
+                let data3 = [];
+                res.forEach(element => {
+                    if(element.requestedTime != null){
+                        data1.push(element);
                     }
-                    else{
-                        setHalli(true);
+                    if(element.isAccepted){
+                        data2.push(element);
+                    } else{
+                        data3.push(element);
                     }
-                }
-                else{
-                    setHalliList([])
+                });
+                setHalliRoadmapList(data1);
+                setHalliList(data2);
+                setHalliRequestList(data3);
+                if(data2.length == 0){
                     setHalli(false);
                 }
-            })
+                else{
+                    setHalli(true);
+                }
+            }
+            else{
+                setHalliList([])
+                setHalli(false);
+            }
+        })
+    }
+
+    const openHalliModal = function() {
+        setIsHalliOpen(!isHalliOpen);
+        updateHalliGalliList();
     }
 
     const openGalliModal = function(){
@@ -117,38 +126,7 @@ const Main = function(){
 
         }
         else if(index == 1){
-            // 할리 리스트 조회
-            getHalleyList()
-            .then((res)=>{
-                if(res){
-                    let data1 = [];
-                    let data2 = [];
-                    let data3 = [];
-                    res.forEach(element => {
-                        if(element.requestedTime != null){
-                            data1.push(element);
-                        }
-                        if(element.isAccepted){
-                            data2.push(element);
-                        } else{
-                            data3.push(element);
-                        }
-                    });
-                    setHalliRoadmapList(data1);
-                    setHalliList(data2);
-                    setHalliRequestList(data3);
-                    if(data2.length == 0){
-                        setHalli(false);
-                    }
-                    else{
-                        setHalli(true);
-                    }
-                }
-                else{
-                    setHalliList([])
-                    setHalli(false);
-                }
-            })
+            updateHalliGalliList();
         }
         else{
             // 갈리 리스트 조회
@@ -168,37 +146,7 @@ const Main = function(){
     }
 
     const openHalliListModal = function(){
-        getHalleyList()
-            .then((res)=>{
-                if(res){
-                    let data1 = [];
-                    let data2 = [];
-                    let data3 = [];
-                    res.forEach(element => {
-                        if(element.requestedTime != null){
-                            data1.push(element);
-                        }
-                        if(element.isAccepted){
-                            data2.push(element);
-                        } else{
-                            data3.push(element);
-                        }
-                    });
-                    setHalliRoadmapList(data1);
-                    setHalliList(data2);
-                    setHalliRequestList(data3);
-                    if(data2.length == 0){
-                        setHalli(false);
-                    }
-                    else{
-                        setHalli(true);
-                    }
-                }
-                else{
-                    setHalliList([])
-                    setHalli(false);
-                }
-            })
+        updateHalliGalliList();
         setIsHalliListOpen(!isHalliListOpen);   
     }
 
@@ -452,6 +400,7 @@ const Main = function(){
     return(
         <>
         <div>
+            {notification && <div style={{position: 'fixed', zIndex:'100',width: '300px', height: '400px', background: 'black'}}>ㅁㄴㅇㄻ너리;아ㅓㄴㅇ</div>}
             {isFirstVisit && (
                 <div className={styles.first_visit_container}>
                     <div className={styles.first_visit_lottie}>
