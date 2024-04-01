@@ -46,7 +46,7 @@ public class ExerciseDecided {
     private LocalDateTime exerciseStart = LocalDateTime.now();
 
     @Column(name = "exercise_end")
-    private LocalDateTime exerciseEnd = LocalDateTime.now();
+    private LocalDateTime exerciseEnd;
 
     private Double calorie;
 }
