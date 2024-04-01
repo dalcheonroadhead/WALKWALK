@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-const Store = function(){
+const SavedVoice = function(){
     const navigate = useNavigate();
     const [selectedVoiceIndex, setSelectedVoiceIndex] = useState(null);
     const[voice, setVoice] = useState(false);    
@@ -130,4 +130,4 @@ const Store = function(){
     )
 }
 
-export default Store;
+export default SavedVoice;
