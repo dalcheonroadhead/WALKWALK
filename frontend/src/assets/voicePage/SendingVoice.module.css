@@ -117,11 +117,60 @@ font-face {
     border-radius: 1rem;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .select_name{
     font-size: 1.3rem;
     margin-left: 3%;
+}
+
+.galli_select_search_icon{
+    height: 3rem;
+    width: auto;
+    position: absolute;
+    right: 3%;
+}
+
+.send_btn_container{
+    margin-top: 10%;
+    width: 22rem;
+    height: 4.5rem;
+    background: #FFC200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    font-size: 1.8rem;
+}
+
+.img_container{
+    width: 24.4rem;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: -2%;
+}
+
+.ch_img{
+    height: 15rem;
+    width: auto;
+}
+
+.ch_mike{
+    height: 5rem;
+    width: auto;
+    margin-top: 20%;
+    margin-left: -10%;
+}
+
+.ch_ground{
+    width: 24.4rem;
+    height: auto;
+    position: absolute;
+    bottom: 0%;
 }
 
 .modal_background{
@@ -138,7 +187,7 @@ font-face {
 
 .galli_modal_container{
     width: 22rem;
-    height: 25rem;
+    height: 30rem;
     top: 50%;
     left: 50%;
     z-index: 11;
@@ -163,8 +212,9 @@ font-face {
     width: 13rem;
     font-family: "bc_b";
     font-size: 1.6rem;
-    top: 10%;
+    top: 50%;
     left: 50%;
+    text-align: center;
     transform: translate(-50%, -50%);
     position: absolute;
 }
@@ -181,7 +231,7 @@ font-face {
 .galli_search_container{
     width: 20rem;
     height: 5rem;
-    top: 25%;
+    top: 32%;
     left: 50%;
     z-index: 11;
     position: absolute;
@@ -213,22 +263,25 @@ font-face {
 
 .galli_list_container{
     width: 20rem;
-    height: 15rem;
-    top: 65.6%;
+    height: 16.8rem;
+    top: 68.5%;
     left: 50%;
     z-index: 11;
     position: absolute;
     border-radius: 30px;
     transform: translate(-50%, -50%);
     background: #FFFBF3;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .galli_names_container{
     width: 20rem;
-    height: 14.9rem;
+    height: 15rem;
     position: relative;
     border-radius: 30px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .galli_name_container{
