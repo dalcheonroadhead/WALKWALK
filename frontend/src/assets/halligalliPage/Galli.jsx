@@ -103,9 +103,6 @@ const Galli = function(){
                     <div className={styles.days_content_box_container}>
                         <div className={styles.content_title_container}>
                             <p className={styles.calen_title}>3월 12일</p>
-                            <div className={styles.rest_btn_container} onClick={openRestModal}>
-                                <p>휴식권 사용</p>
-                            </div>
                         </div>
                         <div className={styles.ff_btn_container}>
                             <div className={styles.walk_cnt_btn_container}>
