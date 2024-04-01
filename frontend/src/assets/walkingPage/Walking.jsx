@@ -1,13 +1,11 @@
 import styles from "./Walking.module.css"
 
 const Walking = function(){
-    return(
-        <>
-            <div className={styles.main_container}>
-                <h1>운동 페이지</h1>
-            </div>
-        </>
-    )
+  return(
+    <div className={styles.walking_container}>
+      <div>오늘의 운동</div>
+    </div>
+  )
 }
 
 export default Walking;
