@@ -19,7 +19,7 @@ export const getAlarmList = async () => {
     return await instance.get(url)
         .then(res=>{
             console.log(res.data.data)
-            return res.data.data;
+            return res.data.data.reverse();
         })
 }
 

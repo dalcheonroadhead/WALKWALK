@@ -26,11 +26,9 @@ import MyGoalUpdate from "./assets/myPage/MyGoalUpdate";
 import SavedVoice from "./assets/voicePage/SavedVoice";
 import SendVoice from "./assets/voicePage/SendVoice";
 import SendingVoice from "./assets/voicePage/SendingVoice";
-import useAlarmStore from "./stores/alarm";
 import { useEffect, useState } from "react";
 
 function App() {
-  const { subscriptionId } = useAlarmStore();
   const [alramFlag, setAlarmFlag] = useState(false);
   const [alarmInfo, setAlarmInfo] = useState(null);
 
@@ -39,10 +37,11 @@ function App() {
   }
 
   useEffect(()=>{
+    const localItem = JSON.parse(localStorage.getItem('tokens'));
     // EventSource 생성 및 설정
-    if (subscriptionId !== null) {
-      const source = new EventSource(`${import.meta.env.VITE_API_URI}/notifications/subscribe/${subscriptionId}`);
-      
+    if (localItem !== null) {
+      const source = new EventSource(`${import.meta.env.VITE_API_URI}/notifications/subscribe/${localItem.member_id}`);
+      console.log(source)
       source.addEventListener('sse', event => {
         const notificationData = JSON.parse(event.data);
         setAlarmInfo(notificationData)
@@ -54,7 +53,7 @@ function App() {
         source.close();
       };
     }
-  }, [subscriptionId]);
+  }, []);
 
   return (
     <BrowserRouter>
