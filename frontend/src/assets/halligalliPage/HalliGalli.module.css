@@ -171,10 +171,18 @@
     margin-left: -48%
 }
 
+.mission_title_h{
+    font-size: 1.5rem;
+    text-align: left;
+    margin-top: 5%;
+    font-family: "bc_b";
+    margin-left: -6%
+}
+
 .mission_back{
     width: 22rem;
     height: 25rem;
-    margin-top: -2%;
+    margin-top: -3%;
     background: #FFFEFC;
     flex-direction: column; /* 세로로 배치 */
     display: flex;
@@ -485,4 +493,24 @@
 .record_cp_cnt{
     font-size: 1.5rem;
     margin-top: -10%;
+}
+
+.no_mission_container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.no_mission_txt{
+    font-size: 2rem;
+    text-align: center;
+}
+
+.no_mission_img{
+    height: 15rem;
+    width: auto;
+    margin-top: -20%;
 }
