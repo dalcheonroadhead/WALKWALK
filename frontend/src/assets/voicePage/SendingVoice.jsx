@@ -259,7 +259,6 @@ const SendingVoice = function(){
                         <img src="/imgs/mike.png" alt="오리 마이크" className={styles.ch_mike}></img>
                         
                     </div>
-                
                 </div>
 
             </div>
