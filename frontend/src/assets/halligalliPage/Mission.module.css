@@ -29,9 +29,9 @@
 
 }
 
-.rest_modal_container{
+.mission_modal_container{
     width: 22rem;
-    height: 23rem;
+    height: 25rem;
     top: 50%;
     left: 50%;
     z-index: 11;
@@ -45,14 +45,14 @@
 
 }
 
-.rest_title_container{
+.mission_title_container{
     position: relative;
     display: flex;
     width: 22rem;
     height: 4rem;
 }
 
-.rest_modal_x{
+.mission_modal_x{
     position: absolute;
     right: 5%;
     top: 20%;
@@ -60,10 +60,10 @@
     height: 2rem;
 }
 
-.rest_content{
+.mission_content{
     width: 20rem;
-    height: 15rem;
-    margin-top: -2%;
+    height: 17rem;
+    margin-top: -1%;
     border-radius: 30px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -73,13 +73,13 @@
     background: #FFFBF3;
 }
 
-.rest_img{
+.mission_img{
     height: 10rem;
     width: auto;
     margin-top: -26%;
 }
 
-.rest_detail{
+.mission_detail{
     width: 18rem;
     height: 10rem;
     display: flex;
@@ -90,10 +90,10 @@
     text-align: center;
 }
 
-.rest_ok_container{
+.mission_ok_container{
     width: 5.3rem;
     height: 3.1rem;
-    margin-top: 3%;
+    margin-top: 2%;
     border-radius: 1rem;
     background: #FFF2CB;
     display: flex;
@@ -215,16 +215,64 @@
 }
 
 .content_txt_container{
-    width: 12.4rem;
-    height: 8rem;
+    width: 14.4rem;
+    height: 10rem;
     display: flex;
     flex-direction: column;
     text-align: left;
+    margin-left: -5%;
+}
+
+.time_container{
+    width: 14.4rem;
+    height: fit-content;
+    display: flex;
+}
+
+.input_time{
+    width: 2rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    outline: none;
+    background: #FFF2CB;
+    font-family: "bc_b";
+    font-size: 1.5rem;
+    margin-left: 2%;
+    padding: 0.5rem;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
+}
+
+.day_money_container{
+    width: 14.4rem;
+    height: fit-content;
+    display: flex;
+}
+
+.input_money{
+    width: 6rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    outline: none;
+    background: #FFF2CB;
+    font-family: "bc_b";
+    font-size: 1.5rem;
+    margin-left: 4%;
+    padding: 0.5rem;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
+}
+
+.rest_container{
+    width: 14.4rem;
+    height: fit-content;
+    display: flex;
 }
 
 .content_detail_txt{
     font-family: "bc_b";
     font-size: 1.3rem;
+    margin-right: 1%;
 }
 
 .money_content_txt{
@@ -232,6 +280,7 @@
     font-family: "bc_b";
     margin-left: -78%;
     margin-top: 3%;
+
 }
 
 .money_bottom_line{
@@ -280,212 +329,4 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.calendar_container{
-    width: 24.4rem;
-    height: 60rem;
-    margin-top: 10%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.mission_title2{
-    font-size: 1.5rem;
-    text-align: left;
-    margin-top: 5%;
-    margin-bottom: 3%;
-    font-family: "bc_b";
-    margin-left: -15%
-}
-
-.days_content_box_container{
-    width: 24.4rem;
-    height: 22rem;
-    margin-top: 10%;
-    border-radius: 1rem;
-    background: #FFFBF4;    
-    box-shadow: 0.113rem 0.225rem 0.5rem 0 rgba(0, 0, 0, 0.3);
-    margin-bottom: 10%;
-}
-
-.content_title_container{
-    width: 24.4rem;
-    height: fit-content;
-    display: flex;
-    align-items: center;
-}
-
-.calen_title{
-    font-size: 1.8rem;
-    margin-left: 4%;
-}
-
-.rest_btn_container{
-    width: 7rem;
-    height: 3rem;
-    background: #FFDD71;
-    border-radius: 1rem;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 35%;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.2);
-}
-
-.ff_btn_container{
-    width: 24.4rem;
-    height: 6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0%;
-}
-
-.walk_cnt_btn_container{
-    width: 7.4rem;
-    height: 7rem;
-    background: #E1D9CB;
-    border-radius: 1rem;
-    margin-right: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.2);
-
-}
-
-.foot_icon{
-    height: 1.8rem;
-    width: auto;
-    margin-top: 2%;
-    margin-left: -50%;
-}
-
-.base_walk_cnt{
-    font-size: 1.15rem;
-    margin-top: 2%;
-}
-
-.record_walk_cnt{
-    font-size: 1.15rem;
-    margin-top: -20%;
-}
-
-.walk_time_btn_container{
-    width: 7.4rem;
-    height: 7rem;
-    background: #FFEFBC;
-    border-radius: 1rem;
-    margin-right: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.2);
-
-}
-
-.clock_icon{
-    height: 1.8rem;
-    width: auto;
-    margin-top: 3%;
-    margin-left: -60%;
-}
-
-.base_time_cnt{
-    font-size: 1.15rem;
-    margin-top: 2%;
-}
-
-.record_time_cnt{
-    font-size: 1.15rem;
-    margin-top: -20%;
-}
-
-.walk_road_btn_container{
-    width: 7.4rem;
-    height: 7rem;
-    background: #E4EED0;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.2);
-
-}
-
-.road_icon{
-    height: 1.8rem;
-    width: auto;
-    margin-top: 3%;
-    margin-left: -60%;
-}
-
-.base_road_cnt{
-    font-size: 1.15rem;
-    margin-top: 2%;
-}
-
-.record_road_cnt{
-    font-size: 1.15rem;
-    margin-top: -20%;
-}
-
-.sf_btn_container{
-    width: 24.4rem;
-    height: 6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 7%;
-}
-
-.mission_money_btn_container{
-    width: 14.2rem;
-    height: 7rem;
-    background: #E4EED0;
-    border-radius: 1rem;
-    margin-right: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.2);
-}
-
-.base_money_cnt{
-    font-size: 1.2rem;
-    margin-top: 12%;
-}
-
-.record_money_cnt{
-    font-size: 1.5rem;
-    margin-top: -5%;
-}
-
-.mission_cp_btn_container{
-    width: 8.5rem;
-    height: 7rem;
-    background: #E1D9CB;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.2);
-}
-
-.base_cp_cnt{
-    font-size: 1.2rem;
-    margin-top: 25%;
-}
-
-.record_cp_cnt{
-    font-size: 1.5rem;
-    margin-top: -10%;
 }
