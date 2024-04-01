@@ -6,6 +6,16 @@ import { useStore } from "../../stores/member";
 import Calendar from "../common/calendar/Calendar";
 
 const Galli = function(){
+
+    // 현재 날짜 생성
+    var today = new Date();
+
+    // 이번 달의 마지막 날짜 구하기
+    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    // 남은 일 수 계산
+    var remainingDays = lastDayOfMonth.getDate() - today.getDate();
+
     const {memberId, setMemberId} = useStore();
     useEffect(()=>{
         getGalley(memberId)
@@ -67,7 +77,7 @@ const Galli = function(){
                         <div className={styles.content_container}>
                             <img src="/imgs/ch2_bol_money.png" alt="할리 돈 오리" className={styles.ch2_money}></img>
                             <div className={styles.content_txt_container}>
-                                <p className={styles.content_detail_txt} style={{marginTop: 25}}>일일 목표 시간 : {galleyInfo.requestedTime}분</p>
+                                <p className={styles.content_detail_txt} style={{marginTop: 25}}>일일 목표 시간 : {galleyInfo.requestedTime == -1 ? 0 : galleyInfo.requestedTime}분</p>
                                 <p className={styles.content_detail_txt} style={{marginTop: -5}}>총 휴일권 : {galleyInfo.dayoff}개</p>
                             </div>
                         </div>
@@ -76,8 +86,8 @@ const Galli = function(){
                         <div className={styles.money_content_container}>
                             <img src="/imgs/money.png" alt="할리 돈 오리" className={styles.money}></img>
                             <div className={styles.money_content_txt_container}>
-                                <p className={styles.money_content_detail_txt} style={{marginTop: 25}}>총<span style={{fontSize : '0.7rem', color : "#7F7F7E"}}>(월 단위)</span> : {galleyInfo.reward}원</p>
-                                <p className={styles.money_content_detail_txt} style={{marginTop: -5}}>일일<span style={{fontSize : '0.7rem', color : "#7F7F7E"}}>(월/해당 월 날짜 수)</span> : {galleyInfo.reward/30}원</p>
+                                <p className={styles.money_content_detail_txt} style={{marginTop: 25}}>총<span style={{fontSize : '0.7rem', color : "#7F7F7E"}}>(월 단위)</span> : {galleyInfo.reward * remainingDays}원</p>
+                                <p className={styles.money_content_detail_txt} style={{marginTop: -5}}>일일<span style={{fontSize : '0.7rem', color : "#7F7F7E"}}>(월/해당 월 날짜 수)</span> : {galleyInfo.reward}원</p>
                             </div>
                         </div>
                     </div>
@@ -93,9 +103,6 @@ const Galli = function(){
                     <div className={styles.days_content_box_container}>
                         <div className={styles.content_title_container}>
                             <p className={styles.calen_title}>3월 12일</p>
-                            <div className={styles.rest_btn_container} onClick={openRestModal}>
-                                <p>휴식권 사용</p>
-                            </div>
                         </div>
                         <div className={styles.ff_btn_container}>
                             <div className={styles.walk_cnt_btn_container}>
