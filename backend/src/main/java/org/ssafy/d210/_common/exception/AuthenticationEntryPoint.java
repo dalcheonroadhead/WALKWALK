@@ -29,15 +29,17 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
 
         String exception = (String) request.getAttribute("exception");
 
+        log.error(request.getRequestURI());
+
         // 소켓 헤더 확인하기
-//        Enumeration<String> headerNames = request.getHeaderNames();
-//
-//        while (headerNames.hasMoreElements()){
-//            String name = headerNames.nextElement();
-//            String value = request.getHeader(name);
-//
-//            log.info("header 이름: {} <<<<<<< 값: {}", name, value);
-//        }
+        Enumeration<String> headerNames = request.getHeaderNames();
+
+        while (headerNames.hasMoreElements()){
+            String name = headerNames.nextElement();
+            String value = request.getHeader(name);
+
+            log.info("header 이름: {} <<<<<<< 값: {}", name, value);
+        }
 
         if(exception != null) {
             if (ErrorType.valueOf(exception).equals(ErrorType.TOKEN_DOESNT_EXIST)) {
@@ -61,6 +63,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
             }
 
         }else {
+            authException.printStackTrace();
             exceptionHandler(response, ErrorType.ANOTHER_ERROR);
         }
     }
@@ -72,6 +75,7 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
         response.setStatus(error.getCode());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
 
         try {
             // B-2 에러가 무엇인지에 대한 Body를 Response에 쓴다.

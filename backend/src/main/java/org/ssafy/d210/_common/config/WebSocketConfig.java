@@ -29,7 +29,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
 
-        registry.setErrorHandler(socketErrorHandler);
+//        registry.setErrorHandler(socketErrorHandler);
     }
 
     // B. [TOPIC]에 대한 구독 요청과 발행 요청을 구분하는 접두사를 설정한다.

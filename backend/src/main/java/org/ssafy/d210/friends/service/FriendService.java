@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210.friends.dto.FriendReceivedDto;
+import org.ssafy.d210.friends.dto.FriendSentDto;
 import org.ssafy.d210.friends.dto.GalleyMemberListDto;
 import org.ssafy.d210.friends.dto.MemberListDto;
 import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
@@ -56,10 +58,10 @@ public class FriendService {
         Members receiver = membersRepository.findById(request.getMemberId())
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
 
-        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver)
-                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver).orElse(null);
+        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverId(receiver, member).orElse(null);
 
-        if(friendList == null) {
+        if(friendList1 == null && friendList2 == null) {
             friendListRepository.save(
                     FriendList.builder()
                             .senderId(member)
@@ -81,7 +83,7 @@ public class FriendService {
                     .receiverId(receiver)
                     .isChecked(false)
                     .notiType(NotiType.FRIEND)
-                    .notiContent("친구 요청이 왔습니다.")
+                    .notiContent(member.getNickname()+"님으로부터 친구 요청이 왔습니다")
                     .build();
             notificationService.insertNotification(notification);
             notificationService.notify(receiver.getId(), notification);
@@ -90,6 +92,18 @@ public class FriendService {
             throw new CustomException(ErrorType.ALREADY_SEND_FRIEND_REQUEST);
         }
         return "";
+    }
+
+    public List<FriendSentDto> getSentList(Members member){
+        return friendListRepository.findFriendListsBySenderIdAndIsAcceptedIsTrueAndIsFriendIsFalse(member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND))
+                .stream().map(FriendSentDto::from).toList();
+    }
+
+    public List<FriendReceivedDto> getReceivedList(Members member){
+        return friendListRepository.findFriendListsByReceiverIdAndIsAcceptedIsTrueAndIsFriendIsFalse(member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND))
+                .stream().map(FriendReceivedDto::from).toList();
     }
 
     @Transactional
@@ -122,7 +136,7 @@ public class FriendService {
     }
 
     public List<MemberListDto> getSearchedMemberList(Members member, PostSearchMemberListRequest request){
-        return friendListRepository.findAllBySenderId(member.getId(), request.getKeyword());
+        return friendListRepository.findAllByKeyword(member.getId(), request.getKeyword());
     }
 
     public List<GalleyMemberListDto> getSearchedGalleyMemberList(Members member, PostSearchMemberListRequest request){

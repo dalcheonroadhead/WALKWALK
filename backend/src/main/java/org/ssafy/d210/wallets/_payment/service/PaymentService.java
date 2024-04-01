@@ -39,6 +39,7 @@ import static org.ssafy.d210._common.response.MsgType.PUT_MONEY_EXCHANGE_SUCCESS
 @Slf4j
 @Service
 @Transactional
+
 public class PaymentService {
 
     @Value("${pay.secret-key}")
