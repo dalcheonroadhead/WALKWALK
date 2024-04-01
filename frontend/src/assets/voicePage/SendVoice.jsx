@@ -3,16 +3,20 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-const Store = function(){
+const SendVoice = function(){
     const navigate = useNavigate();
     const [galli, setGalli] = useState(false);
 
-    const moveToVoicePage = function () {
+    const moveToVoicePage = function(){
         navigate("/voice")
     }
 
-    const moveToRealTimeVoicePage = function () {
+    const moveToRealTimeVoicePage = function(){
         navigate("/member/1")
+    }
+
+    const moveToNormalVoicePage = function(){
+        navigate("/voice/sendvoice/sendingvoice")
     }
 
     const openGalliListModal = function(){
@@ -79,7 +83,7 @@ const Store = function(){
                         <p className={styles.btn_txt}> 실시간 응원 메시지<br></br>보내기</p>
                         <img src="/imgs/mike.png" alt="마이크" className={styles.voice_img}></img>
                     </div>
-                    <div className={styles.item_container}>
+                    <div className={styles.item_container} onClick={moveToNormalVoicePage}>
                         <p className={styles.btn_txt}>일반 응원 메시지<br></br>보내기</p>
                         <img src="/imgs/mike.png" alt="마이크" className={styles.voice_img}></img>
                     </div>
@@ -93,4 +97,4 @@ const Store = function(){
     )
 }
 
-export default Store;
+export default SendVoice;

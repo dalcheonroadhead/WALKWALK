@@ -25,6 +25,7 @@ import MyBadege from "./assets/myPage/MyBadge";
 import MyGoalUpdate from "./assets/myPage/MyGoalUpdate";
 import SavedVoice from "./assets/voicePage/SavedVoice";
 import SendVoice from "./assets/voicePage/SendVoice";
+import SendingVoice from "./assets/voicePage/SendingVoice";
 import useAlarmStore from "./stores/alarm";
 import { useEffect, useState } from "react";
 
@@ -87,6 +88,7 @@ function App() {
         <Route path="/voice/savedvoice" element={<SavedVoice />}></Route>
         <Route path="/voice/sendvoice" element={<SendVoice />}></Route>
         <Route path="/member/:id" element={<SocketPage4Member/>}></Route>
+        <Route path="/voice/sendvoice/sendingvoice" element={<SendingVoice />}></Route>
       </Routes>
     </BrowserRouter>
   )
