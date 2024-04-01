@@ -96,3 +96,14 @@ export const responseGalley = async (data) => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 미션 세팅
+export const postMission = async (data) => {
+    const url = '/halleygalley/mission';
+
+    return await instance.post(url, data)
+        .then((res) => {
+            return true;
+        })
+        .catch((err) => {return false});
+}
