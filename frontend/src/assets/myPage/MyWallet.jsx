@@ -99,9 +99,15 @@ const MyWallet = function () {
                 </div>
               </div>
 
-              <div className={styles.mywallet_field_container}>
-                <button className={styles.mywallet_btn} onClick={() => {setChargeModalOpen(true)}}>충전</button>
-                <button className={styles.mywallet_btn} onClick={() => {setExchangeModalOpen(true)}}>환전</button>
+              <div className={styles.mywallet_btn_container}>
+                <button className={styles.mywallet_btn} onClick={() => {setChargeModalOpen(true)}}>
+                  <img className={styles.mywallet_transfer_img} src="src\lotties\money-bill-solid.svg" alt="" />
+                  <div>충전</div>
+                </button>
+                <button className={styles.mywallet_btn} onClick={() => {setExchangeModalOpen(true)}}>
+                  <img className={styles.mywallet_transfer_img} src="src\lotties\money-bill-transfer-solid.svg" alt="" />
+                  <div>환전</div>
+                </button>
               </div>
 
               <div className={styles.mywallet_field_container}>
@@ -113,24 +119,25 @@ const MyWallet = function () {
       </>
       {isChargeModalOpen && (
         <>
-          <div className={styles.mywallet_modal_background}></div>
-          <div className={styles.mywallet_modal_container}>
-            <img className={styles.mywallet_close} src="/imgs/x.png" alt="" onClick={() => {setChargeModalOpen(false)}}/>
-            <h2>머니 충전하기</h2>
-            <input className={styles.mywallet_input} type="number" name="inputMoney" placeholder="금액을 입력해주세요" onChange={handleInputChange}/>
-            <button onClick={submitMoneyCharge}>충 전</button>
-            <img src="/imgs/payment_icon.png" alt="kakaopay_btn" />
+          <div className={styles.mywallet_modal_background}>
+            <div className={styles.mywallet_modal_container}>
+              <img className={styles.mywallet_close} src="/imgs/x.png" alt="" onClick={() => {setChargeModalOpen(false)}}/>
+              <div className={styles.mywallet_title}>머니 충전하기</div>
+              <input className={styles.mywallet_input} type="number" name="inputMoney" placeholder="금액을 입력해주세요" onChange={handleInputChange}/>
+              <img className={styles.mywallet_kakaopay_btn} src="/imgs/kakaopay.png" alt="kakaopay_btn" onClick={submitMoneyCharge}/>
+            </div>
           </div>
         </>
       )}
       {isExchangeModalOpen && (
         <>
-          <div className={styles.mywallet_modal_background}></div>
-          <div className={styles.mywallet_modal_container}>
-            <img className={styles.mywallet_close} src="/imgs/x.png" alt="" onClick={() => {setExchangeModalOpen(false)}}/>
-            <h2>머니 환전하기</h2>
-            <input className={styles.mywallet_input} type="number" name="inputMoney" placeholder="금액을 입력해주세요" onChange={handleInputChange}/>
-            <button onClick={submitMoneyExchange}>환 전</button>
+          <div className={styles.mywallet_modal_background}>
+            <div className={styles.mywallet_modal_container}>
+              <img className={styles.mywallet_close} src="/imgs/x.png" alt="" onClick={() => {setExchangeModalOpen(false)}}/>
+              <div className={styles.mywallet_title}>머니 환전하기</div>
+              <input className={styles.mywallet_input} type="number" name="inputMoney" placeholder="금액을 입력해주세요" onChange={handleInputChange}/>
+              <button className={styles.mywallet_exchange_btn} onClick={submitMoneyExchange}>환 전</button>
+            </div>
           </div>
         </>
       )}
