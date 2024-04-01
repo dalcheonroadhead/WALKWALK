@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210._common.exception.CustomException;
+import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
@@ -24,12 +25,16 @@ import org.ssafy.d210.wallets._payment.dto.response.PaymentReadyResponse;
 import org.ssafy.d210.wallets._payment.entity.Payment;
 import org.ssafy.d210.wallets._payment.repository.PaymentRepository;
 import org.ssafy.d210.wallets.entity.MemberAccount;
+import org.ssafy.d210.wallets.entity.WalletHistory;
+import org.ssafy.d210.wallets.entity.WalletType;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
+import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.ssafy.d210._common.exception.ErrorType.*;
+import static org.ssafy.d210._common.response.MsgType.PUT_MONEY_EXCHANGE_SUCCESSFULLY;
 
 @Slf4j
 @Service
@@ -42,15 +47,17 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
+    private final WalletHistoryRepository walletHistoryRepository;
 
     private final String kakaoPayReadyUrl = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private final String kakaoPayApproveUrl = "https://open-api.kakaopay.com/online/v1/payment/approve";
 
-    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository) {
+    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository, WalletHistoryRepository walletHistoryRepository) {
         this.restTemplate = restTemplateBuilder.build();
         this.paymentRepository = paymentRepository;
         this.membersRepository = membersRepository;
         this.memberAccountRepository = memberAccountRepository;
+        this.walletHistoryRepository = walletHistoryRepository;
     }
 
     // 결제 준비
@@ -84,7 +91,6 @@ public class PaymentService {
         payment.setIsApprove(false);
         paymentRepository.save(payment);
 
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {}", response.getBody().getTid());
         return response.getBody();
     }
 
@@ -121,10 +127,12 @@ public class PaymentService {
             payment.updateIsApprove(true);
         }
 
+        walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), member));
+
         return response.getBody();
     }
 
-    public PaymentExchangeResponse exchangeMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentExchangeRequest paymentExchangeRequest) {
+    public ApiResponseDto<PaymentExchangeResponse> exchangeMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentExchangeRequest paymentExchangeRequest) {
 
         Members member = membersRepository.findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail())
                 .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
@@ -132,7 +140,11 @@ public class PaymentService {
         MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
                 .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
 
-        return PaymentExchangeResponse.of(memberAccount.exchangeMoney(paymentExchangeRequest));
+        Integer putMoneyResult = memberAccount.putMoney(paymentExchangeRequest.getExchangeMoneyValue(), false);
+
+        walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), member));
+
+        return ApiResponseDto.of(PUT_MONEY_EXCHANGE_SUCCESSFULLY, PaymentExchangeResponse.of(putMoneyResult));
     }
 
     public Members findMembersByMembers(String email) {

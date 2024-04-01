@@ -10,14 +10,19 @@ import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
-import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
 import org.ssafy.d210.wallets.dto.response.GetEggMoneyResponse;
+import org.ssafy.d210.wallets.dto.response.GetWalletHistoryResponse;
 import org.ssafy.d210.wallets.dto.response.PutEggResponse;
-import org.ssafy.d210.wallets.dto.response.PutHalleyGalleyMoneyResponse;
 import org.ssafy.d210.wallets.dto.response.PutMoneyResponse;
 import org.ssafy.d210.wallets.entity.MemberAccount;
+import org.ssafy.d210.wallets.entity.WalletHistory;
+import org.ssafy.d210.wallets.entity.WalletType;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
+import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
 import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER_ACCOUNT;
@@ -30,6 +35,7 @@ public class WalletsService {
 
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
+    private final WalletHistoryRepository walletHistoryRepository;
 
     public GetEggMoneyResponse getEggMoney(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
@@ -42,12 +48,16 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
+        walletHistoryRepository.save(WalletHistory.of(WalletType.EGG, true, putEggRequest.getPutEggValue(), member));
+
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), true));
     }
 
     public PutEggResponse putEggSub(@AuthenticationPrincipal UserDetailsImpl userDetails, PutEggRequest putEggRequest) {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
+
+        walletHistoryRepository.save(WalletHistory.of(WalletType.EGG, false, putEggRequest.getPutEggValue(), member));
 
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), false));
     }
@@ -56,30 +66,26 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
+        walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, putMoneyRequest.getPutMoneyValue(), member));
+
         return PutMoneyResponse.of(memberAccount.putMoney(putMoneyRequest.getPutMoneyValue(), true));
     }
 
-    public PutHalleyGalleyMoneyResponse putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest) {
-        // 갈리 정보
-        Members galley = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
-        MemberAccount galleyAccount = findMemberAccountByMembers(galley.getMemberAccountId().getId());
+    public PutMoneyResponse putMoneySub(@AuthenticationPrincipal UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) {
+        Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
+        MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        // 할리 정보
-        Members halley = findMembersById(putHalleyGalleyMoneyRequest.getHalleyId());
-        MemberAccount halleyAccount = findMemberAccountByMembers(halley.getMemberAccountId().getId());
+        walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, putMoneyRequest.getPutMoneyValue(), member));
 
-        // 할리 money 감소
-        int halleyMoney = halleyAccount.putMoney(putHalleyGalleyMoneyRequest.getPutMoneyValue(), false);
-
-        // 갈리 money 증가
-        int galleyMoney = galleyAccount.putMoney(putHalleyGalleyMoneyRequest.getPutMoneyValue(), true);
-
-        return PutHalleyGalleyMoneyResponse.of(halleyMoney, galleyMoney);
+        return PutMoneyResponse.of(memberAccount.putMoney(putMoneyRequest.getPutMoneyValue(), true));
     }
 
-    public Members findMembersById(Long halleyId) {
-        return membersRepository.findMembersById(halleyId)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
+    public List<GetWalletHistoryResponse> getWalletHistory(UserDetailsImpl userDetails) {
+        Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
+
+        return walletHistoryRepository.findAllByMember(member)
+                .stream().map(GetWalletHistoryResponse::from)
+                .collect(Collectors.toList());
     }
 
     public Members findByEmailAndDeletedAtIsNull(String email) {
