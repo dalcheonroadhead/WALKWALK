@@ -261,7 +261,7 @@ const Main = function(){
                                         <div className={styles.halli_time_progress_base}>
                                             {halliList.map((data, index) =>{
                                                 return (
-                                                    <div key={index} className={styles.halli_mission_container} style={{left: `${data.requestedTime/할리API요청결과.data.maxExerciseTime*16}rem`, backgroundImage: realtimeExerciseData.time >= data.requestedTime ? 'url(/public/imgs/yes_marker.png)' : 'url(/public/imgs/no_marker.png)'}}>
+                                                    <div key={index} className={styles.halli_mission_container} style={{left: `${data.requestedTime/할리API요청결과.data.maxExerciseTime*16}rem`, backgroundImage: realtimeExerciseData.time >= data.requestedTime ? 'url(/imgs/yes_marker.png)' : 'url(/imgs/no_marker.png)'}}>
                                                         <div className={styles.halli_mission_profile}>
                                                             <img src={data.profileUrl}/>
                                                         </div>
