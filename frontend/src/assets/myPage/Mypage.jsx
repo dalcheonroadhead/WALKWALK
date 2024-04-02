@@ -31,10 +31,6 @@ const Mypage = function () {
     { text: "내 배지", path: "/mybadge" }
   ];
 
-  const handleTest = () => {
-    navigate('/transaction')
-  }
-
   return(
     <div className={styles.mypage_container}>
       {mypageInfo && (
@@ -53,7 +49,6 @@ const Mypage = function () {
               <img className={styles.mypage_direct} src="/imgs/direct.png" alt="" />
             </button>
           ))}
-          <button className={styles.mypage_logout_btn} onClick={handleTest}>테스트</button>
           <button className={styles.mypage_logout_btn} onClick={handleLogout}>로그아웃</button>
         </>
       )}
