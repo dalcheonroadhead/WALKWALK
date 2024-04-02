@@ -20,7 +20,7 @@ const Toolbar = function(){
     const navigate = useNavigate();
     const [egg, setEgg] = useState(0);
     const [money, setMoney] = useState(0);
-    const [memberInfo, setMemberInfo] = useState({});
+    const [memberInfo, setMemberInfo] = useState({profileUrl: '', nickname: '', comment: ''});
 
     const moveToAlarmPage = function () {
         navigate("/Alarm")
