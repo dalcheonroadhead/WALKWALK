@@ -54,4 +54,10 @@ public class ExerciseController {
         StepsRankingPeriodEnum type = StepsRankingPeriodEnum.valueOf(typeStr.toUpperCase());
         return ResponseUtils.ok(exerciseService.getStepsRankingWithFriends(userDetails.getMember(), type, pageable), MsgType.GET_STEPS_RANKING_SUCCESSFULLY);
     }
+
+    @Operation(summary = "한 달 운동")
+    @GetMapping("/calendar")
+    public ApiResponseDto<?> getMonthlyExerciseDataForCalendar(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseUtils.ok(exerciseService.findMonthlyExerciseData(userDetails.getMember()), MsgType.GET_MONTHLY_EXERCISE_DATA_SUCCESSFULLY);
+    }
 }

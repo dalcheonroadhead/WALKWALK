@@ -86,6 +86,14 @@ public class ExerciseService {
         return data;
     }
 
+    public List<Exercise> findMonthlyExerciseData(Members member) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.withDayOfMonth(1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        return exerciseRepository.findExercisesByMemberAndExerciseDayBetween(member, startDate, endDate);
+    }
+
 //    public SliceResponseDto calculateRanking(Long myId, Slice<FriendRankingResponseDto> exercises, int startRank, int pageSize) {
 //        Long myRank = 1L;
 //        Long preValue = Long.MAX_VALUE;
