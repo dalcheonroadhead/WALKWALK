@@ -4,8 +4,10 @@ import styles from "./Rank.module.css"
 import { instance } from "../../apis/axiosModule";
 
 const Rank = function(){
-    
-    const now = new Date();
+    const [month, setMonth] = useState('');
+    const [todayDate, setTodayDate] = useState('');
+    const [mondayDate, setMondayDate] = useState('');
+    const [sundayDate, setSundayDate] = useState('');
 
     const [tabIndex, setTabIndex] = useState(0);
     const [daily, setDaily] = useState([]);
@@ -43,8 +45,6 @@ const Rank = function(){
 
     await instance.get(url)
     .then((res) => {
-       console.log(res.data.data);
-
        switch(index){
         case 0:
             setDaily([...res.data.data.content]);
@@ -65,13 +65,33 @@ const Rank = function(){
    }
 
     useEffect(() => {
-        getRanking(0);
-        getRanking(1);
-        getRanking(2);
-        getRanking(3);
+        (async () => {
+            try {
+                await getRanking(0);
+                await getRanking(1);
+                await getRanking(2);
+                await getRanking(3);
+            } catch (error) {
+                console.error('랭킹 정보를 가져오는 중 에러 발생 : ', error)
+            }
+        })();
+
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const differenceToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 일요일이면 -6, 아니면 1에서 현재 요일을 뺀 값
+        const differenceToSunday = 7 - dayOfWeek; // 일요일까지 남은 날짜
+
+        const monday = new Date(today);
+        monday.setDate(today.getDate() + differenceToMonday);
+
+        const sunday = new Date(today);
+        sunday.setDate(today.getDate() + differenceToSunday);
+
+        setMonth(today.getMonth() + 1); // JavaScript는 월을 0부터 시작하므로 1을 더해줌
+        setTodayDate(today.getDate());
+        setMondayDate(monday.getDate());
+        setSundayDate(sunday.getDate());
     },[])
-
-
 
     const tabArr=[{
         tabTitle:(
@@ -82,7 +102,7 @@ const Rank = function(){
         tabCont:(
             <div className={styles.day_rank_container}>
                 <div className={styles.rank_day}>
-                    <p>{now.getMonth() + 1}월  {now.getDate()}일</p>
+                    <p>{month}월  {todayDate}일</p>
                 </div>
                 <div className={styles.top_rank_container}>
                     <div className={styles.top3_ranks}>
@@ -144,7 +164,7 @@ const Rank = function(){
         tabCont:(
             <div className={styles.week_rank_container}>
                 <div className={styles.rank_week}>
-                    <p>{now.getMonth() +1}월 {now.getDate()}일 ~  {now.getMonth() +1}월 {now.getDate() + 6}일</p>
+                    <p>{month}월 {mondayDate}일 ~  {month}월 {sundayDate}일</p>
                 </div>
                 <div className={styles.top_rank_container}>
                     <div className={styles.top3_ranks}>
@@ -209,7 +229,7 @@ const Rank = function(){
         tabCont:(
             <div className={styles.month_rank_container}>
                 <div className={styles.rank_month}>
-                    <p>{now.getMonth() +1}월</p>
+                    <p>{month}월</p>
                 </div>
                 <div className={styles.top_rank_container}>
                     <div className={styles.top3_ranks}>
