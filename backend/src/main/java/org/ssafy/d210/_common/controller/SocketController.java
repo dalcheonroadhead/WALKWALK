@@ -35,6 +35,7 @@ public class SocketController {
         socketService.sendEnterMessage(publishMessage);
     }
 
+
     // 2. 일반 대화 용
     @MessageMapping("/api/socket/talk")
     public void talkMsg(String publishMessage, SimpMessageHeaderAccessor headerAccessor) {
