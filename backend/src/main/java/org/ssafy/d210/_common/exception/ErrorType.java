@@ -29,6 +29,7 @@ public enum ErrorType {
     NOT_ENOUGH_EGG(401, "에그가 부족합니다."),
     NOT_ENOUGH_MONEY(401, "머니가 부족합니다."),
     NOT_FOUND_PAYMENT(404, "결제 요청 정보가 존재하지 않습니다."),
+    NOT_FOUND_WALLET_HISTORY(404, "거래 내역 정보가 존재하지 않습니다."),
 
     //----------------------------HALLEY_GALLEY-----------------------
     NOT_FOUND_HALLEY(401, "할리가 존재하지 않습니다."),

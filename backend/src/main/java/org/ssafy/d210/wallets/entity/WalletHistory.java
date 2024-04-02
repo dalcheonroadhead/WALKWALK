@@ -29,24 +29,33 @@ public class WalletHistory extends OnlyCreatedTime {
     @Column(nullable = false)
     private Integer price;
 
+    @Column(nullable = false)
+    private String blockUri;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Members member;
 
     @Builder
-    private WalletHistory(WalletType walletType, Boolean operator, Integer price, Members member) {
+    private WalletHistory(WalletType walletType, Boolean operator, Integer price, String blockUri, Members member) {
         this.walletType = walletType;
         this.operator = operator;
         this.price = price;
+        this.blockUri = blockUri;
         this.member = member;
     }
 
-    public static WalletHistory of(WalletType walletType, Boolean operator, Integer price, Members member) {
+    public static WalletHistory of(WalletType walletType, Boolean operator, Integer price, String blockUri, Members member) {
         return builder()
                 .walletType(walletType)
                 .operator(operator)
                 .price(price)
+                .blockUri(blockUri)
                 .member(member)
                 .build();
+    }
+
+    public void updateBlockUri(String blockUri) {
+        this.blockUri = blockUri;
     }
 }

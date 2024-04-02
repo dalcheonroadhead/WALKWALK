@@ -29,6 +29,7 @@ import org.ssafy.d210.wallets.entity.WalletHistory;
 import org.ssafy.d210.wallets.entity.WalletType;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
+import org.ssafy.d210.wallets.service.WalletsService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,15 +51,18 @@ public class PaymentService {
     private final MemberAccountRepository memberAccountRepository;
     private final WalletHistoryRepository walletHistoryRepository;
 
+    private final WalletsService walletsService;
+
     private final String kakaoPayReadyUrl = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private final String kakaoPayApproveUrl = "https://open-api.kakaopay.com/online/v1/payment/approve";
 
-    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository, WalletHistoryRepository walletHistoryRepository) {
+    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository, WalletHistoryRepository walletHistoryRepository, WalletsService walletsService) {
         this.restTemplate = restTemplateBuilder.build();
         this.paymentRepository = paymentRepository;
         this.membersRepository = membersRepository;
         this.memberAccountRepository = memberAccountRepository;
         this.walletHistoryRepository = walletHistoryRepository;
+        this.walletsService = walletsService;
     }
 
     // 결제 준비
@@ -66,7 +70,7 @@ public class PaymentService {
     public PaymentReadyResponse preparePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentReadyRequest paymentReadyRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
-        Members member = findMembersByMembers(userDetails.getMember().getEmail());
+        Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
 
         // 카카오페이 결제를 시작하기 위해 결제정보를 카카오페이 서버에 전달하고 결제 고유번호(TID)와 URL을 응답받는 단계
         // Secret key를 헤더에 담아 파라미터 값들과 함께 POST로 요청
@@ -97,10 +101,10 @@ public class PaymentService {
 
     // 결제 승인
     // member의 카카오톡으로 결제 완료 카톡 보내기
-    public PaymentApproveResponse approvePayment(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentApproveRequest paymentApproveRequest) {
+    public PaymentApproveResponse approvePayment(UserDetailsImpl userDetails, PaymentApproveRequest paymentApproveRequest) {
 
         // 사용자 정보 가져오기(Token 유효성 검사)
-        Members member = findMembersByMembers(userDetails.getMember().getEmail());
+        Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMemberAccountId(member.getMemberAccountId().getId());
         Payment payment = findPaymentByTid(paymentApproveRequest.getTid());
 
@@ -128,28 +132,25 @@ public class PaymentService {
             payment.updateIsApprove(true);
         }
 
-        walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), member));
+        walletsService.writeDBandBlockchain(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "", member), "카카오페이로 MONEY 충전");
 
         return response.getBody();
     }
 
-    public ApiResponseDto<PaymentExchangeResponse> exchangeMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, PaymentExchangeRequest paymentExchangeRequest) {
+    public ApiResponseDto<PaymentExchangeResponse> exchangeMoney(UserDetailsImpl userDetails, PaymentExchangeRequest paymentExchangeRequest) {
 
-        Members member = membersRepository.findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail())
-                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
-
-        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
-                .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
+        Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
+        MemberAccount memberAccount = findMemberAccountByMemberAccountId(member.getMemberAccountId().getId());
 
         Integer putMoneyResult = memberAccount.putMoney(paymentExchangeRequest.getExchangeMoneyValue(), false);
 
-        walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), member));
+        walletsService.writeDBandBlockchain(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", member), "MONEY 환전");
 
         return ApiResponseDto.of(PUT_MONEY_EXCHANGE_SUCCESSFULLY, PaymentExchangeResponse.of(putMoneyResult));
     }
 
-    public Members findMembersByMembers(String email) {
-        return membersRepository.findByEmail(email)
+    public Members findByEmailAndDeletedAtIsNull(String email) {
+        return membersRepository.findByEmailAndDeletedAtIsNull(email)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER));
     }
 
