@@ -613,7 +613,7 @@ const Main = function(){
                             ]
                         }}
                         axisLeft={{
-                            tickValues: [0, 3000, 6000, 10000, 20000], // 0만 포함하도록 설정
+                            tickValues: [0, ...weeklyExerciseData.avg != 0 ? [3000, 6000, 10000, 20000] : []], // 0만 포함하도록 설정
                             format: value => value.toLocaleString(),
                             text: {
                                 fontSize: 10,
