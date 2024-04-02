@@ -105,5 +105,6 @@ export const postMission = async (data) => {
         .then((res) => {
             return true;
         })
-        .catch((err) => {return false});
+        .catch((err) => {console.log(err)});
+
 }
