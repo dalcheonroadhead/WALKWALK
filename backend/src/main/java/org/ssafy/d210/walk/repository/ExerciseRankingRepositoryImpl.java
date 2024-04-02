@@ -28,6 +28,7 @@ public class ExerciseRankingRepositoryImpl implements ExerciseRankingRepository 
                 "from members m join exercise e on m.member_id = e.member_id " +
                 "where (m.member_id = ?1 or m.member_id in (select f.receiver_id from friend_list f where f.sender_id = ?1 and f.is_friend = true)) " +
                 "and e.exercise_day between ?2 and ?3) subquery on m.member_id = subquery.member_id " +
+                "where (m.member_id = ?1 or m.member_id in (select f.receiver_id from friend_list f where f.sender_id = ?1 and f.is_friend = true)) " +
                 "GROUP BY m.member_id " +
                 "ORDER BY ranking asc ";
 
@@ -74,6 +75,7 @@ public class ExerciseRankingRepositoryImpl implements ExerciseRankingRepository 
                 "AND e.exercise_day = ?2" +
                 ") s " +
                 "ON m.member_id = s.member_id " +
+                "where (m.member_id = ?1 or m.member_id in (select f.receiver_id from friend_list f where f.sender_id = ?1 and f.is_friend = true)) " +
                 "ORDER BY ranking ";
 
 
