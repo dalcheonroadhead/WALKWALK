@@ -52,6 +52,10 @@ public enum MsgType {
     INIT_CRITERIA_SUCCESSFULLY("연령대 맞춤 운동 기준으로 초기화에 성공하였습니다."),
     GET_STEPS_RANKING_SUCCESSFULLY("걸음 수 기준 랭킹 조회에 성공하였습니다."),
     GET_STREAK_RANKING_SUCCESSFULLY("스트릭 기준 랭킹 조회에 성공하였습니다."),
+    SET_DECIDED_EXERCISE_START_SUCCESSFULLY("작정한 운동 시작 시간 세팅에 성공하였습니다."),
+    SET_DECIDED_EXERCISE_END_SUCCESSFULLY("작정한 운동 데이터 저장에 성공하였습니다."),
+    GET_REPORT_SUCCESSFULLY("저번달 운동 리포트 제작에 성공하였습니다."),
+
 
     // ====================== MISSION ==========================
     POST_MISSION_SUCCESSFULLY("미션 등록에 성공하였습니다."),

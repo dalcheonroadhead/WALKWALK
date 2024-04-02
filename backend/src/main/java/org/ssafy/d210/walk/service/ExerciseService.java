@@ -20,6 +20,7 @@ import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.walk.dto.request.StepsRankingPeriodEnum;
 import org.ssafy.d210.walk.dto.response.*;
 import org.ssafy.d210.walk.entity.Exercise;
+import org.ssafy.d210.walk.repository.ExerciseRankingRepository;
 import org.ssafy.d210.walk.repository.ExerciseRepository;
 
 import java.time.DayOfWeek;
@@ -38,6 +39,7 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final ExerciseCriteriaService exerciseCriteriaService;
     private final MemberItemHistoryRepository memberItemHistoryRepository;
+    private final ExerciseRankingRepository exerciseRankingRepository;
 
 
     // db에 저장된 마지막 날짜
@@ -84,19 +86,56 @@ public class ExerciseService {
         return data;
     }
 
+//    public SliceResponseDto calculateRanking(Long myId, Slice<FriendRankingResponseDto> exercises, int startRank, int pageSize) {
+//        Long myRank = 1L;
+//        Long preValue = Long.MAX_VALUE;
+//        int sameRankCount = 1;
+//
+//        for (FriendRankingResponseDto exercise : exercises) {
+//            if (!exercise.getValue().equals(preValue)) {
+//                startRank += sameRankCount;
+//                sameRankCount = 1; // 동점자 수 초기화
+//                preValue = exercise.getValue();
+//            } else {
+//                sameRankCount++; // 동점자 수를 증가시킵니다.
+//            }
+//            exercise.setRank((long) startRank);
+//
+//            if (exercise.getMemberId().equals(myId)) {
+//                myRank = exercise.getRank();
+//            }
+//        }
+//        startRank += sameRankCount; // 마지막에 동점자가 있었다면, 이를 반영해줍니다.
+//
+//
+//        int pageNumber = (int) (myRank / pageSize);
+//
+//        return new SliceResponseDto(exercises, myRank, pageNumber);
+//    }
+
     public SliceResponseDto getStreakRankingWithFriends(Members member, Pageable pageable) {
 //        Members member = membersRepository.findById(memberId).orElseThrow();
         Long myId = member.getId();
-        Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStreakRankingByPage(myId, pageable, LocalDate.now().minusDays(1));
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        Slice<FriendRankingResponseDto> exercises = exerciseRankingRepository.findStreakRankingByPage(myId, pageable, yesterday);
 
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
+//        return calculateRanking(myId, exercises, startRank, pageable.getPageSize());
+        Long myRank = 1L;
+//
         for (FriendRankingResponseDto exercise : exercises) {
-            exercise.setRank((long) startRank++);
+            if (exercise.getMemberId().equals(myId)) {
+                myRank = exercise.getRank();
+                break;
+            }
         }
 
-        return new SliceResponseDto(exercises);
+        // 내 순위에 해당하는 페이지 번호 계산
+        int myRankPage = (int) (myRank / pageable.getPageSize());
+
+        return new SliceResponseDto(exercises, myRank, myRankPage);
     }
 
     public SliceResponseDto getStepsRankingWithFriends(Members member, StepsRankingPeriodEnum type, Pageable pageable) {
@@ -109,23 +148,59 @@ public class ExerciseService {
         if (type == StepsRankingPeriodEnum.WEEKLY) {
             startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
             endDate = today.with(DayOfWeek.SUNDAY);
+            System.out.println(startDate + "               " + endDate);
         } else if (type == StepsRankingPeriodEnum.MONTHLY) {
             startDate = today.withDayOfMonth(1);
             endDate = today.withDayOfMonth(today.lengthOfMonth());
+            System.out.println(startDate + "               " + endDate);
         }
 
         Long myId = member.getId();
 
-        Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStepsRankingByPage(myId, pageable, startDate, endDate);
+        Slice<FriendRankingResponseDto> exercises = exerciseRankingRepository.findStepsRankingByPage(myId, pageable, startDate, endDate);
 
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
+//        return calculateRanking(myId, exercises, startRank, pageable.getPageSize());
+
+
+        Long myRank = 1L;
+
         for (FriendRankingResponseDto exercise : exercises) {
-            exercise.setRank((long) startRank++);
+            if (exercise.getMemberId().equals(myId)) {
+                myRank = exercise.getRank();
+                break;
+            }
         }
 
-        return new SliceResponseDto(exercises);
+        // 내 순위에 해당하는 페이지 번호 계산
+        int myRankPage = (int) (myRank / pageable.getPageSize());
+
+        return new SliceResponseDto(exercises, myRank, myRankPage);
+//        Long preValue = Long.MAX_VALUE;
+//        int sameRankCount = 1;
+//
+//        for (FriendRankingResponseDto exercise : exercises) {
+//            if (!exercise.getValue().equals(preValue)) {
+//                startRank += sameRankCount;
+//                sameRankCount = 1; // 동점자 수 초기화
+//                preValue = exercise.getValue();
+//            } else {
+//                sameRankCount++; // 동점자 수를 증가시킵니다.
+//            }
+//            exercise.setRank((long) startRank);
+//
+//            if (exercise.getMemberId().equals(myId)) {
+//                myRank = exercise.getRank();
+//            }
+//        }
+//        startRank += sameRankCount; // 마지막에 동점자가 있었다면, 이를 반영해줍니다.
+//
+//
+//        int pageNumber = (int) (myRank / pageable.getPageSize());
+//
+//        return new SliceResponseDto(exercises, myRank, pageNumber);
     }
 
     public FitnessResponse fetchGoogleFitData(String accessToken, long startTimeMillis, long endTimeMillis) {
@@ -144,7 +219,7 @@ public class ExerciseService {
                 Map.of("dataTypeName", "com.google.heart_rate.bpm"),
                 Map.of("dataSourceId", "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes")
         ));
-        requestBody.put("bucketByTime", Map.of("durationMillis", 86400000)); // 24시간 (하루)를 밀리초로 표현
+        requestBody.put("bucketByTime", Map.of("durationMillis", endTimeMillis - startTimeMillis)); // 24시간 (하루)를 밀리초로 표현
         requestBody.put("startTimeMillis", startTimeMillis);
         requestBody.put("endTimeMillis", endTimeMillis);
 
@@ -153,7 +228,6 @@ public class ExerciseService {
 //        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.postForEntity(url, entity, String.class).getBody());
         // 얘가 문제임
         ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
-
 
         return response.getBody();
     }
