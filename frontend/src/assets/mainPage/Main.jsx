@@ -89,7 +89,7 @@ const Main = function(){
                     }
                 });
                 setHalliRoadmapList(data1);
-                setHalliList(data1);
+                setHalliList(data2);
                 setHalliRequestList(data3);
                 calculateMaxValue(data1);
                 if(data2.length == 0){
@@ -265,7 +265,7 @@ const Main = function(){
                                 { halliRoadmapList.length != 0 ?
                                     <div className={styles.halli_time_progress_container}>
                                         <div className={styles.halli_time_progress_base}>
-                                            {halliList.map((data, index) =>{
+                                            {halliRoadmapList.map((data, index) =>{
                                                 return (
                                                     <div key={index} className={styles.halli_mission_container} style={{left: `${data.requestedTime/maxHalliVal*16}rem`, backgroundImage: realtimeExerciseData.time >= data.requestedTime ? 'url(/imgs/yes_marker.png)' : 'url(/imgs/no_marker.png)'}}>
                                                         <div className={styles.halli_mission_profile}>
