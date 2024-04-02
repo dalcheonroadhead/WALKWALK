@@ -8,6 +8,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.OnlyCreatedTime;
 import org.ssafy.d210.members.entity.Members;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -41,8 +44,11 @@ public class HalleyGalley extends OnlyCreatedTime {
     @ColumnDefault("false")
     private Boolean isAccepted;
 
+    @Column(name = "get_reward_at", nullable = true)
+    private LocalDate getRewardAt;
+
     @Builder
-    private HalleyGalley(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff, Boolean isAccepted){
+    private HalleyGalley(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff, Boolean isAccepted, LocalDate getRewardAt){
 
         this.galleyId = galleyId;
         this.halleyId = halleyId;
@@ -50,9 +56,10 @@ public class HalleyGalley extends OnlyCreatedTime {
         this.reward = reward;
         this.dayoff = dayoff;
         this.isAccepted = isAccepted;
+        this.getRewardAt = getRewardAt;
     }
 
-    public static HalleyGalley of(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff, Boolean isAccepted){
+    public static HalleyGalley of(Members galleyId, Members halleyId, Mission missionId, Integer reward, Integer dayoff, Boolean isAccepted, LocalDate getRewardAt){
 
         return builder()
                 .galleyId(galleyId)
@@ -61,6 +68,7 @@ public class HalleyGalley extends OnlyCreatedTime {
                 .reward(reward)
                 .dayoff(dayoff)
                 .isAccepted(isAccepted)
+                .getRewardAt(LocalDate.now())
                 .build();
     }
 
@@ -79,4 +87,6 @@ public class HalleyGalley extends OnlyCreatedTime {
     public void updateDayoff(Integer dayoff){
         this.dayoff = dayoff;
     }
+
+    public void updateGetRewardAt(LocalDate getRewardAt) { this.getRewardAt = getRewardAt; }
 }
