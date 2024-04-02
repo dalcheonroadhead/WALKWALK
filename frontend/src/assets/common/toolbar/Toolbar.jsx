@@ -78,10 +78,10 @@ const Toolbar = function(){
                 </div>
                 <div className={styles.profile_container}>
                     <div className={styles.profile_img_container}>
-                        <img src={memberInfo.profileUrl} alt='프로필 이미지' className={styles.profile_img}></img>
+                        <img src={memberInfo != undefined ? memberInfo.profileUrl : ''} alt='프로필 이미지' className={styles.profile_img}></img>
                         <div className={styles.profile_detail_container}>
-                            <p className={styles.profile_name}>{memberInfo.nickname}</p>
-                            <p className={styles.profile_intro}>{memberInfo.comment ? memberInfo.comment : '등록된 자기소개가 없습니다.'}</p>
+                            <p className={styles.profile_name}>{memberInfo != undefined ? memberInfo.nickname : ''}</p>
+                            <p className={styles.profile_intro}>{memberInfo != undefined ? (memberInfo.comment ? memberInfo.comment : '등록된 자기소개가 없습니다.'): ''}</p>
                         </div>
                     </div>
                     <div className={styles.all_money_container}>
