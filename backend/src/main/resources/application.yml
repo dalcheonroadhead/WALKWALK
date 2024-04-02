@@ -28,12 +28,12 @@ spring:
     serialization:
       fail-on-empty-beans: false
 
-#  batch:
-#    job:
-#      enabled: false # 키자마자 자동 실행 방지
-##      name: ${job.name:NONE}
-#    jdbc:
-#      initialize-schema: always
+  batch:
+    job:
+      enabled: false # 키자마자 자동 실행 방지
+#      name: ${job.name:NONE}
+    jdbc:
+      initialize-schema: always
 
 
 
