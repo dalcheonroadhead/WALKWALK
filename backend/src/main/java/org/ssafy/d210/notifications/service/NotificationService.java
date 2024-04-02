@@ -1,6 +1,7 @@
 package org.ssafy.d210.notifications.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -15,6 +16,7 @@ import org.ssafy.d210.notifications.repository.NotificationRepository;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -27,7 +29,7 @@ public class NotificationService {
     public SseEmitter subscribe(Long userId) {
         SseEmitter emitter = createEmitter(userId);
 
-        sendToClient(userId, "EventStream Created. [userId=" + userId + "]");
+//        notify(userId, "EventStream Created. [userId=" + userId + "]");
         return emitter;
     }
 

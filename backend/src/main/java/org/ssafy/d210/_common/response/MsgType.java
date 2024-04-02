@@ -20,8 +20,11 @@ public enum MsgType {
     GET_EGG_MONEY_SUCCESSFULLY("에그, 머니 조회에 성공하였습니다."),
     PUT_EGG_ADD_SUCCESSFULLY("에그 획득에 성공하였습니다."),
     PUT_EGG_SUB_SUCCESSFULLY("에그 차감에 성공하였습니다."),
-    PUT_EGG_MONEY_ADD_SUCCESSFULLY("에그, 머니 획득에 성공하였습니다."),
+    PUT_MONEY_ADD_SUCCESSFULLY("머니 획득에 성공하였습니다."),
+    PUT_MONEY_SUB_SUCCESSFULLY("머니 차감에 성공하였습니다."),
     PUT_MONEY_HALLEY_TO_GALLEY_SUCCESSFULLY("미션 머니 획득에 성공하였습니다."),
+    PUT_MONEY_EXCHANGE_SUCCESSFULLY("머니 환전에 성공하였습니다."),
+    GET_WALLET_HISTORY_SUCCESSFULLY("거래 내역 조회에 성공하였습니다."),
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
@@ -67,6 +70,10 @@ public enum MsgType {
     SUBSCRIBE_SUCCESSFULLY("SSE 구독에 성공하였습니다."),
     GET_NOTIFICATION_LIST_SUCCESSFULLY("모든 알림 조회에 성공하였습니다."),
     PUT_NOTIFICATION_SUCCESSFULLY("알림 확인에 성공하였습니다."),
+    GET_NOTIFICATION_SUBSCRIBE_SUCCESSFULLY("알림 구독에 성공하였습니다."),
+
+    // ====================== BLOCKCHAIN ======================
+    GET_RECEIPT_SUCCESSFULLY("영수증 조회에 성공하였습니다.")
     ;
 
     private final String msg;
