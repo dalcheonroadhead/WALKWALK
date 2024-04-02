@@ -51,7 +51,8 @@ public enum MsgType {
     GET_STREAK_RANKING_SUCCESSFULLY("스트릭 기준 랭킹 조회에 성공하였습니다."),
     SET_DECIDED_EXERCISE_START_SUCCESSFULLY("작정한 운동 시작 시간 세팅에 성공하였습니다."),
     SET_DECIDED_EXERCISE_END_SUCCESSFULLY("작정한 운동 데이터 저장에 성공하였습니다."),
-    GET_REPORT_SUCCESSFULLY("저번달 운동 리포트 제작에 성공하였습니다."),
+    GET_REPORT_SUCCESSFULLY("지난 달 운동 리포트 제작에 성공하였습니다."),
+    GET_DAILY_FROM_CALENDAR_SUCCESSFULLY("날짜 지정 운동 데이터 조회에 성공하였습니다."),
 
 
     // ====================== MISSION ==========================

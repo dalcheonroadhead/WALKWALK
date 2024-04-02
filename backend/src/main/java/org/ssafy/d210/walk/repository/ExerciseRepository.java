@@ -45,4 +45,5 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
     Optional<Exercise> findExerciseByMemberAndExerciseDay(Members member, LocalDate exerciseDay);
 
+
 }

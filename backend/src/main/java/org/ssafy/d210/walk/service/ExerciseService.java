@@ -103,6 +103,14 @@ public class ExerciseService {
 
     }
 
+    public Exercise findDailyFromCalendar(Long memberId, LocalDate date) {
+        Optional<Members> membersOptional = membersRepository.findById(memberId);
+        if (!membersOptional.isPresent()) return null;
+        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(membersOptional.get(), date);
+        if (exerciseOptional.isPresent()) return exerciseOptional.get();
+        else return null;
+    }
+
 //    public SliceResponseDto calculateRanking(Long myId, Slice<FriendRankingResponseDto> exercises, int startRank, int pageSize) {
 //        Long myRank = 1L;
 //        Long preValue = Long.MAX_VALUE;

@@ -23,6 +23,7 @@ import org.ssafy.d210.walk.service.ExerciseService;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,5 +63,12 @@ public class ExerciseController {
     public ApiResponseDto<?> getMonthlyExerciseDataForCalendar(@PathVariable(name = "member-id", required = true) Long memberId) {
         List<Exercise> exercises = exerciseService.findMonthlyExerciseData(memberId);
         return ResponseUtils.ok(exercises != null ? exercises : "멤버가 존재하지 않습니다.", MsgType.GET_MONTHLY_EXERCISE_DATA_SUCCESSFULLY);
+    }
+
+    @Operation(summary = "그 날의 운동 데이터 조회")
+    @GetMapping("/calendar/{member-id}/{date}")
+    public ApiResponseDto<?> getCalendarDailyRecord(@PathVariable(value = "member-id", required = true) Long memberId, @PathVariable(value = "date", required = true) LocalDate date) {
+        Exercise exercise = exerciseService.findDailyFromCalendar(memberId, date);
+        return ResponseUtils.ok(exercise != null ? exercise : "멤버가 존재하지 않거나 해당일 운동 기록이 없습니다.", MsgType.GET_DAILY_FROM_CALENDAR_SUCCESSFULLY);
     }
 }
