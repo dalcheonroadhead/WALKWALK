@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.ssafy.d210._common.request.AudioConfig;
-import org.ssafy.d210._common.request.Input;
-import org.ssafy.d210._common.request.MessageInfo;
-import org.ssafy.d210._common.request.Voice;
+import org.ssafy.d210._common.request.*;
 import org.ssafy.d210._common.response.ResTTSInfo;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.entity.MsgType;
@@ -62,23 +59,10 @@ public class SocketService {
     @Transactional
     public void sendEnterMessage(String publishMessage){
         try {
-            MessageInfo msg = objectMapper.readValue(publishMessage, MessageInfo.class);
+            GeoLocation gps = objectMapper.readValue(publishMessage, GeoLocation.class);
+            log.info("위도: {}, 경도: {}", gps.getLatitude(), gps.getLongitude());
 
-
-            // A. 들어온 메세지 확인
-            log.info("들어온 입장 메세지: \n" +
-                    "보낸 이: "+ msg.getSenderId() +
-                    "받는 이: "+ msg.getReceiverId()
-            );
-
-            // B. 메세지 내용 채우기
-            msg.setTextContent(msg.getSenderId()+"님 환영합니다!");
-            msg.setCreatedAt(LocalDateTime.now());
-            msg.setOpened(false);
-            msg.setCreatedAt(LocalDateTime.now());
-
-
-            saveAndSendingMessageToSubscriber(msg);
+            sendLocationToSubscriber(gps);
 
         } catch (Exception e){
             log.error("Exception {}",e.getMessage());
@@ -193,6 +177,12 @@ public class SocketService {
 
         log.info("{}",msg.getReceiverId());
 
+
+    }
+
+    public void sendLocationToSubscriber (GeoLocation gps) {
+
+        template.convertAndSend("/sub/gps/"+gps.getReceiverId(), gps);
 
     }
 
