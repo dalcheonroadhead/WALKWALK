@@ -11,7 +11,6 @@ import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
-import org.ssafy.d210.wallets.dto.request.PutHalleyGalleyMoneyRequest;
 import org.ssafy.d210.wallets.service.WalletsService;
 
 import static org.ssafy.d210._common.exception.ErrorType.BAD_REQUEST;
@@ -57,19 +56,31 @@ public class WalletsController {
     }
 
     @PutMapping("/money-add")
-    public ApiResponseDto<?> putEggMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
-        log.info("WalletsController.putEggMoneyAdd");
+    public ApiResponseDto<?> putMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
+        log.info("WalletsController.putMoneyAdd");
 
         // validation 오류
         if (bindingResult.hasErrors()) {
             throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
         }
 
-        return ApiResponseDto.of(PUT_EGG_MONEY_ADD_SUCCESSFULLY, walletsService.putMoneyAdd(userDetails, putMoneyRequest));
+        return ApiResponseDto.of(PUT_MONEY_ADD_SUCCESSFULLY, walletsService.putMoneyAdd(userDetails, putMoneyRequest));
+    }
+
+    @PutMapping("/money-sub")
+    public ApiResponseDto<?> putMoneySub(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
+        log.info("WalletsController.putMoneySub");
+
+        // validation 오류
+        if (bindingResult.hasErrors()) {
+            throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
+        }
+
+        return ApiResponseDto.of(PUT_MONEY_SUB_SUCCESSFULLY, walletsService.putMoneySub(userDetails, putMoneyRequest));
     }
 
     @PutMapping("/money-halley-galley")
-    public ApiResponseDto<?> putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutHalleyGalleyMoneyRequest putHalleyGalleyMoneyRequest, BindingResult bindingResult) {
+    public ApiResponseDto<?> putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
         log.info("WalletsController.putHalleyGalleyMoney");
 
         // validation 오류
@@ -77,6 +88,12 @@ public class WalletsController {
             throw new CustomException(BAD_REQUEST, getErrorMessages(bindingResult));
         }
 
-        return ApiResponseDto.of(PUT_MONEY_HALLEY_TO_GALLEY_SUCCESSFULLY, walletsService.putHalleyGalleyMoney(userDetails, putHalleyGalleyMoneyRequest));
+        return ApiResponseDto.of(PUT_MONEY_HALLEY_TO_GALLEY_SUCCESSFULLY, walletsService.putMoneyAdd(userDetails, putMoneyRequest));
+    }
+
+    @GetMapping("/wallet-history")
+    public ApiResponseDto<?> getWalletHistory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("WalletsController.getWalletHistory");
+        return ApiResponseDto.of(GET_WALLET_HISTORY_SUCCESSFULLY, walletsService.getWalletHistory(userDetails));
     }
 }

@@ -30,19 +30,19 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
 
-    // 마지막으로 db에 저장된 날짜
+    @Operation(summary = "마지막으로 db에 저장된 날짜")
     @GetMapping("/last-date")
     public ApiResponseDto<?> getLastDate() {
         return ResponseUtils.ok(exerciseService.findLastSavedDate(), MsgType.GET_LAST_SAVED_DATE_SUCCESSFULLY);
     }
 
-    // 이번 주 운동 데이터(걸음 수) 조회
+    @Operation(summary = "이번 주 운동 데이터(걸음 수) 조회")
     @GetMapping("/{date}")
     public ApiResponseDto<?> getWeeklyExerciseRecords(@PathVariable(value = "date", required = true) LocalDate date, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(exerciseService.findWeeklyExerciseRecords(date, userDetails.getMember().getId()), MsgType.GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY);
     }
 
-    // 랭킹 조회, 내 위아래 4명
+    @Operation(summary = "랭킹 조회, 내 위아래 4명")
     @GetMapping("/ranking/streak")
     public ApiResponseDto<SliceResponseDto> getMemberRankingWithFriends(@PageableDefault(size = 10, sort = "streak", direction = Sort.Direction.DESC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(exerciseService.getStreakRankingWithFriends(userDetails.getMember(), pageable), MsgType.GET_STREAK_RANKING_SUCCESSFULLY);

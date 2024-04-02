@@ -1,6 +1,8 @@
 package org.ssafy.d210.wallets._blockchain.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -10,10 +12,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.ssafy.d210.wallets._blockchain.dto.request.PostWriteToBlockchainRequest;
+import org.ssafy.d210.wallets._blockchain.dto.response.GetReadFromBlockchainResponse;
 import org.ssafy.d210.wallets._blockchain.dto.response.PostIssueAccountResponse;
+import org.ssafy.d210.wallets._blockchain.dto.response.PostWriteToBlockchainResponse;
 import org.ssafy.d210.wallets._blockchain.entity.ServerBlockchainAccount;
 import org.ssafy.d210.wallets._blockchain.repository.BlockchainRepository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -28,6 +34,7 @@ public class BlockchainService {
     private String chainId;
 
     private final String blockchainIssueUrl = "https://wallet-api.klaytnapi.com/v2/account";
+    private final String blockchainWriteUrl = "https://metadata-api.klaytnapi.com/v1/metadata";
 
     private final RestTemplate restTemplate;
 
@@ -67,5 +74,33 @@ public class BlockchainService {
             serverBlockchainAccount.setUpdatedAt(response.getBody().getUpdatedAt());
             blockchainRepository.save(serverBlockchainAccount);
         }
+    }
+
+    public String writeToBlockchain(PostWriteToBlockchainRequest postWriteToBlockchainRequest) throws JSONException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authorization);
+        headers.set("x-chain-id", chainId);
+
+        JSONObject metadataContent = new JSONObject();
+        metadataContent.put("walletHistoryId", postWriteToBlockchainRequest.getWalletHistoryId());
+        metadataContent.put("walletType", postWriteToBlockchainRequest.getWalletType().name());
+        metadataContent.put("operator", postWriteToBlockchainRequest.getOperator());
+        metadataContent.put("price", postWriteToBlockchainRequest.getPrice());
+        metadataContent.put("memberId", postWriteToBlockchainRequest.getMember().getId());
+        metadataContent.put("description", postWriteToBlockchainRequest.getDescription());
+        metadataContent.put("createdAt", postWriteToBlockchainRequest.getCreatedAt().toString());
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("metadata", metadataContent);
+
+        HttpEntity<?> request = new HttpEntity<>(requestBody.toString(), headers);
+        ResponseEntity<PostWriteToBlockchainResponse> response = restTemplate.postForEntity(blockchainWriteUrl, request, PostWriteToBlockchainResponse.class);
+
+        return Objects.requireNonNull(response.getBody()).getUri();
+    }
+
+    public GetReadFromBlockchainResponse readFromBlockchain(String uri) {
+        return restTemplate.getForObject(uri, GetReadFromBlockchainResponse.class);
     }
 }

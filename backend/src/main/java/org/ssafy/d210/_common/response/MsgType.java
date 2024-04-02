@@ -20,8 +20,11 @@ public enum MsgType {
     GET_EGG_MONEY_SUCCESSFULLY("에그, 머니 조회에 성공하였습니다."),
     PUT_EGG_ADD_SUCCESSFULLY("에그 획득에 성공하였습니다."),
     PUT_EGG_SUB_SUCCESSFULLY("에그 차감에 성공하였습니다."),
-    PUT_EGG_MONEY_ADD_SUCCESSFULLY("에그, 머니 획득에 성공하였습니다."),
+    PUT_MONEY_ADD_SUCCESSFULLY("머니 획득에 성공하였습니다."),
+    PUT_MONEY_SUB_SUCCESSFULLY("머니 차감에 성공하였습니다."),
     PUT_MONEY_HALLEY_TO_GALLEY_SUCCESSFULLY("미션 머니 획득에 성공하였습니다."),
+    PUT_MONEY_EXCHANGE_SUCCESSFULLY("머니 환전에 성공하였습니다."),
+    GET_WALLET_HISTORY_SUCCESSFULLY("거래 내역 조회에 성공하였습니다."),
 
     // ====================== ITEMS ============================
     GET_ITEM_LIST_SUCCESSFULLY("아이템 조회에 성공하였습니다."),
@@ -39,6 +42,10 @@ public enum MsgType {
 
     // ====================== WALK ============================
     GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),
+    GET_LAST_SAVED_DATE("마지막으로 저장된 날짜 조회에 성공하였습니다."),
+    SET_DEFAULT_CRITERIA("연령대 맞춤 운동 기준 등록을 성공하였습니다."),
+    SET_CUSTOM_CRITERIA("사용자 맞춤 운동 기준 등록을 성공하였습니다."),
+    GET_EXERCISE_CRITERIA("운동 기준 조회에 성공하였습니다."),
     GET_LAST_SAVED_DATE_SUCCESSFULLY("마지막으로 저장된 날짜 조회에 성공하였습니다."),
     SET_DEFAULT_CRITERIA_SUCCESSFULLY("연령대 맞춤 운동 기준 등록을 성공하였습니다."),
     SET_CUSTOM_CRITERIA_SUCCESSFULLY("사용자 맞춤 운동 기준 등록을 성공하였습니다."),
@@ -46,6 +53,10 @@ public enum MsgType {
     INIT_CRITERIA_SUCCESSFULLY("연령대 맞춤 운동 기준으로 초기화에 성공하였습니다."),
     GET_STEPS_RANKING_SUCCESSFULLY("걸음 수 기준 랭킹 조회에 성공하였습니다."),
     GET_STREAK_RANKING_SUCCESSFULLY("스트릭 기준 랭킹 조회에 성공하였습니다."),
+    SET_DECIDED_EXERCISE_START_SUCCESSFULLY("작정한 운동 시작 시간 세팅에 성공하였습니다."),
+    SET_DECIDED_EXERCISE_END_SUCCESSFULLY("작정한 운동 데이터 저장에 성공하였습니다."),
+    GET_REPORT_SUCCESSFULLY("저번달 운동 리포트 제작에 성공하였습니다."),
+
 
     // ====================== MISSION ==========================
     POST_MISSION_SUCCESSFULLY("미션 등록에 성공하였습니다."),
@@ -64,6 +75,9 @@ public enum MsgType {
     GET_NOTIFICATION_LIST_SUCCESSFULLY("모든 알림 조회에 성공하였습니다."),
     PUT_NOTIFICATION_SUCCESSFULLY("알림 확인에 성공하였습니다."),
     GET_NOTIFICATION_SUBSCRIBE_SUCCESSFULLY("알림 구독에 성공하였습니다."),
+
+    // ====================== BLOCKCHAIN ======================
+    GET_RECEIPT_SUCCESSFULLY("영수증 조회에 성공하였습니다.")
     ;
 
     private final String msg;
