@@ -3,16 +3,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
-import { getGalleyList, getHalleyList, postGalleyRequest, getHalley, responseGalley } from "../../apis/halleygalley";
+import { getGalleyList, getHalleyList, postGalleyRequest, getHalley, responseGalley, postMission, putMission } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
 import { getRealtimeExerciseData, getWeeklyExerciseData, getExerciseCriteria } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
 import { useSignupStore } from "../../stores/member";
 import Lottie from 'react-lottie';
 import confetti from '../../lotties/confetti_full.json';
+import { useToolbar } from "../../stores/toolbar";
 
 const Main = function(){
     const {memberId, setMemberId} = useStore();
+    const {updateState} = useToolbar();
     useEffect(()=>{
         getExerciseCriteria()
             .then(res=>{setCriteriaData(res); console.log(res)})
@@ -22,6 +24,7 @@ const Main = function(){
             .then((res)=>{
               setRealtimeExerciseData(res);
             })
+        updateHalliGalliList();
     }, [])
 
     const navigate = useNavigate();
@@ -70,6 +73,7 @@ const Main = function(){
     const [criteriaData, setCriteriaData] = useState({steps:0, exerciseMinute:0});
     const [halliRequestList, setHalliRequestList] = useState([]);
     const [maxHalliVal, setMaxHalliVal] = useState(0);
+    const [giveMeMoneyList, setGiveMeMoneyList] = useState({});
 
     const updateHalliGalliList = () => {
         getHalleyList()
@@ -92,6 +96,17 @@ const Main = function(){
                 setHalliList(data2);
                 setHalliRequestList(data3);
                 calculateMaxValue(data1);
+                setGiveMeMoneyList(data1);
+                const hallyList = [];
+                data1.forEach(d=>{
+                    if(!d.getRewardAt && realtimeExerciseData.time >= d.requestedTime){
+                        hallyList.push(d.memberId);
+                    }
+                })
+                putMission(hallyList)
+                    .then(res=>{
+                        updateState();
+                    })
                 if(data2.length == 0){
                     setHalli(false);
                 }
