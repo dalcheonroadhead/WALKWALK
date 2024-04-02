@@ -10,6 +10,7 @@ import AudioRecord from './AudioRecord';
 import './FileUploader.module.css';
 import axios from 'axios';
 import { getSpeech } from './getSpeech';
+import styles from "./SocketPage4Member.module.css"
 
 let stompClient;
 var pageOwnerId;
@@ -24,8 +25,6 @@ const currentMember =  JSON.parse(localStorage.getItem('tokens')) || {
 
 
 const SocketPage4Member = () => {
-
-  
 
   //⭐ VARIABLES 
   
@@ -56,6 +55,9 @@ const SocketPage4Member = () => {
 
   // I. 현재 유저가 들어온 환경이 모바일인지 아닌지 
   const [isMobile, setIsMobile] = useState(false);
+
+  // G. Tab Bar 용
+  const [tabIndex, setTabIndex] = useState(0);
    
 
   //⭐ CHAT FOCUS ALWAYS ON BOTTOM
@@ -180,7 +182,7 @@ const SocketPage4Member = () => {
     getloadMessage();
 
     // D. 모바일인지 아닌지 확인 
-    console.log(window.innerWidth)
+    console.log("열린 디바이스 브라우저 넓이",window.innerWidth)
 
     if(typeof window !== "undefined"){
       if(window.innerWidth > 412){ 
@@ -247,35 +249,82 @@ const SocketPage4Member = () => {
 
   };
 
-  return (
-    <div className="chat"
-        ref={chatContainerRef}>
-      <div className="chat-box">
-        <div style={{fontWeight: 'bold', alignSelf: 'center'}}> 🏃{pageOwner.nickname}🤸님 응원하기</div> 
 
-        {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
-        <MessageList
-          chatContainerRef={chatContainerRef}
-          messages={messages}
-          currentTypingId={currentTypingId}
-          onEndTyping={handleEndTyping}
-          pageOwnerId={pageOwnerId}
-          currentMember={currentMember}
-        />
-        {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
-        <div style={{display: 'flex'}}>
-          {/* 모바일 환경인지 아닌지에 따라 버튼 다르게 구현 */}
-          {isMobile?(
-            <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
-          ):(
-            <AudioRecord stompClient={stompClient} currentMember = {currentMember} pageOwnerId={pageOwnerId}/>
-          )}
-          
-         
+  const tabClickHandler = (index) => {
+    setTabIndex(index);
+  }
+
+  
+  const tabArr=[
+    {
+      tabTitle:(
+        <div className={tabIndex===0 ? styles.mode_choose : styles.mode_friend_list} onClick={()=>tabClickHandler(0)}>
+          <p className={styles.mode_friend_list_txt}>현재 페이스</p>
         </div>
-        <MessageForm onSendMessage={handleSendMessage} clientHeader={clientHeader} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
+      ),  
+      tabCont:(
+        <div>
+
+        </div>
+      )
+
+
+
+
+    },
+    
+    
+    {
+    tabTitle:(
+      <div className={tabIndex===0 ? styles.mode_choose : styles.mode_friend_list} onClick={()=>tabClickHandler(1)}>
+        <p className={styles.mode_friend_list_txt}>채팅</p>
       </div>
-    </div>
+    ),        
+    tabCont:(
+      <div className={styles.socket_page_content}>
+          <div className={styles.socket_box}>
+              <div style={{fontWeight: 'bold', alignSelf: 'center'}}> 🏃{pageOwner.nickname}🤸님 응원하기</div> 
+
+              {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
+              <MessageList
+                chatContainerRef={chatContainerRef}
+                messages={messages}
+                currentTypingId={currentTypingId}
+                onEndTyping={handleEndTyping}
+                pageOwnerId={pageOwnerId}
+                currentMember={currentMember}
+              />
+              {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
+              <div style={{display: 'flex'}}>
+                {/* 모바일 환경인지 아닌지에 따라 버튼 다르게 구현 */}
+                {isMobile?(
+                  <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
+                ):(
+                  <AudioRecord stompClient={stompClient} currentMember = {currentMember} pageOwnerId={pageOwnerId}/>
+                )}
+                
+              
+              </div>
+              <MessageForm onSendMessage={handleSendMessage} clientHeader={clientHeader} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
+          </div>
+  
+      </div>
+  )
+
+
+  }]
+
+  return (
+    <div className={styles.main_container}>
+      <div className={styles.tab_container}>
+        <div className={styles.mode_tabs}>
+            {tabArr.map((mode, index)=>{
+                return <div key={index}>{mode.tabTitle}</div>
+            })}
+        </div>
+            {tabArr[tabIndex].tabCont}
+      </div>
+  </div>
   );
 };
 
