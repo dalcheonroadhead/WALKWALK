@@ -17,10 +17,12 @@ import org.ssafy.d210._common.response.ResponseUtils;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.walk.dto.request.StepsRankingPeriodEnum;
 import org.ssafy.d210.walk.dto.response.SliceResponseDto;
+import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.service.ExerciseService;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,8 +58,9 @@ public class ExerciseController {
     }
 
     @Operation(summary = "한 달 운동")
-    @GetMapping("/calendar")
-    public ApiResponseDto<?> getMonthlyExerciseDataForCalendar(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(exerciseService.findMonthlyExerciseData(userDetails.getMember()), MsgType.GET_MONTHLY_EXERCISE_DATA_SUCCESSFULLY);
+    @GetMapping("/calendar/{member-id}")
+    public ApiResponseDto<?> getMonthlyExerciseDataForCalendar(@PathVariable(name = "member-id", required = true) Long memberId) {
+        List<Exercise> exercises = exerciseService.findMonthlyExerciseData(memberId);
+        return ResponseUtils.ok(exercises != null ? exercises : "멤버가 존재하지 않습니다.", MsgType.GET_MONTHLY_EXERCISE_DATA_SUCCESSFULLY);
     }
 }
