@@ -14,6 +14,7 @@ import org.ssafy.d210.walk.entity.ExerciseAcc;
 import org.ssafy.d210.wallets._payment.entity.Payment;
 import org.ssafy.d210.wallets.entity.BlockAddress;
 import org.ssafy.d210.wallets.entity.MemberAccount;
+import org.ssafy.d210.wallets.entity.WalletHistory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +117,9 @@ public class Members extends BaseTime {
     @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberItemHistory> memberItemHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<WalletHistory> walletHistories = new ArrayList<>();
 
     @Builder
     public Members(

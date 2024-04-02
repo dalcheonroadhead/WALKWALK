@@ -18,19 +18,29 @@ public class Payment extends OnlyCreatedTime {
     @Column(name = "payment_id")
     private Long id;
 
-    @Column(name = "cid")
+    @Column
     private String cid;
 
-    @Column(name = "partner_order_id")
+    @Column
+    private String tid;
+
+    @Column
     private String partner_order_id;
 
-    @Column(name = "partner_user_id")
+    @Column
     private String partner_user_id;
 
-    @Column(name = "total_amount")
+    @Column
     private Integer total_amount;
+
+    @Column
+    private Boolean isApprove;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Members member;
+
+    public void updateIsApprove(Boolean flag) {
+        this.isApprove = flag;
+    }
 }
