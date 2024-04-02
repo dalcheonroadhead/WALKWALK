@@ -118,6 +118,7 @@ public class Members extends BaseTime {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberItemHistory> memberItemHistories = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<WalletHistory> walletHistories = new ArrayList<>();
 
