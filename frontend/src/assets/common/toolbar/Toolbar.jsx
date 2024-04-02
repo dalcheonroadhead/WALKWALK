@@ -3,9 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getEggMoney } from "../../../apis/wallet";
 import { useEffect, useState } from "react";
 import { getUserDetail } from "../../../apis/member";
+import { useToolbar } from "../../../stores/toolbar";
 
 
 const Toolbar = function(){
+
+    const { state } = useToolbar();
 
     useEffect(()=>{
         getEggMoney()
@@ -13,7 +16,7 @@ const Toolbar = function(){
                 setEgg(res.egg);
                 setMoney(res.money);
             })
-    }, [])
+    }, [state])
     const navigate = useNavigate();
     const [egg, setEgg] = useState(0);
     const [money, setMoney] = useState(0);
