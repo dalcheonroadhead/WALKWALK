@@ -41,6 +41,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 //    Slice<FriendRankingResponseDto> findStepsRankingByPage(Long myId, Pageable pageable, LocalDate startDate, LocalDate endDate);
 
 
+    List<Exercise> findExercisesByMemberAndExerciseDayBetween(Members member, LocalDate startDate, LocalDate endDate);
 
     Optional<Exercise> findExerciseByMemberAndExerciseDay(Members member, LocalDate exerciseDay);
 
