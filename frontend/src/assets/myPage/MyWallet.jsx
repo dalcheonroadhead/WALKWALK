@@ -101,11 +101,11 @@ const MyWallet = function () {
 
               <div className={styles.mywallet_btn_container}>
                 <button className={styles.mywallet_btn} onClick={() => {setChargeModalOpen(true)}}>
-                  <img className={styles.mywallet_transfer_img} src="src\lotties\money-bill-solid.svg" alt="" />
+                  <img className={styles.mywallet_transfer_img} src="/imgs/money-bill-solid.svg" alt="" />
                   <div>충전</div>
                 </button>
                 <button className={styles.mywallet_btn} onClick={() => {setExchangeModalOpen(true)}}>
-                  <img className={styles.mywallet_transfer_img} src="src\lotties\money-bill-transfer-solid.svg" alt="" />
+                  <img className={styles.mywallet_transfer_img} src="/imgs/money-bill-transfer-solid.svg" alt="" />
                   <div>환전</div>
                 </button>
               </div>
