@@ -122,18 +122,28 @@ public class ExerciseService {
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
-//        return calculateRanking(myId, exercises, startRank, pageable.getPageSize());
-        Long myRank = 1L;
+        Long myRank = 0L;
+        int myRankPage = 0;
+
+        int count = 0;
+        boolean found = false;
 //
         for (FriendRankingResponseDto exercise : exercises) {
+            count++;
             if (exercise.getMemberId().equals(myId)) {
                 myRank = exercise.getRank();
-                break;
+                found = true;
+            }
+            if (count % pageable.getPageSize() == 0 && !found) {
+                myRankPage++;
             }
         }
 
         // 내 순위에 해당하는 페이지 번호 계산
-        int myRankPage = (int) (myRank / pageable.getPageSize());
+//        int myRankPage = (int) (myRank / pageable.getPageSize());
+        if (myRank != null) {
+            myRankPage += (int) (myRank / pageable.getPageSize());
+        }
 
         return new SliceResponseDto(exercises, myRank, myRankPage);
     }
@@ -148,11 +158,9 @@ public class ExerciseService {
         if (type == StepsRankingPeriodEnum.WEEKLY) {
             startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
             endDate = today.with(DayOfWeek.SUNDAY);
-            System.out.println(startDate + "               " + endDate);
         } else if (type == StepsRankingPeriodEnum.MONTHLY) {
             startDate = today.withDayOfMonth(1);
             endDate = today.withDayOfMonth(today.lengthOfMonth());
-            System.out.println(startDate + "               " + endDate);
         }
 
         Long myId = member.getId();
@@ -162,20 +170,28 @@ public class ExerciseService {
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
-//        return calculateRanking(myId, exercises, startRank, pageable.getPageSize());
+        Long myRank = 0L;
+        int myRankPage = 0;
 
-
-        Long myRank = 1L;
-
+        int count = 0;
+        boolean found = false;
+//
         for (FriendRankingResponseDto exercise : exercises) {
+            count++;
             if (exercise.getMemberId().equals(myId)) {
                 myRank = exercise.getRank();
-                break;
+                found = true;
+            }
+            if (count % pageable.getPageSize() == 0 && !found) {
+                myRankPage++;
             }
         }
 
         // 내 순위에 해당하는 페이지 번호 계산
-        int myRankPage = (int) (myRank / pageable.getPageSize());
+//        int myRankPage = (int) (myRank / pageable.getPageSize());
+        if (myRank != null) {
+            myRankPage += (int) (myRank / pageable.getPageSize());
+        }
 
         return new SliceResponseDto(exercises, myRank, myRankPage);
 //        Long preValue = Long.MAX_VALUE;
