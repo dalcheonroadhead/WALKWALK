@@ -148,9 +148,11 @@ public class ExerciseService {
         if (type == StepsRankingPeriodEnum.WEEKLY) {
             startDate = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
             endDate = today.with(DayOfWeek.SUNDAY);
+            System.out.println(startDate + "               " + endDate);
         } else if (type == StepsRankingPeriodEnum.MONTHLY) {
             startDate = today.withDayOfMonth(1);
             endDate = today.withDayOfMonth(today.lengthOfMonth());
+            System.out.println(startDate + "               " + endDate);
         }
 
         Long myId = member.getId();

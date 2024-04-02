@@ -9,6 +9,7 @@ import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.response.ResponseUtils;
 import org.ssafy.d210._common.service.UserDetailsImpl;
+import org.ssafy.d210.walk.dto.response.ReportResponseDto;
 import org.ssafy.d210.walk.service.ExerciseDecidedService;
 
 import java.time.LocalDate;
@@ -40,9 +41,10 @@ public class ExerciseDecidedController {
 //        return ResponseUtils.ok()
 //    }
 
-    @Operation(summary = "저번달 리포트")
+    @Operation(summary = "지난 달 리포트")
     @GetMapping("/report")
     public ApiResponseDto<?> getLastMonthReport(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(exerciseDecidedService.)
+        ReportResponseDto report = exerciseDecidedService.makeExerciseReport(userDetails.getMember());
+        return ResponseUtils.ok(report!=null ? report : "지난 달 작정한 운동 데이터가 없습니다!", MsgType.GET_REPORT_SUCCESSFULLY);
     }
 }

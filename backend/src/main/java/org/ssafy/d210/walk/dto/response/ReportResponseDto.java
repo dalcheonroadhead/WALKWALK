@@ -13,8 +13,9 @@ public class ReportResponseDto {
     private List<String> mainExerciseTime;
     private Double heartRateAvg;
     private Double exerciseDistanceAvg;
-    private Integer dayOfExercise;
-    private Long stepsAvg;
-    private Long exerciseMinuteAvg;
+    private Long dayOfExercise;
+    private Double stepsAvg;
+    private Double exerciseMinuteAvg;
     private Double calorieAvg;
+
 }
