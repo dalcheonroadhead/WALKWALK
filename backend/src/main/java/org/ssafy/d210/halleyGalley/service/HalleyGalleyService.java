@@ -14,6 +14,9 @@ import org.ssafy.d210.halleyGalley.repository.HalleyGalleyRepository;
 import org.ssafy.d210.halleyGalley.repository.MissionRepository;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
+import org.ssafy.d210.notifications.entity.NotiType;
+import org.ssafy.d210.notifications.entity.Notification;
+import org.ssafy.d210.notifications.service.NotificationService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +27,7 @@ public class HalleyGalleyService {
     private final HalleyGalleyRepository halleyGalleyRepository;
     private final MissionRepository missionRepository;
     private final MembersRepository membersRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public String postGalleyRequest(Members member, PostGalleyRequest request){
@@ -40,6 +44,15 @@ public class HalleyGalleyService {
                     .dayoff(0)
                     .isAccepted(false)
                     .build());
+            Notification notification = Notification.builder()
+                    .senderId(member)
+                    .receiverId(galley)
+                    .isChecked(false)
+                    .notiType(NotiType.HALLEY_GALLEY)
+                    .notiContent(member.getNickname() + "님으로 부터 할리 수락 요청이 도착했습니다")
+                    .build();
+            notificationService.insertNotification(notification);
+            notificationService.notify(galleyId, notification);
         }
         else{
             throw new CustomException(ErrorType.ALREADY_SEND_REQUEST);
@@ -59,7 +72,12 @@ public class HalleyGalleyService {
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY_GALLEY));
 
         halleyGalley.updateIsAccepted(isAccept);
-        halleyGalleyRepository.save(halleyGalley);
+        if(!isAccept){
+            halleyGalleyRepository.delete(halleyGalley);
+        }
+        else{
+            halleyGalleyRepository.save(halleyGalley);
+        }
 
         return PutGalleyResponseResponse.of(isAccept);
     }

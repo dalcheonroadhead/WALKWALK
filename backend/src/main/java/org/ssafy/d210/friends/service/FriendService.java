@@ -58,9 +58,10 @@ public class FriendService {
         Members receiver = membersRepository.findById(request.getMemberId())
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
 
-        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver).orElse(null);
+        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver).orElse(null);
+        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverId(receiver, member).orElse(null);
 
-        if(friendList == null) {
+        if(friendList1 == null && friendList2 == null) {
             friendListRepository.save(
                     FriendList.builder()
                             .senderId(member)
@@ -82,7 +83,7 @@ public class FriendService {
                     .receiverId(receiver)
                     .isChecked(false)
                     .notiType(NotiType.FRIEND)
-                    .notiContent("친구 요청이 왔습니다.")
+                    .notiContent(member.getNickname()+"님으로부터 친구 요청이 왔습니다")
                     .build();
             notificationService.insertNotification(notification);
             notificationService.notify(receiver.getId(), notification);

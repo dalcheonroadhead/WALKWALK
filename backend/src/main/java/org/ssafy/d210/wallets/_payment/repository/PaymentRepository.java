@@ -1,4 +1,4 @@
-package org.ssafy.d210.wallets._payment.Repository;
+package org.ssafy.d210.wallets._payment.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT p FROM Payment p WHERE p.partner_order_id = :partner_order_id")
     Optional<Payment> findFirstByPartnerOrderId(String partner_order_id);
+
+    Optional<Payment> findPaymentByTid(String tid);
 }
