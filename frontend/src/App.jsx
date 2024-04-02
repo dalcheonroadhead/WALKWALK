@@ -48,7 +48,7 @@ function App() {
           headers: {
             Authorization: localItem.Authorization,
           },
-          timeout: 6000000000
+          timeout: 600000000
         }
         );
       console.log(source)
