@@ -28,6 +28,7 @@ import SendVoice from "./assets/voicePage/SendVoice";
 import SendingVoice from "./assets/voicePage/SendingVoice";
 import Mission from "./assets/halligalliPage/Mission";
 import { useEffect, useState } from "react";
+import ContractTest from './assets/walkingPage/TransactionTest'
 
 function App() {
   const [alarmFlag, setAlarmFlag] = useState(false);
@@ -104,6 +105,7 @@ function App() {
         <Route path="/member/:id" element={<SocketPage4Member/>}></Route>
         <Route path="/voice/sendvoice/sendingvoice" element={<SendingVoice />}></Route>
         <Route path="/galli/mission" element={<Mission />}></Route>
+        <Route path="/transaction" element={<ContractTest />}></Route>
       </Routes>
     </BrowserRouter>
   )
