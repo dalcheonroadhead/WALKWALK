@@ -43,7 +43,7 @@ function App() {
     // EventSource 생성 및 설정
     if (localItem !== null) {
       const source = new EventSourcePolyfill(
-        `http://localhost:8081/api/notifications/subscribe`,
+        `https://j10d210.p.ssafy.io/api/notifications/subscribe`,
         {
           headers: {
             Authorization: localItem.Authorization,
