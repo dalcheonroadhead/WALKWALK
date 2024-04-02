@@ -16,10 +16,10 @@ export const getGoogleToken = async (code) => {
 // 회원가입 추가정보 제출
 export const submitUserInfo = async (userInfo) => {
     const url = '/members/'
-
+    console.log('api로 전달된 정보 :' , userInfo)
     return await instance.post(url, userInfo)
         .then((res) => {
-            console.log(res)
+            console.log('api 결과', res)
             return true
         })
         .catch((err) => {console.log(err)})
