@@ -66,10 +66,11 @@ const Toolbar = function(){
         setOpened(false);
     }
 
+    const [] = useState()
+
     return(
         <> 
-
-                <div className={`${styles.sidebar_container} ${opened && styles.sidebar_container_opened}`}>
+            <div className={`${styles.sidebar_container} ${opened && styles.sidebar_container_opened}`}>
                 <div className={`${styles.hamburger_container} ${opened ? styles.hamburger_container_opened : styles.change_opacity_0}`} onClick={handleSidebarClickEvent}>
                     <div className={`${styles.hamburger} ${opened && styles.hamburger_1_opened}`}></div>
                     <div className={`${styles.hamburger} ${opened && styles.hamburger_2_opened}`}></div>
@@ -122,6 +123,7 @@ const Toolbar = function(){
                     </div>
                 </div>
             </div>
+
 
         
             <div className={styles.tool_container}>          
