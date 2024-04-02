@@ -40,6 +40,7 @@ public class ExerciseService {
     private final ExerciseCriteriaService exerciseCriteriaService;
     private final MemberItemHistoryRepository memberItemHistoryRepository;
     private final ExerciseRankingRepository exerciseRankingRepository;
+    private final MembersRepository membersRepository;
 
 
     // db에 저장된 마지막 날짜
@@ -86,12 +87,20 @@ public class ExerciseService {
         return data;
     }
 
-    public List<Exercise> findMonthlyExerciseData(Members member) {
+    public List<Exercise> findMonthlyExerciseData(Long memberId) {
         LocalDate today = LocalDate.now();
         LocalDate startDate = today.withDayOfMonth(1);
         LocalDate endDate = startDate.plusMonths(1).minusDays(1);
 
-        return exerciseRepository.findExercisesByMemberAndExerciseDayBetween(member, startDate, endDate);
+        Optional<Members> membersOptional = membersRepository.findById(memberId);
+
+        if (membersOptional.isPresent()) {
+            Members member = membersRepository.findById(memberId).get();
+            return exerciseRepository.findExercisesByMemberAndExerciseDayBetween(member, startDate, endDate);
+        } else {
+            return null;
+        }
+
     }
 
 //    public SliceResponseDto calculateRanking(Long myId, Slice<FriendRankingResponseDto> exercises, int startRank, int pageSize) {
