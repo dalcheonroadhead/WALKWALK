@@ -3,12 +3,10 @@ import FitnessTracker from './FitnessTracker.json';
 
 // 환경 설정
 const endPoint = 'https://eth-sepolia.g.alchemy.com/v2/7mSBp_od0HOmQy9s-vLF4k5NnrohXhc5';
-// const privateKey = import.meta.env.VITE_PRIVATE_KEY;
-const privateKey = '94ec0b910e4b49e778a210c0f0c43e401c661a9bfd16847bf03e2a5f5df4d6bf';
+const privateKey = import.meta.env.VITE_PRIVATE_KEY;
 const provider = new ethers.providers.JsonRpcProvider(endPoint);
 const wallet = new ethers.Wallet(privateKey, provider);
-// const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
-const contractAddress = '0x19fE77c3271104f6E2ae6Ad60E650C48d516EA65';
+const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 const contract = new ethers.Contract(contractAddress, FitnessTracker.abi, wallet);
 
 // 정보 기록 함수
