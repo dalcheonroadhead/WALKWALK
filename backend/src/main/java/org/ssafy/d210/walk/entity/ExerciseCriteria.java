@@ -63,12 +63,14 @@ public class ExerciseCriteria { // 운동 기준
     }
 
     public static ExerciseCriteria createDefaultCriteria(Members member) {
+        if (member.getBirthYear() == null) return null;
         int age = (int) (LocalDate.now().getYear() - member.getBirthYear());
         ExerciseCriteriaBuilder builder = determineDefaultCriteriaByAge(age).member(member);
         return builder.build();
     }
 
     public ExerciseCriteria updateDefaultCriteria(Members member) {
+        if (member.getBirthYear() == null) return null;
         int age = (int) (LocalDate.now().getYear() - member.getBirthYear());
         ExerciseCriteriaBuilder builder = determineDefaultCriteriaByAge(age);
         this.isCustom = false;

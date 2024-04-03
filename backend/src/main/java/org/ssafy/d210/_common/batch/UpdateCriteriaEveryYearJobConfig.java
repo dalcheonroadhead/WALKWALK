@@ -61,7 +61,9 @@ public class UpdateCriteriaEveryYearJobConfig {
     public ItemProcessor<Members, ExerciseCriteria> exerciseCriteriaItemProcessor() {
         return member -> {
             try {
-                return exerciseCriteriaService.setDefaultExerciseCriteria(member);
+                ExerciseCriteria exerciseCriteria = exerciseCriteriaService.setDefaultExerciseCriteria(member);
+                if (exerciseCriteria == null) log.info("회원의 출생년도가 기입되어있지 않아 업데이트에 실패했습니다.", member.getNickname());
+                return exerciseCriteria;
             } catch (Exception e) {
                 log.error("운동 기준 업데이트 중 에러가 발생했습니다.", e);
                 return null;

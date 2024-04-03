@@ -71,8 +71,8 @@ public class SchedulerConfig {
 //    }
 
 
-    @Scheduled(cron = "0 30 * * * *")
-//    @Scheduled(cron = "0 0 4 * * *")
+//    @Scheduled(cron = "0 30 * * * *")
+    @Scheduled(cron = "0 0 4 * * *")
     public void runBatchJob() {
         Set<JobExecution> executions = jobExplorer.findRunningJobExecutions(saveFitnessDataEveryDayJob.getName());
         if (!executions.isEmpty()) {
@@ -115,6 +115,7 @@ public class SchedulerConfig {
     }
 
     @Scheduled(cron = "0 0 3 1 1 *")
+//    @Scheduled(cron = "0 50 * * * *")
     public void adjustAgeGroup() {
         Set<JobExecution> executions = jobExplorer.findRunningJobExecutions(updateCriteriaEveryYearJob.getName());
         if (!executions.isEmpty()) {
