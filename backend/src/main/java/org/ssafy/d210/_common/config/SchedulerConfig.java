@@ -66,7 +66,7 @@ public class SchedulerConfig {
 //    }
 
 
-    @Scheduled(cron = "0 0 4 * * *")
+    @Scheduled(cron = "0 30 * * * *")
 //    @Scheduled(cron = "0 * * * * *")
     public void runBatchJob() {
         Set<JobExecution> executions = jobExplorer.findRunningJobExecutions(job.getName());
