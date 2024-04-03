@@ -126,7 +126,7 @@ public class PaymentService {
             payment.updateIsApprove(true);
         }
 
-        walletsService.writeDBandBlockchain(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "", member), "카카오페이로 MONEY 충전");
+        walletsService.writeToBlockchain(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "", member), "카카오페이로 MONEY 충전");
 
         return response.getBody();
     }
@@ -138,7 +138,7 @@ public class PaymentService {
 
         Integer putMoneyResult = memberAccount.putMoney(paymentExchangeRequest.getExchangeMoneyValue(), false);
 
-        walletsService.writeDBandBlockchain(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", member), "MONEY 환전");
+        walletsService.writeToBlockchain(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", member), "MONEY 환전");
 
         return ApiResponseDto.of(PUT_MONEY_EXCHANGE_SUCCESSFULLY, PaymentExchangeResponse.of(putMoneyResult));
     }
