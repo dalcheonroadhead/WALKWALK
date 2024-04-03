@@ -22,18 +22,19 @@ public class ExerciseCriteriaService {
     private final ExerciseCriteriaRepository exerciseCriteriaRepository;
 
     public ExerciseCriteria setDefaultExerciseCriteria(Members member) {
-        Optional<ExerciseCriteria> exerciseCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
+        Optional<ExerciseCriteria> exerciseCriteriaOptional = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
 
-        ExerciseCriteria criteria;
+        ExerciseCriteria exerciseCriteria;
 
-        if (exerciseCriteria.isPresent()) {
-            criteria = exerciseCriteria.get();
-            criteria.updateDefaultCriteria(member);
+        if (exerciseCriteriaOptional.isPresent()) {
+            exerciseCriteria = exerciseCriteriaOptional.get().updateDefaultCriteria(member);
         } else {
-            criteria = ExerciseCriteria.createDefaultCriteria(member);
+            exerciseCriteria = ExerciseCriteria.createDefaultCriteria(member);
         }
 
-        return exerciseCriteriaRepository.save(criteria);
+        if (exerciseCriteria == null) return null;
+
+        return exerciseCriteriaRepository.save(exerciseCriteria);
     }
 
     public ExerciseCriteria setCustomExerciseCriteria(Members member, CustomExerciseCriteriaRequestDto requestDto) {
@@ -46,6 +47,7 @@ public class ExerciseCriteriaService {
             newCriteria.setExerciseMinute(requestDto.getExerciseMinute());
             newCriteria.setSteps(requestDto.getSteps());
             newCriteria.setHeartRate(requestDto.getHeartRate());
+            newCriteria.setExerciseDistance(requestDto.getExerciseDistance());
         } else {
             newCriteria = ExerciseCriteria.builder()
                     .member(member)
@@ -53,6 +55,7 @@ public class ExerciseCriteriaService {
                     .exerciseMinute(requestDto.getExerciseMinute())
                     .steps(requestDto.getSteps())
                     .heartRate(requestDto.getHeartRate())
+                    .exerciseDistance(requestDto.getExerciseDistance())
                     .build();
         }
 
@@ -68,12 +71,14 @@ public class ExerciseCriteriaService {
             responseDto = MainCriteriaResponseDto.builder()
                     .steps(existingCriteria.get().getSteps())
                     .exerciseMinute(existingCriteria.get().getExerciseMinute())
+                    .exerciseDistance(existingCriteria.get().getExerciseDistance())
                     .build();
         } else {
             Optional<ExerciseCriteria> defaultCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
             responseDto = MainCriteriaResponseDto.builder()
                     .steps(defaultCriteria.get().getSteps())
                     .exerciseMinute(defaultCriteria.get().getExerciseMinute())
+                    .exerciseDistance(defaultCriteria.get().getExerciseDistance())
                     .build();
         }
         return responseDto;
