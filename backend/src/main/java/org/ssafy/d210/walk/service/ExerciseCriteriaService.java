@@ -22,18 +22,19 @@ public class ExerciseCriteriaService {
     private final ExerciseCriteriaRepository exerciseCriteriaRepository;
 
     public ExerciseCriteria setDefaultExerciseCriteria(Members member) {
-        Optional<ExerciseCriteria> exerciseCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
+        Optional<ExerciseCriteria> exerciseCriteriaOptional = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
 
-        ExerciseCriteria criteria;
+        ExerciseCriteria exerciseCriteria;
 
-        if (exerciseCriteria.isPresent()) {
-            criteria = exerciseCriteria.get();
-            criteria.updateDefaultCriteria(member);
+        if (exerciseCriteriaOptional.isPresent()) {
+            exerciseCriteria = exerciseCriteriaOptional.get().updateDefaultCriteria(member);
         } else {
-            criteria = ExerciseCriteria.createDefaultCriteria(member);
+            exerciseCriteria = ExerciseCriteria.createDefaultCriteria(member);
         }
 
-        return exerciseCriteriaRepository.save(criteria);
+        if (exerciseCriteria == null) return null;
+
+        return exerciseCriteriaRepository.save(exerciseCriteria);
     }
 
     public ExerciseCriteria setCustomExerciseCriteria(Members member, CustomExerciseCriteriaRequestDto requestDto) {
