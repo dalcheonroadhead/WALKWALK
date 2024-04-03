@@ -7,37 +7,39 @@ import SockJS from "sockjs-client/dist/sockjs";
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
 import AudioRecord from './AudioRecord';
+import './FileUploader.module.css';
+import axios from 'axios';
+import { getSpeech } from './getSpeech';
+import styles from "./SocketPage4Member.module.css"
+import { ResponsiveRadialBar } from '@nivo/radial-bar'
+import { MapComponent } from './MapComponent';
+import GeolocationComponent from './GeolocationComponent';
+
 
 let stompClient;
 var pageOwnerId;
 
 // Static variable For Test
-const currentMember = {
-  memberId: 1,
-  email: "wjsaos2081@gmail.com",
-  memberAccountId: "0xfaCCc553dc302Fb9C49F8525782d51B812C350DA" ,
-  nickname: "책 읽는 남자 전수민",
-  profileUrl: "https://lh3.googleusercontent.com/a/ACg8ocJRi2en1YGof4VbnYEB3r-wQBZEw_B2k-eLTZSJ_a-fM10=s96-c",
-  mainBadge: "https://d210.s3.ap-northeast-2.amazonaws.com/test_badge.png",
-}
+const currentMember =  JSON.parse(localStorage.getItem('tokens')) || {
+  member_id: 1000,
+  member_nickname: "지나가는 오리 1 ",
+  member_profile_url: "https://d210.s3.ap-northeast-2.amazonaws.com/duck.gif",
+  Authorization: null
+};
 
 
 const SocketPage4Member = () => {
 
-
   //⭐ VARIABLES 
   
   // A. LocalStorage에 있는 Authorization 가져오기 
-  const authorization = localStorage.getItem("Authorization");
+  var authorization = currentMember.Authorization;
   
   // B. 화면 이동하면서 현 사용자의 정보 가져오기 
   const location = useLocation();
 
   // C. 페이지 들어올 때 채팅창 스크롤이 항상 하단으로 가게 하기 위하여 사용 
   const chatContainerRef = useRef(null);
-
-  // D. 채팅 입력 받은 것 
-  const [inputChat, setInputChat] = useState("");
 
   // E. 모든 채팅 메세지 저장 
   const [messages, setMessages] = useState([]);
@@ -48,7 +50,53 @@ const SocketPage4Member = () => {
   // G. 현재 소켓의 주인이 되는 사용자의 ID 가져오기 
   const params = useParams();
   pageOwnerId = params.id;
-   
+
+  // H. 현재 페이지 주인의 정보 
+  const [pageOwner, setPageOwner] = useState({})
+
+  // I. 현재 유저가 들어온 환경이 모바일인지 아닌지 
+  const [isMobile, setIsMobile] = useState(false);
+
+  // J. Tab Bar 용
+  const [tabIndex, setTabIndex] = useState(0);
+  
+  // K. 모달 창 용
+  const [isModal, setIsModal] = useState(true)
+
+  // L. CountDown 
+  const [time, setTime] = useState(5);
+
+  // M. 운동 데이터 
+  const [data, setData] = useState([
+    {
+      "id": "걸음수",
+      "data": [
+        {
+          "x": '진행 정도',  
+          "y":  6432
+        }
+      ]
+    }
+  ]);
+
+  // N. 실시간 위도, 경도 
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  // O. 에러 핸들링
+  const [error, setError] = useState(null);
+
+  // Q. 페이지 주인 위치 
+  const [position, setPosition] = useState({ lat: 36.110336, lng: 128.4112384 });
+
+
+  // ⭐ 카운트 다운 함수 
+  useEffect(() => {
+    time > 0 && setTimeout(() => setTime(time -1), 1000)
+  }, [time]);
+
+  
+
 
   //⭐ CHAT FOCUS ALWAYS ON BOTTOM
 
@@ -81,8 +129,8 @@ const SocketPage4Member = () => {
 
   // A-1. 최초 연결 함수 
   const connect = () => {
-    const socketURL = "http://localhost:8081/ws-stomp";
-    // const socketURL = "https://j10d210.p.ssafy.io/ws-stomp" ;
+    // const socketURL = "http://localhost:8081/ws-stomp";
+    const socketURL = "https://j10d210.p.ssafy.io/ws-stomp";
     var sockJS = new SockJS(socketURL);
     stompClient = Stomp.over(sockJS);
     console.log(stompClient);
@@ -97,7 +145,7 @@ const SocketPage4Member = () => {
       console.log("👩🏻‍🎤 최초 연결 시작 🎸");
 
       stompClient.subscribe("/sub/member/" + pageOwnerId, onMessageReceivedFromSocket, clientHeader);
-
+      stompClient.subscribe("/sub/gps/" + pageOwnerId, getGpsAboutPageOwner, clientHeader);
   }
 
   // A-3. 연결 오류가 났을 시 할 행동 
@@ -111,10 +159,10 @@ const SocketPage4Member = () => {
       messageType: content !== null? 'TTS' : "VOICE",
       textContent: content,
       voiceURL: "",
-      senderId: currentMember.memberId,
-      senderProfileUrl: currentMember.profileUrl,
+      senderId: currentMember.member_id,
+      senderProfileUrl: currentMember.member_profile_url,
       receiverId: pageOwnerId,
-      senderNickname: currentMember.nickname,
+      senderNickname: currentMember.member_nickname,
       isOpened: false
     }
 
@@ -129,49 +177,103 @@ const SocketPage4Member = () => {
 
     // 메세지 스택에 저장 
     console.log("들어온 메세지:", receivedMsg);
+    if(Number(pageOwnerId) === Number(currentMember.member_id) && receivedMsg.voiceURL === ''){
+      getSpeech(`${currentMember.member_nickname} 님의 응원메세지!:  `+receivedMsg.textContent);
+    }
     setMessages((preMessages) => [...preMessages, receivedMsg]);
   }
 
+  const getGpsAboutPageOwner = (payload) => {
+    var receivedGPS = JSON.parse(payload.body);
+
+    console.log("주인의 GPS", receivedGPS);
+    
+    const NowGPS =  {lat: receivedGPS.latitude, lng: receivedGPS.longitude};
+
+    console.log(NowGPS)
+
+    setPosition({...NowGPS})
+  }
+
+  // B-3 페이지 오너 정보 가져오기 
+  const getPageOwner = async () =>{
+    axios.get(`https://j10d210.p.ssafy.io/api/members/${pageOwnerId}`, clientHeader)
+    .then((res)=> {
+      console.log(res.data.data)
+     setPageOwner({...res.data.data});
+    })
+    .catch((err) => {console.log(err)})
+  }
+
+  // B-4 해당 방 메세지 전부 불러오기 
+  const getloadMessage = async () =>{
+    axios.get(`https://j10d210.p.ssafy.io/api/members/load/${pageOwnerId}`, clientHeader)
+    .then((res)=> {
+      console.log(res.data.data.content)
+     setMessages([...res.data.data.content].reverse());
+    })
+    .catch((err) => {console.log(err)})
+  }
+
+
   // [ C. 페이지 접근 시 소켓 연결, 페이지 퇴장 시 소켓 종료를 세팅]
   useEffect(() => {
+
+    getPageOwner();
+
     connect();
 
     // C-1 첫 입장 시 스크롤을 맨 밑으로 떙긴다. 
     setTimeout(() => {
-      window.scrollTo(0, document.body.scrollHeight);
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
     },0);
 
-    // C-2 이전 메세지 불러오기 - 공사 중 
+    // C-2 이전 메세지 불러오기 
+    getloadMessage();
+
+    // D. 모바일인지 아닌지 확인 
+    console.log("열린 디바이스 브라우저 넓이",window.innerWidth)
+
+    if(typeof window !== "undefined"){
+      if(window.innerWidth > 412){ 
+        setIsMobile(false);
+    } else {
+      setIsMobile(true);
+    }
+
+    }
+
+    setTimeout(() => {
+      setIsModal(false);
+
+    }, 6500)
+
 
     return () => {
       setTimeout(() => {
-        var messageInfo = {
-          messageType: "VOICE",
-          textContent: currentMember.nickname +"님이 퇴장 하였습니다.",
-          voiceURL: null,
-          senderId: currentMember.memberId,
-          receiverId: pageOwnerId,
-          senderNickname: currentMember.nickname,
-          senderProfileUrl: currentMember.profileUrl,
-          isOpened: false
-        }
-        stompClient.send("/pub/api/socket/quit", clientHeader, JSON.stringify(messageInfo));
-
         stompClient.disconnect();
       },0)
 
     }
-
   },[pageOwnerId])
+
+  useEffect(() => {
+    if(chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  },[messages])
 
 
   // E. 기타 
-  const goBottomChat = () => {
+  useEffect(() => {
+    // 메시지 배열이 업데이트될 때마다 스크롤을 가장 아래로 이동
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  };
+  }, [messages]);
+
 
   const handleEndTyping = (id) => {
     setMessages((prevMessages) =>
@@ -190,25 +292,139 @@ const SocketPage4Member = () => {
 
   };
 
-  return (
-    <div className="chat"
-        ref={chatContainerRef}>
-      <div className="chat-box">
-        <div style={{fontWeight: 'bold'}}> 전수민 </div> 
+  // F. tab 변경 
+  const tabClickHandler = (index) => {
+    setTabIndex(index);
+  }
 
-        {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
-        <MessageList
-          messages={messages}
-          currentTypingId={currentTypingId}
-          onEndTyping={handleEndTyping}
-          pageOwnerId={pageOwnerId}
-        />
-        {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
-        <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
-        <AudioRecord/>
-        <MessageForm onSendMessage={handleSendMessage} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
+  // G. 위치 확인 
+
+  const getLocation = async () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setLatitude(position.coords.latitude);
+                setLongitude(position.coords.longitude);
+                setError(null);
+
+                var GpsDTO = {
+                  senderId: currentMember.member_id,
+                  receiverId: pageOwnerId,
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude
+                }
+
+                stompClient.send("/pub/api/socket/enter", clientHeader, JSON.stringify(GpsDTO));
+            },
+            (error) => {
+                setError(error.message);
+            }
+        );
+    } else {
+        setError("Geolocation is not supported by this browser.");
+    }
+
+};
+
+
+
+  if(currentMember.member_id === pageOwnerId){
+    useEffect(() => {
+      console.log("geoLocation 실행!")
+        getLocation()
+    }, [tabIndex])
+  }
+
+  
+  const tabArr=[
+    {
+      tabTitle:(
+        <div className={tabIndex===0 ? styles.mode_choose : styles.mode_other_list} onClick={()=>tabClickHandler(0)}>
+          <p className={styles.mode_friend_list_txt}>현재 페이스</p>
+        </div>
+      ),  
+      tabCont:(
+        <div className={styles.socket_page_content}>
+          <div className={styles.socket_box}>
+                <MyResponsiveRadialBar2 data={data}/>
+                <div style={{position: 'absolute', left: "45%", top: "32%"}}> 페이스 <br /> __"__ </div>
+                <div style={{position: 'relative', left:"2%", bottom: "30%"}} >
+                  <MapComponent location={position}/>
+                </div>
+          
+          </div>
+          
+        </div>
+      )
+    },
+    
+    
+    {
+    tabTitle:(
+      <div className={tabIndex===1 ? styles.mode_choose : styles.mode_other_list} onClick={()=>tabClickHandler(1)}>
+        <p className={styles.mode_friend_list_txt}>채팅</p>
       </div>
-    </div>
+    ),        
+    tabCont:(
+      <div className={styles.socket_page_content}>
+          <div className={styles.socket_box}>
+              <div style={{fontWeight: 'bold', alignSelf: 'center'}}> 🏃{pageOwner.nickname}🤸님 응원하기</div> 
+
+              {/* 전송된 메세지들이 보이는 공간 messages => 메세지 배열, currentTypingId => 현재 타이핑 중인 메세지 ID, onEndTyping => 메세지 입력이 끝났을 때 호출하는 함수  */}
+              <MessageList
+                chatContainerRef={chatContainerRef}
+                messages={messages}
+                currentTypingId={currentTypingId}
+                onEndTyping={handleEndTyping}
+                pageOwnerId={pageOwnerId}
+                currentMember={currentMember}
+              />
+              {/* 메세지가 쳐지는 INPUT FORM onSendMessage => 새로운 메세지가 전송될 때 호출하는 함수  */}
+              <div style={{display: 'flex'}}>
+                {/* 모바일 환경인지 아닌지에 따라 버튼 다르게 구현 */}
+                {isMobile?(
+                  <FileUploader currentMember = {currentMember} clientHeader={clientHeader} pageOwnerId={pageOwnerId}/>
+                ):(
+                  <AudioRecord stompClient={stompClient} currentMember = {currentMember} pageOwnerId={pageOwnerId}/>
+                )}
+                
+              
+              </div>
+              <MessageForm onSendMessage={handleSendMessage} clientHeader={clientHeader} currentMember = {currentMember}  pageOwnerId={pageOwnerId}/>
+          </div>
+  
+      </div>
+  )
+  }]
+
+  return (
+    <>
+      {isModal && (
+        <div className={styles.modal_background}>
+          <div className={styles.lets_start_modal_container}>
+            <p className={styles.lets_start_modal_title}>잠시 후! <br/> 오늘의 달리기가 <br/> 시작됩니다. </p> 
+            <div className="countdown text-9xl" style={{alignSelf: 'center', paddingBottom: "5rem", fontFamily: "bp_r"}}>
+              {time !== 0? (<span style={{"--value": time}}></span>) : "시작!"}
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <audio style={{display: "none"}} controls autoPlay>
+        <source src='https://d210.s3.ap-northeast-2.amazonaws.com/WALK_WALK.mp3' type='audio/mpeg'/>
+      </audio>
+
+      <div className={styles.main_container}>
+        <div className={styles.tab_container}>
+          <div className={styles.mode_tabs}>
+              {tabArr.map((mode, index)=>{
+                  return <div key={index}>{mode.tabTitle}</div>
+              })}
+          </div>
+            {tabArr[tabIndex].tabCont}
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -242,10 +458,10 @@ const FileUploader = ({currentMember, pageOwnerId, clientHeader}) => {
        messageType: 'VOICE',
        textContent: null,
        voiceURL: base64,
-       senderId: currentMember.memberId,
-       senderProfileUrl: currentMember.profileUrl,
+       senderId: currentMember.member_id,
+       senderProfileUrl: currentMember.member_profile_url,
        receiverId: pageOwnerId,
-       senderNickname: currentMember.nickname,
+       senderNickname: currentMember.member_nickname,
        isOpened: false
      };
  
@@ -269,11 +485,56 @@ const FileUploader = ({currentMember, pageOwnerId, clientHeader}) => {
    };
 
  return(
-   <div className="button" style={{display: "inline"}}>
-     <input type='file' onChange={handleFileChange}/>
-   </div>
+   <form style={{display: 'flex', flexDirection: 'row'}}>
+    <label className='btn glass' htmlFor="file-input">녹음하기</label>
+     <input id='file-input' type='file' onChange={handleFileChange}/>
+   </form>
  )
-
 }
+
+
+const MyResponsiveRadialBar2 = ({ data }) => (
+  <ResponsiveRadialBar
+      data={data}
+      valueFormat=" >-0,.2~r"
+      startAngle={0}
+      endAngle={359}
+      padding={0.6}
+      cornerRadius={7}
+      margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+      colors={['#FFCB23']} 
+      tracksColor={["#F9DD84"]}
+      enableRadialGrid={false}
+      enableCircularGrid={false}
+      radialAxisStart={null}
+      circularAxisOuter={null}
+      maxValue={10000}
+      legends={[
+          {
+              anchor: 'right',
+              direction: 'column',
+              justify: false,
+              translateX: 1000,
+              translateY: 1000,
+              itemsSpacing: 6,
+              itemDirection: 'left-to-right',
+              itemWidth: 100,
+              itemHeight: 18,
+              itemTextColor: '#999',
+              symbolSize: 18,
+              symbolShape: 'square',
+              effects: [
+                  {
+                      on: 'hover',
+                      style: {
+                          itemTextColor: '#000'
+                      }
+                  }
+              ]
+          }
+      ]}
+  />
+)
+
 
 export default SocketPage4Member;

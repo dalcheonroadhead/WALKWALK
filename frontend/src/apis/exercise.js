@@ -73,3 +73,36 @@ export const getWeeklyExerciseData = async () => {
         })
         .catch((err) => {console.log(err)})
 }
+
+// 내 운동기준 정보 조회
+export const getExerciseCriteria = async () => {
+    const url = `/walk/criteria`;
+    
+    return await instance.get(url)
+        .then((res) => {
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
+
+// 내 연령대 맞춤 기준 조회
+export const getExerciseCriteriaByAge = async () => {
+    const url = `/walk/criteria/default`;
+    
+    return await instance.get(url)
+        .then((res) => {
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
+
+// 내 운동 기준 수정
+export const updateExerciseCriteria = async (data) => {
+    const url = `/walk/criteria/custom`;
+    
+    return await instance.post(url, data)
+        .then((res) => {
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}

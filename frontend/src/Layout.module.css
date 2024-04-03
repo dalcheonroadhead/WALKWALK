@@ -1,11 +1,13 @@
 .layoutContainer {
-  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .content {
-  height: auto;
-  padding-top: 4.5rem;
-  padding-bottom: 4.5rem;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  padding: 4.5rem 0;
   overflow-y: auto;
 }

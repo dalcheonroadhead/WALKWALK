@@ -3,29 +3,41 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import { ResponsiveBar } from "@nivo/bar";
 import { color } from "d3-color";
-import { getGalleyList, getHalleyList, postGalleyRequest, getHalley } from "../../apis/halleygalley";
+import { getGalleyList, getHalleyList, postGalleyRequest, getHalley, responseGalley, postMission, putMission } from "../../apis/halleygalley";
 import { searchGalleyMemberList } from "../../apis/friend";
-import { getRealtimeExerciseData, getWeeklyExerciseData } from "../../apis/exercise";
+import { getRealtimeExerciseData, getWeeklyExerciseData, getExerciseCriteria } from "../../apis/exercise";
 import { useStore } from "../../stores/member";
+import { useSignupStore } from "../../stores/member";
+import Lottie from 'react-lottie';
+import confetti from '../../lotties/confetti_full.json';
+import { useToolbar } from "../../stores/toolbar";
 
 const Main = function(){
     const {memberId, setMemberId} = useStore();
+    const {updateState} = useToolbar();
     useEffect(()=>{
+        getExerciseCriteria()
+            .then(res=>{setCriteriaData(res); console.log(res)})
         getWeeklyExerciseData()
             .then(res=>{setWeeklyExerciseData(res);})
         getRealtimeExerciseData()
             .then((res)=>{
               setRealtimeExerciseData(res);
-              console.log(res)
             })
+        updateHalliGalliList();
     }, [])
 
     const navigate = useNavigate();
     
 
-    const moveToHalliGalliPage = function (memberId) {
+    const moveToHalliPage = function (memberId) {
         setMemberId(memberId);
-        navigate("/halligalli")
+        navigate("/halli")
+    }
+
+    const moveToGalliPage = function (memberId) {
+        setMemberId(memberId);
+        navigate("/galli")
     }
 
     const handleInputChange = (e) => {
@@ -58,14 +70,64 @@ const Main = function(){
     const [realtimeExerciseData, setRealtimeExerciseData] = useState({});
     const [halliRoadmapList, setHalliRoadmapList] = useState([]);
     const [weeklyExerciseData, setWeeklyExerciseData] = useState({avg:0, content:[{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},{steps:0},]});
+    const [criteriaData, setCriteriaData] = useState({steps:0, exerciseMinute:0});
+    const [halliRequestList, setHalliRequestList] = useState([]);
+    const [maxHalliVal, setMaxHalliVal] = useState(0);
+    const [giveMeMoneyList, setGiveMeMoneyList] = useState({});
+
+    const updateHalliGalliList = () => {
+        getHalleyList()
+        .then((res)=>{
+            if(res){
+                let data1 = [];
+                let data2 = [];
+                let data3 = [];
+                res.forEach(element => {
+                    if(element.requestedTime != null && element.requestedTime != 0){
+                        data1.push(element);
+                    }
+                    if(element.isAccepted){
+                        data2.push(element);
+                    } else{
+                        data3.push(element);
+                    }
+                });
+                setHalliRoadmapList(data1);
+                setHalliList(data2);
+                setHalliRequestList(data3);
+                calculateMaxValue(data1);
+                setGiveMeMoneyList(data1);
+                const hallyList = [];
+                data1.forEach(d=>{
+                    if(!d.getRewardAt && realtimeExerciseData.time >= d.requestedTime){
+                        hallyList.push(d.memberId);
+                    }
+                })
+                putMission(hallyList)
+                    .then(res=>{
+                        updateState();
+                    })
+                if(data2.length == 0){
+                    setHalli(false);
+                }
+                else{
+                    setHalli(true);
+                }
+            }
+            else{
+                setHalliList([])
+                setHalli(false);
+            }
+        })
+    }
 
     const openHalliModal = function() {
         setIsHalliOpen(!isHalliOpen);
+        updateHalliGalliList();
     }
 
     const openGalliModal = function(){
         setIsGalliOpen(!isGalliOpen);
-        handleSearchClick();
     }
 
     const tabClickHandler = function(index){
@@ -74,27 +136,7 @@ const Main = function(){
 
         }
         else if(index == 1){
-            // 할리 리스트 조회
-            getHalleyList()
-            .then((res)=>{
-                if(res){
-                    setHalliList(res);
-                    console.log(res)
-                    let data = [];
-                    res.forEach(element => {
-                        if(element.requestedTime != null){
-                            data.push(element);
-                        }
-                    });
-                    setHalliRoadmapList(data);
-                    console.log(data)
-                    setHalli(true);
-                }
-                else{
-                    setHalliList([])
-                    setHalli(false);
-                }
-            })
+            updateHalliGalliList();
         }
         else{
             // 갈리 리스트 조회
@@ -114,22 +156,33 @@ const Main = function(){
     }
 
     const openHalliListModal = function(){
-        getHalleyList()
-            .then((res)=>{
-                if(res){
-                    setHalliList(res);
-                    setHalli(true);
-                }
-                else{
-                    setHalliList([])
-                    setHalli(false);
-                }
-            })
+        updateHalliGalliList();
         setIsHalliListOpen(!isHalliListOpen);   
     }
 
     const longGalliList = function(){
         setExpanded(!expanded)
+    }
+
+    const responseToRequest = (data)=>{
+        if(data.isAccept){
+            alert("요청을 수락했습니다.")
+        }
+        else{
+            alert('요청을 거절했습니다.')
+        }
+        responseGalley(data)
+            .then(res=>{
+                openHalliModal();
+            });
+    }
+
+    const calculateMaxValue = (array)=>{
+        let maxVal = 0;
+        array.forEach(data=>{
+            maxVal = Math.max(maxVal, data.requestedTime)
+        })
+        setMaxHalliVal(maxVal);
     }
 
     //===========================================================================
@@ -140,13 +193,12 @@ const Main = function(){
         criteriaSteps: 6000,    // 기준 걸음수
     };
     const 프로그래스바 = {
-        calculatedTime: realtimeExerciseData.time/운동데이터.criteriaTime*320 < 70 ? 70 : realtimeExerciseData.time/운동데이터.criteriaTime*320,
-        calculatedSteps: realtimeExerciseData.steps/운동데이터.criteriaSteps*320 < 90 ? 90 : realtimeExerciseData.steps/운동데이터.criteriaSteps*320,
+        calculatedTime: realtimeExerciseData.time/criteriaData.exerciseMinute*320 < 70 ? 70 : realtimeExerciseData.time/criteriaData.exerciseMinute*320,
+        calculatedSteps: realtimeExerciseData.steps/criteriaData.steps*320 < 90 ? 90 : realtimeExerciseData.steps/criteriaData.steps*320,
     }
 
     const 프로그래스바2 = {
-        calculatedTime: realtimeExerciseData.time/운동데이터.criteriaTime*300 < 70 ? 70 : realtimeExerciseData.time/운동데이터.criteriaTime*300,
-        calculatedSteps: realtimeExerciseData.steps/운동데이터.criteriaSteps*300 < 90 ? 90 : realtimeExerciseData.steps/운동데이터.criteriaSteps*300,
+        calculatedTime: realtimeExerciseData.time/maxHalliVal*300 < 70 ? 70 : realtimeExerciseData.time/maxHalliVal*300,
     }
     
 
@@ -157,10 +209,6 @@ const Main = function(){
             exerciseTime: 10,
             maxExerciseTime: 120,
             
-            creteriaContent: { // 기준
-                timeStamp: "2024-12-11 21:10:10", // LocalDateTime
-                exerciseTime: 19, // Long(minute) (기준 할당량)
-            },
         },
     }
 
@@ -184,7 +232,7 @@ const Main = function(){
                                 </div>
                                 <div className={styles.my_time_number_base}>
                                     <p className={styles.my_time_min}>0분</p>
-                                    <p className={styles.my_time_min2}>{운동데이터.criteriaTime}분</p>
+                                    <p className={styles.my_time_min2}>{criteriaData.exerciseMinute}분</p>
                                 </div>
                             </div>
                         </div>
@@ -201,7 +249,7 @@ const Main = function(){
                                 </div>
                                 <div className={styles.my_walk_number_base}>
                                     <p className={styles.my_walk_min}>0보</p>
-                                    <p className={styles.my_walk_min2}>{운동데이터.criteriaSteps}보</p>
+                                    <p className={styles.my_walk_min2}>{criteriaData.steps}보</p>
                                 </div>
                             </div>
                         </div>
@@ -221,15 +269,20 @@ const Main = function(){
                 {halli ? (
                     <div className={styles.halli_content}>
                         <div className={styles.halli_container}>
-                            <p className={styles.halli_detail}>나의 할리 목록</p> 
+                            <div className={styles.halli_box}>
+                                <p className={styles.halli_detail}>나의 할리 목록</p>
+                                <div className={styles.halli_add} onClick={openHalliModal}>
+                                    <p>요청목록</p>
+                                </div> 
+                            </div>
                             <div className={styles.my_halli_list_container} onClick={openHalliListModal}>
                                 <p className={styles.halli_goal_title}>목표 걷기 시간</p>
                                 { halliRoadmapList.length != 0 ?
                                     <div className={styles.halli_time_progress_container}>
                                         <div className={styles.halli_time_progress_base}>
-                                            {halliList.map((data, index) =>{
+                                            {halliRoadmapList.map((data, index) =>{
                                                 return (
-                                                    <div key={index} className={styles.halli_mission_container} style={{left: `${data.requestedTime/할리API요청결과.data.maxExerciseTime*16}rem`, backgroundImage: realtimeExerciseData.time >= data.requestedTime ? 'url(/public/imgs/yes_marker.png)' : 'url(/public/imgs/no_marker.png)'}}>
+                                                    <div key={index} className={styles.halli_mission_container} style={{left: `${data.requestedTime/maxHalliVal*16}rem`, backgroundImage: realtimeExerciseData.time >= data.requestedTime ? 'url(/imgs/yes_marker.png)' : 'url(/imgs/no_marker.png)'}}>
                                                         <div className={styles.halli_mission_profile}>
                                                             <img src={data.profileUrl}/>
                                                         </div>
@@ -247,7 +300,7 @@ const Main = function(){
                                             </div>
                                             <div className={styles.halli_time_number_base}>
                                                 <p className={styles.halli_time_min}>0분</p>
-                                                <p className={styles.halli_time_min2}></p>
+                                                {/* <p className={styles.halli_time_min2}>{maxHalliVal}</p> */}
                                             </div>
                                         </div>
                                     </div>  
@@ -292,9 +345,9 @@ const Main = function(){
                         {galliList.map((data, index) => {
                             return(
                                 <div key={index} className={styles.my_galli_list_container}>
-                                    <p className={styles.galli_goal_title}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
+                                    <p className={styles.galli_goal_title} onClick={()=>moveToGalliPage(data.memberId)}>나의 갈리 <span style={{color: "#186647", fontFamily: "bc_b"}}>{data.nickname}</span>님의 <br></br>운동기록</p>
                                     <div className={styles.galli_time_progress_container}>
-                                        {data.requestedTime == null ? <p>설정안됨</p> :<div className={styles.galli_time_progress_base}>
+                                        {data.requestedTime == null ? <p>등록한 미션이 없습니다...</p> :<div className={styles.galli_time_progress_base}>
                                             <div className={styles.galli_time_progress_move} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}></div>
                                             <div className={styles.galli_time_ori_container} style={{width: 프로그래스바2.calculatedTime > 300 ? 300 : 프로그래스바2.calculatedTime}}>
                                                 <p className={styles.galli_time_mine} style={{color: 프로그래스바2.calculatedTime > 300 ? 'red' : 'white'}}>{운동데이터.currentTime}분</p>
@@ -329,12 +382,56 @@ const Main = function(){
                 )}
             </>
         )
-    }
-        
+    }    
     ]
+
+    const { isFirstVisit, setIsFirstVisit } = useSignupStore();
+    const handleFirstVisit = (isGoing) => {
+        // 이동 여부 상관없이 isFirstVisit 변경
+        setIsFirstVisit(false);
+
+        if (isGoing) {
+            // ios 디바이스인지 확인
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isIOS = /iphone|ipad|ipod/.test(userAgent);
+            
+            if (isIOS) {
+                window.location.href = 'https://apps.apple.com/kr/app/google-%ED%94%BC%ED%8A%B8%EB%8B%88%EC%8A%A4-%ED%99%9C%EB%8F%99-%EC%B6%94%EC%A0%81%EA%B8%B0/id1433864494';
+            } else {
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.google.android.apps.fitness';
+            }
+        }
+    };
+    // lottifiles 옵션
+    const defaultOptions = {
+        loop: false,
+        autoplay: true,
+        animationData: confetti,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice"
+        }
+    }
+    
     return(
         <>
         <div>
+            {isFirstVisit && (
+                <div className={styles.first_visit_container}>
+                    <div className={styles.first_visit_lottie}>
+                        <Lottie options={defaultOptions}/>
+                    </div>
+                    <div className={styles.first_visit_modal_container}>
+                        <h2>회원가입을 환영합니다!</h2>
+                        <div>운동데이터를 연동하려면</div>
+                        <div>Google 피트니스 앱이 필요합니다</div>
+                        <div>앱 스토어로 이동하시겠어요?</div>
+                        <div className={styles.first_visit_btn_container}>
+                            <button className={styles.first_visit_yes_btn} onClick={() => handleFirstVisit(true)}>네</button>
+                            <button className={styles.first_visit_no_btn} onClick={() => handleFirstVisit(false)}>아니오</button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {isHalliOpen && (
                 <>
                     <div className={styles.modal_background}></div>
@@ -344,25 +441,32 @@ const Main = function(){
                             <img src="/imgs/x.png" alt="x" className={styles.halli_modal_x} onClick={openHalliModal}></img>
                         </div>
                         <div className={styles.halli_list_container}>
-                                {halliList.map((data, index) => {
-                                    console.log(data)
-                                    return(
-                                        <>
-                                            <div key={index} className={styles.halli_name_container}>
-                                                <img src={data.profileUrl} alt="프로필 사진" className={styles.halli_img_container} ></img>
-                                                <p className={styles.halli_name_txt}>{data.nickname}</p>
-                                                <div className={styles.halli_btn_container}>
-                                                    <div className={styles.halli_ok_btn}>
-                                                        <p className={styles.btn_txt}>수락</p>
+                                {halliRequestList.length != 0
+                                    ? halliRequestList.map((data, index) => {
+                                        console.log(data)
+                                        return(
+                                            <>
+                                                <div key={index} className={styles.halli_name_container}>
+                                                    <img src={data.profileUrl} alt="프로필 사진" className={styles.halli_img_container} ></img>
+                                                    <p className={styles.halli_name_txt}>{data.nickname}</p>
+                                                    <div className={styles.halli_btn_container}>
+                                                        <div className={styles.halli_ok_btn}>
+                                                            <p className={styles.btn_txt} onClick={()=>responseToRequest({memberId: data.memberId, isAccept: true})}>수락</p>
+                                                        </div>
+                                                        <div className={styles.halli_no_btn}>
+                                                            <p className={styles.btn_txt} onClick={()=>responseToRequest({memberId: data.memberId, isAccept: false})}>거절</p>
+                                                        </div>
                                                     </div>
-                                                    <div className={styles.halli_no_btn}>
-                                                        <p className={styles.btn_txt}>거절</p>
-                                                    </div>
-                                                </div>
-                                            </div>  
-                                        </>
-                                    )
-                                })}
+                                                </div>  
+                                            </>
+                                        )
+                                    })
+                                    : <div className={styles.main_default}>
+                                        <img className={styles.main_default_img1} src="imgs/ch1_bol_money.png" />
+                                        <img className={styles.main_default_img2} src="imgs/ch2_bol_hir.png" />
+                                        <h3>아직 요청받은 기록이 없어요...</h3>
+                                      </div>
+                                }
                         </div>
                        
                     </div>
@@ -386,23 +490,30 @@ const Main = function(){
                         <div className={styles.galli_list_container}>
                             <div className={styles.galli_names_container}>
 
-                                {memberList.map((data, index) => {
-                                    return(
-                                        <div key={index} className={styles.galli_name_container}>
-                                            <img src={data.profileUrl} alt="프로필 사진" className={styles.galli_img_container} ></img>
-                                            <p className={styles.galli_name_txt}>{data.nickname}</p>
-                                            <div className={styles.galli_btn_container}>
-                                                <div className={styles.galli_put_btn}>
-                                                    <p className={styles.btn_txt} onClick={()=>{
-                                                        postGalleyRequest({'memberId': data.memberId});
-                                                        setIsGalliOpen(false);
-                                                        setMemberList([]);
-                                                        }}>신청</p>
+                                {memberList.length != 0 
+                                    ? memberList.map((data, index) => {
+                                        return(
+                                            <div key={index} className={styles.galli_name_container}>
+                                                <img src={data.profileUrl} alt="프로필 사진" className={styles.galli_img_container} ></img>
+                                                <p className={styles.galli_name_txt}>{data.nickname}</p>
+                                                <div className={styles.galli_btn_container}>
+                                                    <div className={styles.galli_put_btn}>
+                                                        <p className={styles.btn_txt} onClick={()=>{
+                                                            postGalleyRequest({'memberId': data.memberId});
+                                                            setIsGalliOpen(false);
+                                                            setMemberList([]);
+                                                            }}>신청</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>  
-                                    )
-                                })}
+                                            </div>  
+                                        )
+                                    })
+                                    : <div className={styles.main_default}>
+                                    <img className={styles.main_default_img1} src="imgs/ch2_bol_money.png" />
+                                    <img className={styles.main_default_img2} src="imgs/ch1_bol.png" />
+                                    <h3>닉네임으로 갈리를 검색해요</h3>
+                                  </div>
+                                }
                             </div>
                         </div>
                        
@@ -423,7 +534,7 @@ const Main = function(){
                                 {halliList.map((data, index) => {
                                     console.log(data)
                                     return(
-                                        <div key={index} className={styles.my_halli_list_name_container} onClick={()=>moveToHalliGalliPage(data.memberId)}>
+                                        <div key={index} className={styles.my_halli_list_name_container} onClick={()=>moveToHalliPage(data.memberId)}>
                                             <img src={data.profileUrl} alt="프로필 사진" className={styles.my_halli_list_img_container} ></img>
                                             <p className={styles.my_halli_list_name_txt}>{data.nickname}</p>
                                             <div className={styles.my_halli_list_btn_container}>
@@ -537,7 +648,7 @@ const Main = function(){
                             ]
                         }}
                         axisLeft={{
-                            tickValues: [0, 3000, 6000, 10000, 20000], // 0만 포함하도록 설정
+                            tickValues: [0, ...weeklyExerciseData.avg != 0 ? [3000, 6000, 10000, 20000] : []], // 0만 포함하도록 설정
                             format: value => value.toLocaleString(),
                             text: {
                                 fontSize: 10,

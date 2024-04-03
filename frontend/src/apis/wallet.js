@@ -18,13 +18,12 @@ export const createWallet = async () => {
         .catch((err) => {console.log(err)})
 }
 
-// 에그머니 보유량 확인
+// 금고 조회
 export const getEggMoney = async () => {
   const url = '/wallets/egg-money'
 
   return await instance.get(url)
       .then((res) => {
-        console.log('res : ', res.data)
         return res.data.data
       })
       .catch((err) => {console.log(err)})
@@ -33,6 +32,7 @@ export const getEggMoney = async () => {
 // 에그 충전 요청
 export const requestMoneyCharge = async (money) => {
   const url = '/payment/kakaoPayReady'
+  const REDIRECT_URI = import.meta.env.VITE_NODE_ENV === 'production' ? 'https://j10d210.p.ssafy.io' : 'http://localhost:5173';
   const info = {
     "cid": "TC0ONETIME",
     "partner_order_id": "walkwalk",
@@ -41,14 +41,13 @@ export const requestMoneyCharge = async (money) => {
     "quantity": 1,
     "total_amount": money,
     "tax_free_amount": 0,
-    "approval_url":"http://localhost:5173/kakaopay/callback?status=approval",
-    "fail_url":"http://localhost:5173/kakaopay/callback?status=fail",
-    "cancel_url":"http://localhost:5173/kakaopay/callback?status=cancel"
+    "approval_url": `${REDIRECT_URI}/kakaopay/callback?status=approval`,
+    "fail_url": `${REDIRECT_URI}/mywallet?status=fail`,
+    "cancel_url": `${REDIRECT_URI}/mywallet?status=cancel`
   }
 
   return await instance.post(url, info)
       .then((res) => {
-        console.log('res : ', res.data)
         return res.data
       })
       .catch((err) => {console.log(err)})
@@ -68,11 +67,20 @@ export const approveMoneyCharge = async (info) => {
 
   return await instance.post(url, chargeInfo)
       .then((res) => {
-        console.log('res : ', res)
         return true
       })
       .catch((err) => {
-        console.log(err)
         return false
       })
+}
+
+// 머니를 현금으로 환전
+export const requestMoneyExchange = async (money) => {
+  const url = '/payment/exchange'
+
+  return await instance.put(url, {exchangeMoneyValue: money})
+      .then((res) => {
+        return res.data.putMoneyValue
+      })
+      .catch((err) => {console.log(err)})
 }

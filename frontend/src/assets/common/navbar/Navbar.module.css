@@ -1,12 +1,14 @@
 .nav_container{
     position: fixed;
-    display: flex;
-    top: 96.5%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     z-index: 4;
-    width: 100vw;
     height: 4rem;
+    width: 100%;
+    max-width: 412px;
+    display: flex;
     align-items: center;
     justify-content: center;
     background: white;

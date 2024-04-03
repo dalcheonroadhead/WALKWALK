@@ -6,6 +6,7 @@ export const getHalleyList = async () => {
     return await instance.get(url)
         .then((res) => {
             if(res.data.data.requestContent.length != 0){
+                console.log(res.data.data.requestContent)
                 return res.data.data.requestContent;
             }
             return false;
@@ -71,4 +72,52 @@ export const getHalley = async (memberId) => {
             return res.data.data;
         })
         .catch((err) => {console.log(err)})
+}
+
+// 갈리 세부정보 조회
+export const getGalley = async (memberId) => {
+    const url = `/halleygalley/galley?memberId=${memberId}`;
+    
+    return await instance.get(url)
+        .then((res) => {
+            console.log(res)
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
+
+// 갈리 요청 수락/거절
+export const responseGalley = async (data) => {
+    const url = `/halleygalley/galley-response`;
+    
+    return await instance.put(url, data)
+        .then((res) => {
+            console.log(res)
+            return res.data.data;
+        })
+        .catch((err) => {console.log(err)})
+}
+
+// 미션 세팅
+export const postMission = async (data) => {
+    const url = '/halleygalley/mission';
+
+    return await instance.post(url, data)
+        .then((res) => {
+            return true;
+        })
+        .catch((err) => {console.log(err)});
+
+}
+
+// 미션 달성
+export const putMission = async (data) => {
+    const url = '/halleygalley/accomplish-mission';
+
+    return await instance.put(url, {memberIdList: data})
+        .then((res) => {
+            return true;
+        })
+        .catch((err) => {console.log(err)});
+
 }
