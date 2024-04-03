@@ -9,7 +9,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210.items.entity.ItemsType;
 import org.ssafy.d210.items.entity.MemberItemHistory;
@@ -152,11 +155,14 @@ public class ExerciseService {
 
         int count = 0;
         boolean found = false;
-//
+
+        FriendRankingResponseDto myRankingInfo = null;
+
         for (FriendRankingResponseDto exercise : exercises) {
             count++;
             if (exercise.getMemberId().equals(myId)) {
                 myRank = exercise.getRank();
+                myRankingInfo = exercise;
                 found = true;
             }
             if (count % pageable.getPageSize() == 0 && !found) {
@@ -170,7 +176,7 @@ public class ExerciseService {
             myRankPage += (int) (myRank / pageable.getPageSize());
         }
 
-        return new SliceResponseDto(exercises, myRank, myRankPage);
+        return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
     }
 
     public SliceResponseDto getStepsRankingWithFriends(Members member, StepsRankingPeriodEnum type, Pageable pageable) {
@@ -200,11 +206,14 @@ public class ExerciseService {
 
         int count = 0;
         boolean found = false;
-//
+
+        FriendRankingResponseDto myRankingInfo = null;
+
         for (FriendRankingResponseDto exercise : exercises) {
             count++;
             if (exercise.getMemberId().equals(myId)) {
                 myRank = exercise.getRank();
+                myRankingInfo = exercise;
                 found = true;
             }
             if (count % pageable.getPageSize() == 0 && !found) {
@@ -218,7 +227,7 @@ public class ExerciseService {
             myRankPage += (int) (myRank / pageable.getPageSize());
         }
 
-        return new SliceResponseDto(exercises, myRank, myRankPage);
+        return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
 //        Long preValue = Long.MAX_VALUE;
 //        int sameRankCount = 1;
 //
@@ -244,6 +253,7 @@ public class ExerciseService {
 //        return new SliceResponseDto(exercises, myRank, pageNumber);
     }
 
+    @Retryable(value = { RestClientException.class }, maxAttempts = 5, backoff = @Backoff(delay = 1000, multiplier = 2))
     public FitnessResponse fetchGoogleFitData(String accessToken, long startTimeMillis, long endTimeMillis) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
@@ -274,10 +284,10 @@ public class ExerciseService {
     }
 
     @Transactional
-    public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member) {
+    public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member, LocalDate today) {
         Exercise exercise = new Exercise();
         exercise.setMember(member);
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate yesterday = today.minusDays(1);
         exercise.setExerciseDay(yesterday); // 어제 날짜로 설정
 
         for (FitnessResponse.Bucket bucket : fitnessResponse.getBucket()) {
@@ -310,7 +320,9 @@ public class ExerciseService {
         LocalDateTime endOfYesterday = yesterday.atTime(LocalTime.MAX);
         Optional<MemberItemHistory> memberItemHistory = memberItemHistoryRepository.findFirstByMemberAndCreatedAtBetweenAndItemType(member, startOfYesterday, endOfYesterday, ItemsType.STREAK);
 
-        if (criteria.getExerciseMinute() <= exercise.getExerciseMinute() || memberItemHistory.isPresent()) {
+        if (exercise.getExerciseMinute() == null || exercise.getSteps() == null) {
+            return null;
+        } else if (criteria.getExerciseMinute() <= exercise.getExerciseMinute() || memberItemHistory.isPresent()) {
             exercise.setIsAchieved(true);
             Optional<Exercise> lastExercise = exerciseRepository.findExerciseByMemberAndExerciseDay(member, LocalDate.now().minusDays(2));
             lastExercise.ifPresentOrElse(
@@ -322,7 +334,8 @@ public class ExerciseService {
             exercise.setStreak(0L);
         }
 
-        return exerciseRepository.save(exercise);
+//        return exerciseRepository.save(exercise);
+        return exercise;
     }
 
 }

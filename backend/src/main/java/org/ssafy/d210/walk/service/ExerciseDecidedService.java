@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
+import org.ssafy.d210.members.service.MemberService;
 import org.ssafy.d210.walk.dto.response.FitnessResponse;
 import org.ssafy.d210.walk.dto.response.ReportResponseDto;
 import org.ssafy.d210.walk.entity.ExerciseDecided;
@@ -29,6 +31,7 @@ public class ExerciseDecidedService {
     private final ExerciseDecidedRepository exerciseDecidedRepository;
     private final ExerciseService exerciseService;
     private final MemberDataService memberDataService;
+    private final MembersRepository membersRepository;
 
     @Transactional
     public ExerciseDecided saveStartTime(Members member, LocalDateTime startTime) {
@@ -53,6 +56,14 @@ public class ExerciseDecidedService {
             return handleExerciseDataAcrossDates(exerciseDecided, member, endTime);
         }
         return null;
+    }
+
+    public Boolean checkExerciseStarted(Long memberId) {
+        Optional<Members> membersOptional = membersRepository.findById(memberId);
+        if (!membersOptional.isPresent()) return null;
+        Members member = membersOptional.get();
+        Optional<ExerciseDecided> exerciseDecidedOptional = exerciseDecidedRepository.findExerciseDecidedByMemberAndExerciseEndIsNull(member);
+        return exerciseDecidedOptional.isPresent();
     }
 
     private ExerciseDecided handleExerciseDataAcrossDates(ExerciseDecided exerciseDecided, Members member, LocalDateTime endTime) {

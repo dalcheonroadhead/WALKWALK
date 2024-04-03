@@ -14,8 +14,9 @@ public class SliceResponseDto<T> {
     private final boolean last;
     private Long userRank;
     private Integer userRankPage;
+    private FriendRankingResponseDto myExerciseInfo;
 
-    public SliceResponseDto(Slice<T> sliceContent, Long userRank, Integer userRankPage) {
+    public SliceResponseDto(Slice<T> sliceContent, Long userRank, Integer userRankPage, FriendRankingResponseDto myExerciseInfo) {
         this.content = sliceContent.getContent();
         this.currentPage = sliceContent.getNumber();
         this.size = sliceContent.getSize();
@@ -23,6 +24,7 @@ public class SliceResponseDto<T> {
         this.last = sliceContent.isLast();
         this.userRank = userRank;
         this.userRankPage = userRankPage;
+        this.myExerciseInfo = myExerciseInfo;
     }
 
 }

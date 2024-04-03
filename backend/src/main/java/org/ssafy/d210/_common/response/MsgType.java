@@ -54,6 +54,7 @@ public enum MsgType {
     SET_DECIDED_EXERCISE_END_SUCCESSFULLY("작정한 운동 데이터 저장에 성공하였습니다."),
     GET_REPORT_SUCCESSFULLY("지난 달 운동 리포트 제작에 성공하였습니다."),
     GET_DAILY_FROM_CALENDAR_SUCCESSFULLY("날짜 지정 운동 데이터 조회에 성공하였습니다."),
+    GET_DECIDED_EXERCISE_STARTED_SUCCESSFULLY("해당 멤버가 운동 중인지 여부 조회에 성공하였습니다."),
 
 
     // ====================== MISSION ==========================
