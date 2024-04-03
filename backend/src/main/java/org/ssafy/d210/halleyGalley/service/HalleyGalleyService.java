@@ -130,23 +130,24 @@ public class HalleyGalleyService {
     @Transactional
     public String putMission(Members member, PutMissionRequest request){
         List<Long> halleyIdList = request.getMemberIdList();
-        log.warn("호출은 된야 이 잣가은ㄴ녓거안ㅇ");
 
-        int totalMoney = 0;
+        if(!halleyIdList.isEmpty()) {
+            int totalMoney = 0;
 
-        for(Long halleyId: halleyIdList) {
-            Members halley = membersRepository.findById(halleyId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
-            HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, halley).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_HALLEY));
-            halleyGalley.updateGetRewardAt(LocalDate.now());
-            Integer reward = halleyGalley.getReward();
-            totalMoney += reward;
-            halleyGalleyRepository.save(halleyGalley);
+            for (Long halleyId : halleyIdList) {
+                Members halley = membersRepository.findById(halleyId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER));
+                HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, halley).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_HALLEY));
+                halleyGalley.updateGetRewardAt(LocalDate.now());
+                Integer reward = halleyGalley.getReward();
+                totalMoney += reward;
+                halleyGalleyRepository.save(halleyGalley);
+            }
+            MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
+                    .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ACCOUNT));
+            memberAccount.setMoney(memberAccount.getMoney() + totalMoney);
+            memberAccountRepository.save(memberAccount);
+            return "success";
         }
-        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
-                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ACCOUNT));
-        memberAccount.setMoney(memberAccount.getMoney() + totalMoney);
-        memberAccountRepository.save(memberAccount);
-
-        return "";
+        return "fail";
     }
 }
