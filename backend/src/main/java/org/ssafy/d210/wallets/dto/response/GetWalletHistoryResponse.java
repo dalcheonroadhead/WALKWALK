@@ -16,14 +16,16 @@ public class GetWalletHistoryResponse {
     private Boolean operator;
     private Integer price;
     private LocalDateTime createdAt;
+    private String receiptId;
 
     @Builder
-    private GetWalletHistoryResponse(Long walletHistoryId, String walletType, Boolean operator, Integer price, LocalDateTime createdAt) {
+    private GetWalletHistoryResponse(Long walletHistoryId, String walletType, Boolean operator, Integer price, LocalDateTime createdAt, String receiptId) {
         this.walletHistoryId = walletHistoryId;
         this.walletType = walletType;
         this.operator = operator;
         this.price = price;
         this.createdAt = createdAt;
+        this.receiptId = receiptId;
     }
 
     public static GetWalletHistoryResponse from(WalletHistory walletHistory) {
@@ -33,6 +35,7 @@ public class GetWalletHistoryResponse {
                 .operator(walletHistory.getOperator())
                 .price(walletHistory.getPrice())
                 .createdAt(walletHistory.getCreatedAt())
+                .receiptId(walletHistory.getReceiptId())
                 .build();
     }
 }

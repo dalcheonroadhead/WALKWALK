@@ -40,7 +40,6 @@ public class BlockchainService {
     private String chainId;
 
     private final String blockchainIssueUrl = "https://wallet-api.klaytnapi.com/v2/account";
-    private final String blockchainWriteUrl = "https://metadata-api.klaytnapi.com/v1/metadata";
 
     private final RestTemplate restTemplate;
 
@@ -106,7 +105,7 @@ public class BlockchainService {
         // 트랜잭션 영수증에서 모든 로그를 검사하고, 이벤트 해시와 일치하는 로그를 찾음
         for (Log log : transactionReceipt.getLogs()) {
             if (!log.getTopics().isEmpty() && log.getTopics().get(0).equals(eventHash)) {
-                // 이벤트 로그에서 receiptId를 추출합니다. 이 값은 topics의 두 번째 요소에 있습니다.
+                // 이벤트 로그에서 receiptId를 추출함. 이 값은 topics의 두 번째 요소에 있음.
                 return Numeric.toBigInt(log.getTopics().get(1));
             }
         }
