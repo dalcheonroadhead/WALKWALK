@@ -71,13 +71,14 @@ public class ExerciseCriteriaService {
             responseDto = MainCriteriaResponseDto.builder()
                     .steps(existingCriteria.get().getSteps())
                     .exerciseMinute(existingCriteria.get().getExerciseMinute())
-                    .exerciseDistance()
+                    .exerciseDistance(existingCriteria.get().getExerciseDistance())
                     .build();
         } else {
             Optional<ExerciseCriteria> defaultCriteria = exerciseCriteriaRepository.findExerciseCriteriaByMemberAndIsCustomIsFalse(member);
             responseDto = MainCriteriaResponseDto.builder()
                     .steps(defaultCriteria.get().getSteps())
                     .exerciseMinute(defaultCriteria.get().getExerciseMinute())
+                    .exerciseDistance(defaultCriteria.get().getExerciseDistance())
                     .build();
         }
         return responseDto;

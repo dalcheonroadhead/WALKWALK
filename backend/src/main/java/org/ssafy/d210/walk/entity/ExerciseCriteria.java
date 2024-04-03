@@ -44,7 +44,7 @@ public class ExerciseCriteria { // 운동 기준
     @Setter
     @Column(name = "exercise_distance")
     @ColumnDefault("0")
-    private Long exerciseDistance;
+    private Double exerciseDistance;
 
     @Override
     public String toString() {
@@ -60,7 +60,7 @@ public class ExerciseCriteria { // 운동 기준
 
 
     @Builder
-    public ExerciseCriteria(Members member, Boolean isCustom, Long steps, Long exerciseMinute, Long heartRate, Long exerciseDistance) {
+    public ExerciseCriteria(Members member, Boolean isCustom, Long steps, Long exerciseMinute, Long heartRate, Double exerciseDistance) {
         this.member = member;
         this.isCustom = isCustom;
         this.steps = steps;
@@ -103,14 +103,14 @@ public class ExerciseCriteria { // 운동 기준
                     .exerciseMinute(45L)
                     .steps(8000L)
                     .heartRate(110L)
-                    .exerciseDistance(3600L);
+                    .exerciseDistance(3.6);
         } else {
             return ExerciseCriteria.builder()
                     .isCustom(false)
                     .exerciseMinute(25L)
                     .steps(6000L)
                     .heartRate(90L)
-                    .exerciseDistance(2000L);
+                    .exerciseDistance(2.0);
         }
     }
 }

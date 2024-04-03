@@ -8,5 +8,5 @@ import lombok.Getter;
 public class MainCriteriaResponseDto {
     private Long steps;
     private Long exerciseMinute;
-    private Long exerciseDistance;
+    private Double exerciseDistance;
 }
