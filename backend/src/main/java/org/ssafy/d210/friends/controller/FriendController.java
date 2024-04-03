@@ -61,8 +61,8 @@ public class FriendController {
     }
 
     @DeleteMapping("/delete")
-    public ApiResponseDto<?> deleteFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody DeleteFriendRequest request){
-        return ApiResponseDto.of(MsgType.DELETE_FRIEND_SUCCESSFULLY, friendService.deleteFriend(userDetails.getMember(), request));
+    public ApiResponseDto<?> deleteFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Long friendId){
+        return ApiResponseDto.of(MsgType.DELETE_FRIEND_SUCCESSFULLY, friendService.deleteFriend(userDetails.getMember(), friendId));
 
     }
 }

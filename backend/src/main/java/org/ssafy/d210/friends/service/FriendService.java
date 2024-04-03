@@ -145,8 +145,7 @@ public class FriendService {
     }
 
     @Transactional
-    public String deleteFriend(Members member, DeleteFriendRequest request){
-        Long friendId = request.getMemberId();
+    public String deleteFriend(Members member, Long friendId){
         Members friend = membersRepository.findById(friendId)
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
         FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(member, friend)
