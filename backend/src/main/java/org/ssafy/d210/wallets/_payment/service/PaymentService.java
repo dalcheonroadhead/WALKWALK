@@ -27,10 +27,13 @@ import org.ssafy.d210.wallets.entity.MemberAccount;
 import org.ssafy.d210.wallets.entity.WalletHistory;
 import org.ssafy.d210.wallets.entity.WalletType;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
+import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
 import org.ssafy.d210.wallets.service.WalletsService;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static org.ssafy.d210._common.exception.ErrorType.*;
 import static org.ssafy.d210._common.response.MsgType.PUT_MONEY_EXCHANGE_SUCCESSFULLY;
@@ -47,17 +50,18 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final MembersRepository membersRepository;
     private final MemberAccountRepository memberAccountRepository;
-
+    private final WalletHistoryRepository walletHistoryRepository;
     private final WalletsService walletsService;
 
     private final String kakaoPayReadyUrl = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private final String kakaoPayApproveUrl = "https://open-api.kakaopay.com/online/v1/payment/approve";
 
-    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository, WalletsService walletsService) {
+    public PaymentService(RestTemplateBuilder restTemplateBuilder, PaymentRepository paymentRepository, MembersRepository membersRepository, MemberAccountRepository memberAccountRepository, WalletsService walletsService, WalletHistoryRepository walletHistoryRepository) {
         this.restTemplate = restTemplateBuilder.build();
         this.paymentRepository = paymentRepository;
         this.membersRepository = membersRepository;
         this.memberAccountRepository = memberAccountRepository;
+        this.walletHistoryRepository = walletHistoryRepository;
         this.walletsService = walletsService;
     }
 
@@ -126,7 +130,9 @@ public class PaymentService {
             payment.updateIsApprove(true);
         }
 
-        walletsService.writeToBlockchain(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "", member), "카카오페이로 MONEY 충전");
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "", member));
+        CompletableFuture<BigInteger> future = walletsService.writeToBlockchain(DBWalletHistory, "카카오페이로 MONEY 충전");
+        DBWalletHistory.updateReceiptId(String.valueOf(future.get()));
 
         return response.getBody();
     }
@@ -138,7 +144,9 @@ public class PaymentService {
 
         Integer putMoneyResult = memberAccount.putMoney(paymentExchangeRequest.getExchangeMoneyValue(), false);
 
-        walletsService.writeToBlockchain(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", member), "MONEY 환전");
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", member));
+        CompletableFuture<BigInteger> future = walletsService.writeToBlockchain(DBWalletHistory, "MONEY 환전");
+        DBWalletHistory.updateReceiptId(String.valueOf(future.get()));
 
         return ApiResponseDto.of(PUT_MONEY_EXCHANGE_SUCCESSFULLY, PaymentExchangeResponse.of(putMoneyResult));
     }

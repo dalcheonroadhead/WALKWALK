@@ -113,6 +113,9 @@ public class WalletsService {
                         walletHistory.getCreatedAt().toString(),
                         BigInteger.valueOf(walletHistory.getMember().getId()))
         );
+
+        log.info(receiptId.toString());
+
         return CompletableFuture.completedFuture(receiptId);
     }
 
