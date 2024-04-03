@@ -338,4 +338,9 @@ public class ExerciseService {
         return exercise;
     }
 
+    public Exercise getExerciseDataFromDate(Members member, LocalDate theDate) {
+        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(member, theDate);
+        return exerciseOptional.orElse(null);
+    }
+
 }

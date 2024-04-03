@@ -25,6 +25,7 @@ import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
@@ -53,7 +54,9 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        writeDBandBlockchain(WalletHistory.of(WalletType.EGG, true, putEggRequest.getPutEggValue(), "", member), "맵 포인트 도달: 에그 획득");
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.EGG, true, putEggRequest.getPutEggValue(), "", member));
+        CompletableFuture<BigInteger> future = writeToBlockchain(DBWalletHistory, "맵 포인트 도달: 에그 획득");
+        DBWalletHistory.updateReceiptId(String.valueOf(future.get()));  // get() 호출로 비동기 작업의 완료를 기다림
 
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), true));
     }
@@ -62,7 +65,9 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        writeDBandBlockchain(WalletHistory.of(WalletType.EGG, false, putEggRequest.getPutEggValue(), "", member), "아이템 사용: 에그 차감");
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.EGG, false, putEggRequest.getPutEggValue(), "", member));
+        CompletableFuture<BigInteger> future = writeToBlockchain(DBWalletHistory, "아이템 사용: 에그 차감");
+        DBWalletHistory.updateReceiptId(String.valueOf(future.get()));  // get() 호출로 비동기 작업의 완료를 기다림
 
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), false));
     }
@@ -71,7 +76,9 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        writeDBandBlockchain(WalletHistory.of(WalletType.MONEY, true, putMoneyRequest.getPutMoneyValue(), "", member), "목표 달성: 머니 획득");
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, putMoneyRequest.getPutMoneyValue(), "", member));
+        CompletableFuture<BigInteger> future = writeToBlockchain(DBWalletHistory, "목표 달성: 머니 획득");
+        DBWalletHistory.updateReceiptId(String.valueOf(future.get()));  // get() 호출로 비동기 작업의 완료를 기다림
 
         return PutMoneyResponse.of(memberAccount.putMoney(putMoneyRequest.getPutMoneyValue(), true));
     }
@@ -80,7 +87,9 @@ public class WalletsService {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
-        writeDBandBlockchain(WalletHistory.of(WalletType.MONEY, false, putMoneyRequest.getPutMoneyValue(), "", member), "머니 사용");
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, putMoneyRequest.getPutMoneyValue(), "", member));
+        CompletableFuture<BigInteger> future = writeToBlockchain(DBWalletHistory, "머니 사용");
+        DBWalletHistory.updateReceiptId(String.valueOf(future.get()));  // get() 호출로 비동기 작업의 완료를 기다림
 
         return PutMoneyResponse.of(memberAccount.putMoney(putMoneyRequest.getPutMoneyValue(), true));
     }
@@ -94,9 +103,7 @@ public class WalletsService {
     }
 
     @Async
-    public void writeDBandBlockchain(WalletHistory walletHistory, String description) throws Exception {
-        WalletHistory DBWalletHistory = walletHistoryRepository.save(walletHistory);
-
+    public CompletableFuture<BigInteger> writeToBlockchain(WalletHistory walletHistory, String description) throws Exception {
         BigInteger receiptId = blockchainService.writeReceiptToBlockchain(
                 Receipt.of(
                         walletHistory.getWalletType().name(),
@@ -106,10 +113,7 @@ public class WalletsService {
                         walletHistory.getCreatedAt().toString(),
                         BigInteger.valueOf(walletHistory.getMember().getId()))
         );
-
-        log.info(receiptId.toString());
-
-        DBWalletHistory.updateReceiptId(String.valueOf(receiptId));
+        return CompletableFuture.completedFuture(receiptId);
     }
 
     public Members findByEmailAndDeletedAtIsNull(String email) {
