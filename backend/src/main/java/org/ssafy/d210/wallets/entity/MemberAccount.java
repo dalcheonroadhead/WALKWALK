@@ -1,14 +1,15 @@
 package org.ssafy.d210.wallets.entity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.BaseTime;
-import org.ssafy.d210.members.entity.Members;
+import org.ssafy.d210._common.exception.CustomException;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_ENOUGH_EGG;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_ENOUGH_MONEY;
 
 @Entity
 @Getter
@@ -34,6 +35,33 @@ public class MemberAccount extends BaseTime {
     @ColumnDefault("0")
     private Integer money;
 
-    @OneToMany(mappedBy = "memberAccountId", cascade = CascadeType.REMOVE)
-    private List<Members> members = new ArrayList<>();
+    public Integer putEgg(int egg, boolean operation) {
+        // operation true(1): 획득, operation false(0): 차감
+        if (operation) {
+            this.egg += egg;
+        } else {
+            if (egg < 0 || this.egg < egg) {
+                throw new CustomException(NOT_ENOUGH_EGG);
+            }
+
+            this.egg -= egg;
+        }
+
+        return egg;
+    }
+
+    public Integer putMoney(Integer money, boolean operation) {
+        // operation true(1): 획득, operation false(0): 차감
+        if (operation) {
+            this.money += money;
+        } else {
+            if (money < 0 || this.money < money) {
+                throw new CustomException(NOT_ENOUGH_MONEY);
+            }
+
+            this.money -= money;
+        }
+
+        return money;
+    }
 }

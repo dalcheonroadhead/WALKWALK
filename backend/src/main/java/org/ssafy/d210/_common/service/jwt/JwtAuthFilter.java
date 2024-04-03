@@ -28,16 +28,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // B. 토큰이 null 이면 다음 필터로 넘어간다
         if (token == null) {
-            request.setAttribute("exception", ErrorType.TOKEN_DOESNT_EXIST+" with filter");
+
             filterChain.doFilter(request, response);
             return;
         }
 
-        // C. 토큰이 유효하지 않으면 다음 필터로 넘어간다
-        if (!jwtUtil.validateToken(token)) {
-            request.setAttribute("exception", ErrorType.NOT_VALID_TOKEN);
-            filterChain.doFilter(request, response);
-            return;
+        // C. 토큰이 유효하지 않으면 Exception 체크하고 다음 필터로 넘어간다
+
+        int validationCheck = jwtUtil.validateToken(token);
+
+        if (validationCheck < 0) {
+            if(validationCheck == -1) {
+                request.setAttribute("exception", ErrorType.NOT_VALID_TOKEN.toString());
+                filterChain.doFilter(request, response);
+                return;
+            }else if (validationCheck == -2){
+                request.setAttribute("exception", ErrorType.EXPIRED_TOKEN.toString());
+            }
         }
 
         // D. 유효한 토큰이라면, 토큰으로부터 사용자 정보를 가져온다.
@@ -51,10 +58,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             setAuthentication(info.getSubject());   // 이메일로 사용자 정보를 얻어오고, 그 사용자 정보로 인증 객체 만든다.
 
         } catch (UsernameNotFoundException e) {
-            request.setAttribute("exception", ErrorType.NOT_FOUND_MEMBER);
+            request.setAttribute("exception", ErrorType.NOT_FOUND_MEMBER.toString());
+            log.error("관련에러: {}", e.getMessage());
         }
         // 다음 필터로 넘어간다.
         filterChain.doFilter(request, response);
+
     }
 
     private void setAuthentication(String userEmail) {

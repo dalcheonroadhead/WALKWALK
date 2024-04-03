@@ -9,13 +9,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.ssafy.d210._common.entity.GatRedis;
+import org.ssafy.d210._common.entity.GrtRedis;
+import org.ssafy.d210._common.entity.RefreshTokenInRedis;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
+import org.ssafy.d210._common.repository.GatRepository;
+import org.ssafy.d210._common.repository.GrtRepository;
+import org.ssafy.d210._common.repository.RefreshTokenInRedisRepository;
 import org.ssafy.d210._common.response.oauth2Google.GoogleAccessTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleOauthTokenInfo;
 import org.ssafy.d210._common.response.oauth2Google.GoogleProfileInfo;
@@ -35,8 +40,10 @@ import java.util.List;
 public class MemberService {
 
     private final MembersRepository membersRepository;
+    private final RefreshTokenInRedisRepository refreshTokenInRedisRepository;
+    private final GrtRepository grtRepository;
+    private final GatRepository gatRepository;
     private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
 
     @Value("${google.client-id}")
     String client_id;
@@ -77,6 +84,7 @@ public class MemberService {
         try {
             // B-4) 직렬화된 JSON을 진짜 객체 형태로 역직렬화, 실패시 FAIL_ON_UNKNOWN_PROPERTIES 에러가 나고, 이는 DTO 명세를 맞추지 못한 것이다.
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            log.info("성공적으로 GOOGLE과 통신했습니다={}", responseEntity.getBody());
             return objectMapper.readValue(responseEntity.getBody(), GoogleOauthTokenInfo.class);
         } catch (JsonProcessingException e) {
             // B-5) 에러 내역 참고
@@ -91,45 +99,66 @@ public class MemberService {
     public List<String> SaveUserAndGetToken(
             String token, HttpServletResponse response, GoogleAccessTokenInfo gat, GoogleRefreshTokenInfo grt) {
 
-        // C-1) AT 이용해 유저 정보 받아온다.
+        // C-1) Google AT 이용해 유저 정보 받아온다.
         GoogleProfileInfo googleProfileInfo = findProfile(token);
-        log.info("{}", googleProfileInfo.toString());
+        log.info("[Google AccessToken]을 이용해 받아온 현재 OAuth2 로그인한 사용자의 정보: {}", googleProfileInfo.toString());
 
         // C-2) 해당 정보를 가진 유저가 있는지 찾는다.
         Members member = membersRepository.findByEmailAndDeletedAtIsNull(googleProfileInfo.getEmail()).orElse(null);
 
-        // C-3) user가 Null이면 response에 Error를 띄워보내야 해서 이렇게 씀
+        // C-3) user가 Null이면 response에 신규 유저임을 해서 이렇게 씀
         boolean isNew = false;
 
         // C-4) 아예 처음 가입한 사람인 경우 다 비어있을 것이다. 그러면 신규 유저다.
-        if(member == null){
+        if (member == null) {
             member = Members.of(
                     googleProfileInfo.getEmail(),
-                    googleProfileInfo.getName() == null? "없음" : googleProfileInfo.getName(),
+                    googleProfileInfo.getName() == null? "없음": googleProfileInfo.getName(),
                     googleProfileInfo.getPicture(),
                     Role.USER
             );
             isNew = true;
         }
 
-        else if(member.getBirthYear() == null || member.getBlockAddresses() == null){
+        // C-5) 처음 가입한 유저는 아니지만, 추가 정보 입력 단계에서 나간 유저의 경우 해당 부분이 비어있다. -> 따라서 이를 통해 확인한다.
+        else if (member.getBirthYear() == null || member.getBlockAddresses() == null || member.getPhoneNumber() == null) {
             isNew = true;
         }
-        else{
-            member.setNew(true);
+        // C-6) 추가 정보도 다 차 있는 유저일 경우, 신규 가입 여부를 [false]로 두고, 수정일자를 갱신한다.
+        //      원래 [setter]로 인한 변경 값이 있을 경우, [save]만 해도 수정일자가 바뀌지만 [isNew]가 [false]인 경우
+        //      즉, 추가정보도 다 기입했는데, Google 토큰 만료로 인해 OAuth2 다시 한 사람의 경우, 변경 내용이 없으므로,
+        //      save 를 해도 updated_at 이 바뀌지 않는다. 따라서 억지로 수정일자를 변경 해줘야 한다.
+        else {
+            member.setNew(false);
+
+            membersRepository.updateById(member.getId());
         }
 
+        // C-7) 위의 모든 과정을 거친 후 [save]를 해준다. -> [JPA]의 [dirty Checking]으로 인해, [setter]로 바뀐 값도 자동으로 DB에 업데이트 된다.
+        //      updateById 를 한 경우, save 과정은 불필요 하기에 추후 리팩토링이 필요하다.
         membersRepository.save(member);
 
-        String jwtAccessToken = jwtUtil.createToken(member,false,gat,grt);
-        String jwtRefreshToken = jwtUtil.createToken(member,true,gat,grt);
+        // C-8) 구글 AT, RT 정보를 담은 jwt 토큰을 만들어서 헤더에 실는다.
+        String jwtAccessToken = jwtUtil.createToken(member, false);
+        String jwtRefreshToken = jwtUtil.createToken(member, true);
         response.addHeader("Authorization", jwtAccessToken);
-        response.addHeader("refresh_token",jwtRefreshToken);
 
+        // C-9) jwt 토큰과 신규 가입 유저 여부를 Body에 담기 위해 ArrayList 형태로 다시 컨트롤러 레벨로 돌려준다.
         List<String> ans = new ArrayList<>();
         ans.add(jwtAccessToken);
         ans.add(String.valueOf(isNew));
         ans.add(jwtRefreshToken);
+        ans.add(String.valueOf(member.getId()));
+        ans.add(member.getNickname());
+        ans.add(member.getProfileUrl());
+        // C-10) [REDIS]에 Member 의 PK(식별자), RefreshToken, AccessToken 을 저장
+        refreshTokenInRedisRepository.save(new RefreshTokenInRedis(String.valueOf(member.getId()), jwtRefreshToken, jwtAccessToken));
+        gatRepository.save(new GatRedis(member.getId(), gat.getAccess_token()));
+
+
+        if(grt.getRefresh_token() != null){
+            grtRepository.save(new GrtRedis(member.getId(), grt.getRefresh_token(), gat.getAccess_token()));
+        }
 
         return ans;
     }
@@ -163,8 +192,8 @@ public class MemberService {
         GoogleProfileInfo googleProfileInfo = null;
 
         try {
-            googleProfileInfo = objectMapper.readValue(googleProfileResponse.getBody(),GoogleProfileInfo.class);
-        }catch (JsonProcessingException e){
+            googleProfileInfo = objectMapper.readValue(googleProfileResponse.getBody(), GoogleProfileInfo.class);
+        } catch (JsonProcessingException e) {
             log.error(e.getMessage());
         }
 
@@ -179,7 +208,7 @@ public class MemberService {
     }
 
     // F. 닉네임 중복확인
-    public boolean isDuplicatedID(String nickname){
+    public boolean isDuplicatedID(String nickname) {
         return membersRepository.findByNicknameAndDeletedAtIsNull(nickname).isPresent();
     }
 

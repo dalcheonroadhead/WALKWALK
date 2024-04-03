@@ -1,5 +1,6 @@
 package org.ssafy.d210._common.config;
 
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,9 @@ public class SecurityConfig {
     private final AccessDeniedHandler accessDeniedHandler;
     private final JwtUtil jwtUtil;
 
+    private final String [] whiteList = {"/api/**", "/ws-stomp/**", "/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**"
+    ,"/oauth2/**", "/error"};
+
 
     @Bean
     // 1. 비밀번호를 안전하게 저장할 수 있도록 비밀번호의 단방향 암호화를 지원하는 인터페이스
@@ -57,30 +61,23 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable);       // 2)
         http
                 .csrf(AbstractHttpConfigurer::disable);            // 3)
+
         http
-                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                .cors((corsCustomizer -> corsCustomizer.configurationSource(request -> {
 
+                    CorsConfiguration configuration = new CorsConfiguration();
 
+                    configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+                    configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+                    configuration.setAllowCredentials(true);
+                    configuration.setAllowedHeaders(Arrays.asList("*"));
+                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-
-                        CorsConfiguration configuration = new CorsConfiguration();
-
-                        configuration.setAllowedOrigins(Arrays.asList("*"));
-                        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-                        configuration.setAllowCredentials(true);
-                        configuration.setAllowedHeaders(Arrays.asList("*"));
-                        configuration.setMaxAge(3600L);
-
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-                        return configuration;
-                    }
+                    return configuration;
                 })));
         http
                 .headers((headers) -> headers.frameOptions(
-                        HeadersConfigurer.FrameOptionsConfig::disable
+                        HeadersConfigurer.FrameOptionsConfig::sameOrigin
                 ));                                                 // 4)
         http
                 .sessionManagement((sessionManagement) ->
@@ -91,19 +88,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) ->
                                 auth
-                                        .requestMatchers("/api/**").permitAll()
-//                                        .requestMatchers("/api/oauth/authorize").permitAll()
-                                        .requestMatchers("/oauth2/**").permitAll() //모든 소셜 로그인 후 인가코드 Redirect URL는 다음과 같이 설정
-//                                        .requestMatchers("/api/hello").permitAll()
+                                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                                        .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
+
+                                        .requestMatchers(whiteList).permitAll()
+//                                      .requestMatchers("/api/oauth/authorize").permitAll()
                                         .anyRequest().authenticated()
 
                 )
-                .exceptionHandling(authentication ->        // 7)
-                        authentication.authenticationEntryPoint(authenticationEntryPoint)
-                                .accessDeniedHandler(accessDeniedHandler))
+                   .exceptionHandling(authentication ->        // 7)
+                           authentication.authenticationEntryPoint(authenticationEntryPoint)
+                                  .accessDeniedHandler(accessDeniedHandler))
 
-                                                            // 8)
-               .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                // 8)
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 
@@ -120,7 +118,7 @@ public class SecurityConfig {
         cors.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("*", cors);  // 모든 경로에 대해 CORS 설정 적용
+        source.registerCorsConfiguration("/**", cors);  // 모든 경로에 대해 CORS 설정 적용
 
         return source;
     }

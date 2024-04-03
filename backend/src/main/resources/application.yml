@@ -7,32 +7,46 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
-  output:           # 콘솔 로그에 색깔 입히기 ♡⸜(ˆᗜˆ˵ )⸝♡
+  output: # 콘솔 로그에 색깔 입히기 ♡⸜(ˆᗜˆ˵ )⸝♡
     ansi:
       enabled: always
 
+  cache:
+    type: redis
   data:
     # redis 설정
     redis:
       lettuce:
         pool:
-          max-active: 10
-          max-idle: 10
+          max-active: 5 # pool에 할당될 수 있는 커넥션 최대수
+          max-idle: 5 # pool의 'idle' 커넥션 최대수
           min-idle: 2
-      host: localhost
+      host: ${REDIS_HOST}
       port: 6379
       password: ${REDIS_PASSWORD}
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  batch:
+    job:
+      enabled: false # 키자마자 자동 실행 방지
+#      name: ${job.name:NONE}
+    jdbc:
+      initialize-schema: always
+
+
 
 
 google:
-    client-id: ${GOOGLE_CLIENT_ID}
-    client-secret: ${GOOGLE_SECRET}
-    local-redirect-uri: http://localhost:8081/oauth2/callback/google
-    dev-redirect-uri: https://j10d210.p.ssafy.io/oauth2/callback/google
-    token-uri: https://oauth2.googleapis.com/token
-    user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
-    authorization-uri: https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
-
+  client-id: ${GOOGLE_CLIENT_ID}
+  client-secret: ${GOOGLE_SECRET}
+  local-redirect-uri: http://localhost:8081/oauth2/callback/google
+  dev-redirect-uri: https://j10d210.p.ssafy.io/oauth2/callback/google
+  token-uri: https://oauth2.googleapis.com/token
+  user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
+  authorization-uri: https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
+  Text-to-Speech-key: ${Google_TTS_CLOUD_API_KEY}
 server:
   port: 8081
 
@@ -46,18 +60,44 @@ cloud:
       static: ap-northeast-2  # S3가 가용될 수 있는 지역 -> 동북아시아/대한민국으로 한정
     stack:
       auto: false # 프로젝트를 EC2로 배포 시에, 이 값이 true 되어있으면 SpringBoot에서 CloudFormation 구성을 시작함
-                  # 근데 따로 설정한 CloudFormation이 없으면 프로젝트가 배포단계에서 죽어버림
-                  # 따라서 우리는 애초에 Cloud 구성 기능을 사용하지 않겠다는 의미에서 false로 바꿔 둔다.
+      # 근데 따로 설정한 CloudFormation이 없으면 프로젝트가 배포단계에서 죽어버림
+      # 따라서 우리는 애초에 Cloud 구성 기능을 사용하지 않겠다는 의미에서 false로 바꿔 둔다.
 
     s3:
-      bucket:  d210
+      bucket: d210
 
 jwt:
   header: Authorization
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
   secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
   token:
-      #접근토큰시간: 5시간  #60*60*5*1000 =18000000    #샘플테스트 :30초 ==>30*1000=30000
-      access-expiration-time: 30000
-      #갱신토큰시간: 7일  #60*60*24*7*1000=604800000  #샘플테스트: 1분 ===>60000
-      refresh-expiration-time: 120000
+    #접근토큰시간: 5시간  #60*60*5*1000 =18000000
+    access-expiration-time: 259200000
+    #갱신토큰시간: 3일  #60*60*24*3*1000=259200000
+    refresh-expiration-time: 259200000
+springdoc:
+  swagger-ui:
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+    default-models-expand-depth: 2
+    default-model-expand-depth: 2
+  api-docs:
+    path: /api-docs
+
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
+  model-and-view-allowed: true
+  paths-to-match:
+    - /api/**
+
+pay:
+  secret-key: ${PAY_SECRET_KEY}
+
+blockchain:
+  auth: ${BLOCKCHAIN_AUTH}
+  chain-id: ${BLOCKCHAIN_CHAIN_ID}

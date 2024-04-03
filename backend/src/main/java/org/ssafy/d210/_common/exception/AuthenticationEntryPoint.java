@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.ssafy.d210._common.response.ResponseUtils;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 /*
  * (〜￣△￣)〜    인증 되지 않은 사용자의 요청에 대한 처리       〜(￣△￣〜)
@@ -20,31 +21,51 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class AuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint {
+
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        log.error("시큐리티 인증 과정에서 오류가 발생하였습니다! ＼(´◓Д◔`)／{}", authException.getMessage());
 
-//        ErrorType exception = (ErrorType) request.getAttribute("exception");
-//
-//        if(exception != null) {
-//            if (exception.equals(ErrorType.TOKEN_DOESNT_EXIST)) {
-//                exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
-//                return;
-//            }
-//
-//            if (exception.equals(ErrorType.NOT_VALID_TOKEN)) {
-//                exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
-//                return;
-//            }
-//
-//            if (exception.equals(ErrorType.NOT_FOUND_USER)) {
-//                exceptionHandler(response, ErrorType.NOT_FOUND_USER);
-//
-//            }
-//        }else {
-//            exceptionHandler(response, ErrorType.CANT_PASS_SECURITY);
-//        }
+        String exception = (String) request.getAttribute("exception");
+
+        log.error(request.getRequestURI());
+
+        // 소켓 헤더 확인하기
+        Enumeration<String> headerNames = request.getHeaderNames();
+
+        while (headerNames.hasMoreElements()){
+            String name = headerNames.nextElement();
+            String value = request.getHeader(name);
+
+            log.info("header 이름: {} <<<<<<< 값: {}", name, value);
+        }
+
+        if(exception != null) {
+            if (ErrorType.valueOf(exception).equals(ErrorType.TOKEN_DOESNT_EXIST)) {
+                exceptionHandler(response, ErrorType.TOKEN_DOESNT_EXIST);
+                return;
+            }
+
+            if (ErrorType.valueOf(exception).equals(ErrorType.NOT_VALID_TOKEN)) {
+                exceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
+                return;
+            }
+
+            if(ErrorType.valueOf(exception).equals(ErrorType.EXPIRED_TOKEN)) {
+
+                exceptionHandler(response, ErrorType.EXPIRED_TOKEN);
+                return;
+            }
+
+            if (ErrorType.valueOf(exception).equals(ErrorType.NOT_FOUND_MEMBER)) {
+                exceptionHandler(response, ErrorType.NOT_FOUND_MEMBER);
+            }
+
+        }else {
+            authException.printStackTrace();
+            exceptionHandler(response, ErrorType.ANOTHER_ERROR);
+        }
     }
 
 
@@ -55,13 +76,14 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+
         try {
             // B-2 에러가 무엇인지에 대한 Body를 Response에 쓴다.
             String json = new ObjectMapper().writeValueAsString(ResponseUtils.error(ErrorResponse.of(error)));
             response.getWriter().write(json);
 
             //      에러 내용 로그 확인
-            log.error("인증 과정에서 오류가 났습니다. 에러 내용은 다음과 같습니다.={}", error.getMsg());
+            log.error(" 에러 내용은 다음과 같습니다.={}", error.getMsg());
         } catch (Exception e){
             // B-3 Response 작성 과정에서 에러가 났을 경우 알려준다.
             log.error(e.getMessage());
