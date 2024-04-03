@@ -32,7 +32,7 @@ public class WalletsController {
     }
 
     @PutMapping("/egg-add")
-    public ApiResponseDto<?> putEggAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutEggRequest putEggRequest, BindingResult bindingResult) {
+    public ApiResponseDto<?> putEggAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutEggRequest putEggRequest, BindingResult bindingResult) throws Exception {
         log.info("WalletsController.putEggAdd");
 
         // validation 오류
@@ -44,7 +44,7 @@ public class WalletsController {
     }
 
     @PutMapping("/egg-sub")
-    public ApiResponseDto<?> putEggSub(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutEggRequest putEggRequest, BindingResult bindingResult) {
+    public ApiResponseDto<?> putEggSub(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutEggRequest putEggRequest, BindingResult bindingResult) throws Exception {
         log.info("WalletsController.putEggSub");
 
         // validation 오류
@@ -56,7 +56,7 @@ public class WalletsController {
     }
 
     @PutMapping("/money-add")
-    public ApiResponseDto<?> putMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
+    public ApiResponseDto<?> putMoneyAdd(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) throws Exception {
         log.info("WalletsController.putMoneyAdd");
 
         // validation 오류
@@ -68,7 +68,7 @@ public class WalletsController {
     }
 
     @PutMapping("/money-sub")
-    public ApiResponseDto<?> putMoneySub(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
+    public ApiResponseDto<?> putMoneySub(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) throws Exception {
         log.info("WalletsController.putMoneySub");
 
         // validation 오류
@@ -80,7 +80,7 @@ public class WalletsController {
     }
 
     @PutMapping("/money-halley-galley")
-    public ApiResponseDto<?> putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) {
+    public ApiResponseDto<?> putHalleyGalleyMoney(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PutMoneyRequest putMoneyRequest, BindingResult bindingResult) throws Exception {
         log.info("WalletsController.putHalleyGalleyMoney");
 
         // validation 오류

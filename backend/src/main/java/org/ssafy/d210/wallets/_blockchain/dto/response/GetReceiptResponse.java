@@ -15,30 +15,16 @@ public class GetReceiptResponse {
     private Integer price;
     private String description;
     private LocalDateTime createdAt;
-    private String uri;
-
+    private String receiptId;
 
     @Builder
-    private GetReceiptResponse(Long id, String walletType, Boolean operator, Integer price, String description, LocalDateTime createdAt, String uri) {
+    private GetReceiptResponse(Long id, String walletType, Boolean operator, Integer price, String description, LocalDateTime createdAt, String receiptId) {
         this.id = id;
         this.walletType = walletType;
         this.operator = operator;
         this.price = price;
         this.description = description;
         this.createdAt = createdAt;
-        this.uri = uri;
-    }
-
-    public static GetReceiptResponse from(GetReadFromBlockchainResponse getReadFromBlockchainResponse, String uri) {
-        return builder()
-                .id(getReadFromBlockchainResponse.getWalletHistoryId())
-                .walletType(getReadFromBlockchainResponse.getWalletType())
-                .operator(getReadFromBlockchainResponse.getOperator())
-                .price(getReadFromBlockchainResponse.getPrice())
-                .description(getReadFromBlockchainResponse.getDescription())
-                .createdAt(getReadFromBlockchainResponse.getCreatedAt())
-//                .createdAt(LocalDateTime.parse(getReadFromBlockchainResponse.getCreatedAt(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .uri(uri)
-                .build();
+        this.receiptId = receiptId;
     }
 }

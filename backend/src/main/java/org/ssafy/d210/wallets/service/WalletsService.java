@@ -3,14 +3,13 @@ package org.ssafy.d210.wallets.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
-import org.ssafy.d210.wallets._blockchain.dto.request.PostWriteToBlockchainRequest;
-import org.ssafy.d210.wallets._blockchain.dto.response.GetReadFromBlockchainResponse;
-import org.ssafy.d210.wallets._blockchain.dto.response.GetReceiptResponse;
+import org.ssafy.d210.wallets._blockchain.entity.Receipt;
 import org.ssafy.d210.wallets._blockchain.service.BlockchainService;
 import org.ssafy.d210.wallets.dto.request.PutEggRequest;
 import org.ssafy.d210.wallets.dto.request.PutMoneyRequest;
@@ -24,10 +23,12 @@ import org.ssafy.d210.wallets.entity.WalletType;
 import org.ssafy.d210.wallets.repository.MemberAccountRepository;
 import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.ssafy.d210._common.exception.ErrorType.*;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_FOUND_MEMBER_ACCOUNT;
 
 @Slf4j
 @Service
@@ -48,7 +49,7 @@ public class WalletsService {
         return GetEggMoneyResponse.from(memberAccount);
     }
 
-    public PutEggResponse putEggAdd(UserDetailsImpl userDetails, PutEggRequest putEggRequest) {
+    public PutEggResponse putEggAdd(UserDetailsImpl userDetails, PutEggRequest putEggRequest) throws Exception {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
@@ -57,7 +58,7 @@ public class WalletsService {
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), true));
     }
 
-    public PutEggResponse putEggSub(UserDetailsImpl userDetails, PutEggRequest putEggRequest) {
+    public PutEggResponse putEggSub(UserDetailsImpl userDetails, PutEggRequest putEggRequest) throws Exception {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
@@ -66,7 +67,7 @@ public class WalletsService {
         return PutEggResponse.of(memberAccount.putEgg(putEggRequest.getPutEggValue(), false));
     }
 
-    public PutMoneyResponse putMoneyAdd(UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) {
+    public PutMoneyResponse putMoneyAdd(UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) throws Exception {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
@@ -75,7 +76,7 @@ public class WalletsService {
         return PutMoneyResponse.of(memberAccount.putMoney(putMoneyRequest.getPutMoneyValue(), true));
     }
 
-    public PutMoneyResponse putMoneySub(UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) {
+    public PutMoneyResponse putMoneySub(UserDetailsImpl userDetails, PutMoneyRequest putMoneyRequest) throws Exception {
         Members member = findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
         MemberAccount memberAccount = findMemberAccountByMembers(member.getMemberAccountId().getId());
 
@@ -92,20 +93,23 @@ public class WalletsService {
                 .collect(Collectors.toList());
     }
 
-    public GetReceiptResponse getReceipt(UserDetailsImpl userDetails, Long walletHistoryId) {
-        findByEmailAndDeletedAtIsNull(userDetails.getMember().getEmail());
-
-        String blockUri = findWalletHistoryById(walletHistoryId).getBlockUri();
-        GetReadFromBlockchainResponse getReadFromBlockchainResponse = blockchainService.readFromBlockchain(blockUri);
-
-        return GetReceiptResponse.from(getReadFromBlockchainResponse, blockUri);
-    }
-
-    public void writeDBandBlockchain(WalletHistory walletHistory, String description) {
+    @Async
+    public void writeDBandBlockchain(WalletHistory walletHistory, String description) throws Exception {
         WalletHistory DBWalletHistory = walletHistoryRepository.save(walletHistory);
 
-        PostWriteToBlockchainRequest postWriteToBlockchainRequest = PostWriteToBlockchainRequest.of(DBWalletHistory.getId(), walletHistory, description, DBWalletHistory.getCreatedAt());
-        DBWalletHistory.updateBlockUri(blockchainService.writeToBlockchain(postWriteToBlockchainRequest));
+        BigInteger receiptId = blockchainService.writeReceiptToBlockchain(
+                Receipt.of(
+                        walletHistory.getWalletType().name(),
+                        walletHistory.getOperator(),
+                        BigInteger.valueOf(walletHistory.getPrice()),
+                        description,
+                        walletHistory.getCreatedAt().toString(),
+                        BigInteger.valueOf(walletHistory.getMember().getId()))
+        );
+
+        log.info(receiptId.toString());
+
+        DBWalletHistory.updateReceiptId(String.valueOf(receiptId));
     }
 
     public Members findByEmailAndDeletedAtIsNull(String email) {
@@ -116,10 +120,5 @@ public class WalletsService {
     public MemberAccount findMemberAccountByMembers(Long memberAccountId) {
         return memberAccountRepository.findMemberAccountById(memberAccountId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_MEMBER_ACCOUNT));
-    }
-
-    public WalletHistory findWalletHistoryById(Long id) {
-        return walletHistoryRepository.findWalletHistoryById(id)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_WALLET_HISTORY));
     }
 }

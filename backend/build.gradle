@@ -74,6 +74,9 @@ dependencies {
 
     // ⭐ org.json
     implementation 'org.json:json:20240303'
+
+    // ⭐ web3j_blockchain
+    implementation 'org.web3j:core:5.0.0'
 }
 
 tasks.named('test') {

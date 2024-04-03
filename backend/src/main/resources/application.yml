@@ -101,3 +101,8 @@ pay:
 blockchain:
   auth: ${BLOCKCHAIN_AUTH}
   chain-id: ${BLOCKCHAIN_CHAIN_ID}
+  web3j:
+    url:${BLOCKCHAIN_WEB3J_URL}
+  contract:
+    address: ${BLOCKCHAIN_CONTRACT_ADDRESS}
+  credentials: ${BLOCKCHAIN_CREDENTIALS}
