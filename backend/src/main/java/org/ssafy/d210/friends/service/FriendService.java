@@ -10,6 +10,7 @@ import org.ssafy.d210.friends.dto.FriendReceivedDto;
 import org.ssafy.d210.friends.dto.FriendSentDto;
 import org.ssafy.d210.friends.dto.GalleyMemberListDto;
 import org.ssafy.d210.friends.dto.MemberListDto;
+import org.ssafy.d210.friends.dto.request.DeleteFriendRequest;
 import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
 import org.ssafy.d210.friends.dto.response.GetFriendListResponse;
 import org.ssafy.d210.friends.dto.request.PostFriendRequest;
@@ -141,5 +142,19 @@ public class FriendService {
 
     public List<GalleyMemberListDto> getSearchedGalleyMemberList(Members member, PostSearchMemberListRequest request){
         return friendListRepository.findMembersById(member.getId(), request.getKeyword());
+    }
+
+    @Transactional
+    public String deleteFriend(Members member, Long friendId){
+        Members friend = membersRepository.findById(friendId)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
+        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(member, friend)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(friend, member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+        friendListRepository.delete(friendList1);
+        friendListRepository.delete(friendList2);
+
+        return "";
     }
 }
