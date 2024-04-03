@@ -8,6 +8,7 @@ import org.ssafy.d210._common.exception.CustomException;
 import org.ssafy.d210._common.exception.ErrorType;
 import org.ssafy.d210.halleyGalley.dto.HalleyDto;
 import org.ssafy.d210.halleyGalley.dto.request.PostGalleyRequest;
+import org.ssafy.d210.halleyGalley.dto.request.PutDayoffRequest;
 import org.ssafy.d210.halleyGalley.dto.request.PutGalleyResponseRequest;
 import org.ssafy.d210.halleyGalley.dto.request.PutMissionRequest;
 import org.ssafy.d210.halleyGalley.dto.response.*;
@@ -149,5 +150,23 @@ public class HalleyGalleyService {
             return "success";
         }
         return "fail";
+    }
+
+    @Transactional
+    public String putDayoff(Members member, PutDayoffRequest request){
+        Long halleyId = request.getHalleyId();
+        Members halley = membersRepository.findById(halleyId).
+                orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
+        HalleyGalley halleyGalley = halleyGalleyRepository.findHalleyGalleyByGalleyIdAndHalleyId(member, halley)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_HALLEY_GALLEY));
+        halleyGalley.updateGetRewardAt(LocalDate.now());
+        halleyGalley.updateDayoff(halleyGalley.getDayoff()-1);
+        halleyGalleyRepository.save(halleyGalley);
+
+        MemberAccount memberAccount = memberAccountRepository.findMemberAccountById(member.getMemberAccountId().getId())
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ACCOUNT));
+        memberAccount.setMoney(memberAccount.getMoney() + halleyGalley.getReward());
+        memberAccountRepository.save(memberAccount);
+        return "";
     }
 }

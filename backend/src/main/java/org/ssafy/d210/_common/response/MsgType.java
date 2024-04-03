@@ -39,6 +39,7 @@ public enum MsgType {
     GET_GALLEY_SUCCESSFULLY("갈리 정보 조회에 성공하였습니다."),
     GET_HALLEY_SUCCESSFULLY("할리 정보 조회에 성공하였습니다."),
     PUT_MISSION_STATE_SUCCESSFULLY("미션 달성 체크에 성공하였습니다."),
+    PUT_DAYOFF_SUCCESSFULLY("휴식권 사용에 성공하였습니다."),
 
     // ====================== WALK ============================
     GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY("이번 주 운동 데이터 조회에 성공하였습니다."),
