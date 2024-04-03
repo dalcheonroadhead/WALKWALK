@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.ssafy.d210._common.response.ApiResponseDto;
 import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.service.UserDetailsImpl;
+import org.ssafy.d210.friends.dto.request.DeleteFriendRequest;
 import org.ssafy.d210.friends.dto.request.PostFriendRequest;
 import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
 import org.ssafy.d210.friends.dto.request.PutFriendRequest;
@@ -57,5 +58,11 @@ public class FriendController {
     @PostMapping("/search-galley")
     public ApiResponseDto<?> searchGalleyMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PostSearchMemberListRequest request){
         return ApiResponseDto.of(MsgType.POST_MEMBER_LIST_SUCCESSFULLY, friendService.getSearchedGalleyMemberList(userDetails.getMember(), request));
+    }
+
+    @DeleteMapping("/delete")
+    public ApiResponseDto<?> deleteFriend(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody DeleteFriendRequest request){
+        return ApiResponseDto.of(MsgType.DELETE_FRIEND_SUCCESSFULLY, friendService.deleteFriend(userDetails.getMember(), request));
+
     }
 }
