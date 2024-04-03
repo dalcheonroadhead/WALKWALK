@@ -42,7 +42,7 @@ public class PaymentController {
     }
 
     @PostMapping("/kakaoPayApprove")
-    public ResponseEntity<PaymentApproveResponse> kakaoPayApprove(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PaymentApproveRequest paymentApproveRequest) {
+    public ResponseEntity<PaymentApproveResponse> kakaoPayApprove(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PaymentApproveRequest paymentApproveRequest) throws Exception {
         PaymentApproveResponse paymentApproveResponse = paymentService.approvePayment(userDetails, paymentApproveRequest);
         return ResponseEntity.ok(paymentApproveResponse);
     }
@@ -63,7 +63,7 @@ public class PaymentController {
     }
 
     @PutMapping("/exchange")
-    public ApiResponseDto<PaymentExchangeResponse> paymentExchange(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PaymentExchangeRequest paymentExchangeRequest, BindingResult bindingResult) {
+    public ApiResponseDto<PaymentExchangeResponse> paymentExchange(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid PaymentExchangeRequest paymentExchangeRequest, BindingResult bindingResult) throws Exception {
         return paymentService.exchangeMoney(userDetails, paymentExchangeRequest);
     }
 }
