@@ -155,11 +155,14 @@ public class ExerciseService {
 
         int count = 0;
         boolean found = false;
-//
+
+        FriendRankingResponseDto myRankingInfo = null;
+
         for (FriendRankingResponseDto exercise : exercises) {
             count++;
             if (exercise.getMemberId().equals(myId)) {
                 myRank = exercise.getRank();
+                myRankingInfo = exercise;
                 found = true;
             }
             if (count % pageable.getPageSize() == 0 && !found) {
@@ -173,7 +176,7 @@ public class ExerciseService {
             myRankPage += (int) (myRank / pageable.getPageSize());
         }
 
-        return new SliceResponseDto(exercises, myRank, myRankPage);
+        return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
     }
 
     public SliceResponseDto getStepsRankingWithFriends(Members member, StepsRankingPeriodEnum type, Pageable pageable) {
@@ -203,11 +206,14 @@ public class ExerciseService {
 
         int count = 0;
         boolean found = false;
-//
+
+        FriendRankingResponseDto myRankingInfo = null;
+
         for (FriendRankingResponseDto exercise : exercises) {
             count++;
             if (exercise.getMemberId().equals(myId)) {
                 myRank = exercise.getRank();
+                myRankingInfo = exercise;
                 found = true;
             }
             if (count % pageable.getPageSize() == 0 && !found) {
@@ -221,7 +227,7 @@ public class ExerciseService {
             myRankPage += (int) (myRank / pageable.getPageSize());
         }
 
-        return new SliceResponseDto(exercises, myRank, myRankPage);
+        return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
 //        Long preValue = Long.MAX_VALUE;
 //        int sameRankCount = 1;
 //
