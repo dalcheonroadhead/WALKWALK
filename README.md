@@ -120,9 +120,7 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 
 ---
 
-```java
-포팅 메뉴얼 링크
-```
+[포팅 메뉴얼 링크!](https://lab.ssafy.com/s10-blockchain-contract-sub2/S10P22D210/-/blob/d182195b6dea4772f0d6107ca9456296be04a571/exec/%ED%8F%AC%ED%8C%85%20%EB%A9%94%EB%89%B4%EC%96%BC%20WALK_WALK.pdf)
 
 # 효도하기 10조의 팀원들을 소개합니다!
 
