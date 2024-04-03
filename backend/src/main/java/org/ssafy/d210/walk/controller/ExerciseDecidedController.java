@@ -47,4 +47,11 @@ public class ExerciseDecidedController {
         ReportResponseDto report = exerciseDecidedService.makeExerciseReport(userDetails.getMember());
         return ResponseUtils.ok(report!=null ? report : "지난 달 작정한 운동 데이터가 없습니다!", MsgType.GET_REPORT_SUCCESSFULLY);
     }
+
+    @Operation(summary = "이 사람 운동 중인지")
+    @GetMapping("/ing-check/{member-id}")
+    public ApiResponseDto<?> getWhetherExerciseStart(@PathVariable(name = "member-id", required = true) Long memberId) {
+        Boolean value = exerciseDecidedService.checkExerciseStarted(memberId);
+        return ResponseUtils.ok(value != null ? value : "해당 회원이 존재하지 않습니다.", MsgType.GET_DECIDED_EXERCISE_STARTED_SUCCESSFULLY);
+    }
 }
