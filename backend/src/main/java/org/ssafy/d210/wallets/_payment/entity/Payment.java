@@ -7,11 +7,13 @@ import lombok.Setter;
 import org.ssafy.d210._common.entity.OnlyCreatedTime;
 import org.ssafy.d210.members.entity.Members;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Payment extends OnlyCreatedTime {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +37,9 @@ public class Payment extends OnlyCreatedTime {
 
     @Column
     private Boolean isApprove;
+
+    @Column
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

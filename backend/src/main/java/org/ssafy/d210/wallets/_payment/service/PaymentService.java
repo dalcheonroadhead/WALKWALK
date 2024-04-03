@@ -31,6 +31,7 @@ import org.ssafy.d210.wallets.repository.WalletHistoryRepository;
 import org.ssafy.d210.wallets.service.WalletsService;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -92,6 +93,7 @@ public class PaymentService {
         payment.setMember(member);
         payment.setTid(response.getBody().getTid());
         payment.setIsApprove(false);
+        payment.setCreatedAt(LocalDateTime.now().plusHours(9));
         paymentRepository.save(payment);
 
         return response.getBody();
@@ -130,7 +132,7 @@ public class PaymentService {
             payment.updateIsApprove(true);
         }
 
-        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "", member));
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, true, paymentApproveRequest.getTotal_amount(), "",  LocalDateTime.now().plusHours(9), member));
         CompletableFuture<BigInteger> future = walletsService.writeToBlockchain(DBWalletHistory, "카카오페이로 MONEY 충전");
         DBWalletHistory.updateReceiptId(String.valueOf(future.get()));
 
@@ -144,7 +146,7 @@ public class PaymentService {
 
         Integer putMoneyResult = memberAccount.putMoney(paymentExchangeRequest.getExchangeMoneyValue(), false);
 
-        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", member));
+        WalletHistory DBWalletHistory = walletHistoryRepository.save(WalletHistory.of(WalletType.MONEY, false, paymentExchangeRequest.getExchangeMoneyValue(), "", LocalDateTime.now().plusHours(9), member));
         CompletableFuture<BigInteger> future = walletsService.writeToBlockchain(DBWalletHistory, "MONEY 환전");
         DBWalletHistory.updateReceiptId(String.valueOf(future.get()));
 
