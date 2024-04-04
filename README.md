@@ -131,7 +131,7 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 | 이름 | 역할 | 개발 내용 |
 | --- | --- | --- |
 | 전수민 | 팀장<br/>Back<br/>Front | - DB 설계<br/>- 회원, Spring Security & JWT &  OAuth2.0<br/>- 채팅 및 tts, 응원 메시지 구현<br/>- 화면 설계 |
-| 한채연 | Back<br/>Blockchain | - DB 설계<br/>- 지갑 관리 및 카카오페이 연동<br/>- 블록체인 |
+| 한채연 | Back<br/>Blockchain | - DB 설계<br/>- 지갑 관리<br/>- 카카오페이 API를 통한 결제 구현<br/>- 블록체인을 활용한 영수증 발급 |
 | 최지수 | Back | - DB 설계<br/>- 운동 데이터, 기준 및 운동 도메인 api<br/>- 스프링 배치 및 스케줄링을 통한 대용량 데이터 처리 서버 구현<br/>- 랭킹 도메인 페이저블 구현 |
 | 심규영 | Front<br/>Blockchain | - 화면 설계<br/>- 블록체인<br/>- 회원관리 & OAuth2.0<br/>- 결제 |
 | 김세현 | Front<br/>Back | - DB 설계<br/>- 서버 EC2 배포<br/>- CI/CD with Jenkins<br/>- 친구, 할리갈리 관리<br/>- SSE 알림 서비스<br/>- 메인화면, 할리갈리, 친구 페이지 구현 |
