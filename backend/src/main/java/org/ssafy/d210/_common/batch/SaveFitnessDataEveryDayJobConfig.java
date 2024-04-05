@@ -29,6 +29,7 @@ import org.ssafy.d210.walk.service.ExerciseService;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -112,9 +113,20 @@ public class SaveFitnessDataEveryDayJobConfig {
             for (Exercise exercise : exercises) {
                 if (exercise != null) {
                     log.info("save job itemWriter 진입 성공 " + exercise.getMember().getNickname());
-                    Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(exercise.getMember(), exercise.getExerciseDay());
-                    exerciseOptional.ifPresent(value -> exercise.setId(value.getId())); // 멱등성
-                    exerciseRepository.save(exercise);
+                    try {
+                        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(exercise.getMember(), exercise.getExerciseDay());
+                        exerciseOptional.ifPresent(value -> exercise.setId(value.getId())); // 멱등성
+                        exerciseRepository.save(exercise);
+                    } catch (Exception e) {
+                        List<Exercise> exerciseOptional = exerciseRepository.findExercisesByMemberAndExerciseDay(exercise.getMember(), exercise.getExerciseDay());
+                        for (int i = 0; i < exerciseOptional.size()-1; i++) {
+                            Exercise uselessExercise = exerciseOptional.get(i);
+                            exerciseRepository.delete(uselessExercise);
+                        }
+                        exercise.setId(exerciseOptional.get(exerciseOptional.size()-1).getId());
+                        exerciseRepository.save(exercise);
+                    }
+
                 }
 
             }
