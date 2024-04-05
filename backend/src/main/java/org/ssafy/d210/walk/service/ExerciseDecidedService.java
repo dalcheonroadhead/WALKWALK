@@ -1,22 +1,22 @@
 package org.ssafy.d210.walk.service;
 
 import jakarta.transaction.Transactional;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
 import org.ssafy.d210.members.service.MemberDataService;
-import org.ssafy.d210.members.service.MemberService;
 import org.ssafy.d210.walk.dto.response.FitnessResponse;
 import org.ssafy.d210.walk.dto.response.ReportResponseDto;
 import org.ssafy.d210.walk.entity.ExerciseDecided;
 import org.ssafy.d210.walk.entity.ReportPrevious;
 import org.ssafy.d210.walk.repository.ExerciseDecidedRepository;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

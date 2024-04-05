@@ -43,7 +43,7 @@ public class SaveFitnessDataEveryDayJobConfig {
 
     @Bean
     public Job saveFitnessDataEveryDayJob(JobRepository jobRepository, Step saveFitnessDataEveryDayStep) {
-        System.out.println("job!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         return new JobBuilder("saveFitnessDataEveryDayJob", jobRepository)
                 .start(saveFitnessDataEveryDayStep)
                 .build();
@@ -51,7 +51,7 @@ public class SaveFitnessDataEveryDayJobConfig {
 
     @Bean
     public Step saveFitnessDataEveryDayStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
-        System.out.println("step????????????????????????????????????????????????????????????????");
+
         return new StepBuilder("saveFitnessDataEveryDayStep", jobRepository)
                 .<Members, Exercise>chunk(10, platformTransactionManager)
                 .reader(userDetailsItemReader(entityManagerFactory))
@@ -64,7 +64,7 @@ public class SaveFitnessDataEveryDayJobConfig {
     @StepScope
     public JpaPagingItemReader<Members> userDetailsItemReader(EntityManagerFactory entityManagerFactory) {
 
-        log.info("아이템 리더 들어왔다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.info("save job itemReader 진입 성공");
         return new JpaPagingItemReaderBuilder<Members>()
                 .name("userDetailsItemReader")
                 .queryString("SELECT m FROM Members m")
@@ -78,7 +78,7 @@ public class SaveFitnessDataEveryDayJobConfig {
     public ItemProcessor<Members, Exercise> accessTokenProcessor(@Value("#{jobParameters['time']}") Long timeParam) {
         return member -> {
 
-            log.info("프로세서 들어왔다 ??????????????????????????????????????????????????" + member.getNickname());
+            log.info("save job processor 진입 성공 " + member.getNickname());
 
             try {
                 // access token 받아오기
@@ -111,7 +111,7 @@ public class SaveFitnessDataEveryDayJobConfig {
         return exercises -> {
             for (Exercise exercise : exercises) {
                 if (exercise != null) {
-                    log.info("writer!!!!!!!!!!!!!!!!!!!!!!!" + exercise.getMember().getNickname());
+                    log.info("save job itemWriter 진입 성공 " + exercise.getMember().getNickname());
                     Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(exercise.getMember(), exercise.getExerciseDay());
                     exerciseOptional.ifPresent(value -> exercise.setId(value.getId())); // 멱등성
                     exerciseRepository.save(exercise);

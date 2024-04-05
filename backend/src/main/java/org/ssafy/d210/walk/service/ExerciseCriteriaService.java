@@ -10,7 +10,6 @@ import org.ssafy.d210.walk.dto.response.MainCriteriaResponseDto;
 import org.ssafy.d210.walk.entity.ExerciseCriteria;
 import org.ssafy.d210.walk.repository.ExerciseCriteriaRepository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service

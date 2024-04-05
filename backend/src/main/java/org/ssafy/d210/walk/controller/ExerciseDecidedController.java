@@ -12,7 +12,6 @@ import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.walk.dto.response.ReportResponseDto;
 import org.ssafy.d210.walk.service.ExerciseDecidedService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
@@ -35,17 +34,11 @@ public class ExerciseDecidedController {
         return ResponseUtils.ok(exerciseDecidedService.saveEndTime(userDetails.getMember(), endTime), MsgType.SET_DECIDED_EXERCISE_END_SUCCESSFULLY);
     }
 
-//    @Operation(summary = "어제 작정한 운동 데이터 불러오기")
-//    @GetMapping("/yesterday")
-//    public ApiResponseDto<?> getYesterdayDecidedExercise(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return ResponseUtils.ok()
-//    }
-
     @Operation(summary = "지난 달 리포트")
     @GetMapping("/report")
     public ApiResponseDto<?> getLastMonthReport(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         ReportResponseDto report = exerciseDecidedService.makeExerciseReport(userDetails.getMember());
-        return ResponseUtils.ok(report!=null ? report : "지난 달 작정한 운동 데이터가 없습니다!", MsgType.GET_REPORT_SUCCESSFULLY);
+        return ResponseUtils.ok(report != null ? report : "지난 달 작정한 운동 데이터가 없습니다!", MsgType.GET_REPORT_SUCCESSFULLY);
     }
 
     @Operation(summary = "이 사람 운동 중인지")

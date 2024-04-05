@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.ssafy.d210.members.entity.Members;
-import org.ssafy.d210.walk.dto.response.ReportResponseDto;
 import org.ssafy.d210.walk.entity.ExerciseDecided;
 import org.ssafy.d210.walk.entity.ReportPrevious;
 
