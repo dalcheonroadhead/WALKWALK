@@ -19,7 +19,6 @@ import org.ssafy.d210.items.entity.MemberItemHistory;
 import org.ssafy.d210.items.repository.MemberItemHistoryRepository;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
-import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.walk.dto.request.StepsRankingPeriodEnum;
 import org.ssafy.d210.walk.dto.response.*;
 import org.ssafy.d210.walk.entity.Exercise;
@@ -114,33 +113,6 @@ public class ExerciseService {
         else return null;
     }
 
-//    public SliceResponseDto calculateRanking(Long myId, Slice<FriendRankingResponseDto> exercises, int startRank, int pageSize) {
-//        Long myRank = 1L;
-//        Long preValue = Long.MAX_VALUE;
-//        int sameRankCount = 1;
-//
-//        for (FriendRankingResponseDto exercise : exercises) {
-//            if (!exercise.getValue().equals(preValue)) {
-//                startRank += sameRankCount;
-//                sameRankCount = 1; // 동점자 수 초기화
-//                preValue = exercise.getValue();
-//            } else {
-//                sameRankCount++; // 동점자 수를 증가시킵니다.
-//            }
-//            exercise.setRank((long) startRank);
-//
-//            if (exercise.getMemberId().equals(myId)) {
-//                myRank = exercise.getRank();
-//            }
-//        }
-//        startRank += sameRankCount; // 마지막에 동점자가 있었다면, 이를 반영해줍니다.
-//
-//
-//        int pageNumber = (int) (myRank / pageSize);
-//
-//        return new SliceResponseDto(exercises, myRank, pageNumber);
-//    }
-
     public SliceResponseDto getStreakRankingWithFriends(Members member, Pageable pageable) {
 //        Members member = membersRepository.findById(memberId).orElseThrow();
         Long myId = member.getId();
@@ -221,39 +193,14 @@ public class ExerciseService {
             }
         }
 
-        // 내 순위에 해당하는 페이지 번호 계산
-//        int myRankPage = (int) (myRank / pageable.getPageSize());
         if (myRank != null) {
             myRankPage += (int) (myRank / pageable.getPageSize());
         }
 
         return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
-//        Long preValue = Long.MAX_VALUE;
-//        int sameRankCount = 1;
-//
-//        for (FriendRankingResponseDto exercise : exercises) {
-//            if (!exercise.getValue().equals(preValue)) {
-//                startRank += sameRankCount;
-//                sameRankCount = 1; // 동점자 수 초기화
-//                preValue = exercise.getValue();
-//            } else {
-//                sameRankCount++; // 동점자 수를 증가시킵니다.
-//            }
-//            exercise.setRank((long) startRank);
-//
-//            if (exercise.getMemberId().equals(myId)) {
-//                myRank = exercise.getRank();
-//            }
-//        }
-//        startRank += sameRankCount; // 마지막에 동점자가 있었다면, 이를 반영해줍니다.
-//
-//
-//        int pageNumber = (int) (myRank / pageable.getPageSize());
-//
-//        return new SliceResponseDto(exercises, myRank, pageNumber);
     }
 
-    @Retryable(value = { RestClientException.class }, maxAttempts = 5, backoff = @Backoff(delay = 1000, multiplier = 2))
+    @Retryable(value = {RestClientException.class}, maxAttempts = 5, backoff = @Backoff(delay = 1000, multiplier = 2))
     public FitnessResponse fetchGoogleFitData(String accessToken, long startTimeMillis, long endTimeMillis) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
@@ -276,8 +223,6 @@ public class ExerciseService {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-//        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.postForEntity(url, entity, String.class).getBody());
-        // 얘가 문제임
         ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
 
         return response.getBody();
@@ -334,7 +279,6 @@ public class ExerciseService {
             exercise.setStreak(0L);
         }
 
-//        return exerciseRepository.save(exercise);
         return exercise;
     }
 

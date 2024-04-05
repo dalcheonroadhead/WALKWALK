@@ -41,36 +41,6 @@ public class SchedulerConfig {
         this.updateCriteriaEveryYearJob = updateCriteriaEveryYearJob;
     }
 
-//    @Scheduled(cron = "0 0 4 * * *")
-////    @Scheduled(cron = "0 * * * * *")
-//    public void runTempSaveExercise() {
-////        exerciseService.saveExerciseDataEveryDay();
-//        List<Members> members = membersRepository.findAll();
-//
-//        for (Members member : members) {
-//
-//            try {
-//                String accessToken = memberDataService.refreshAccessToken(member);
-//
-//                // 받아온 액세스 토큰으로 구글 피트니스 데이터 가져오기
-//                LocalDateTime now = LocalDateTime.now();
-//                LocalDateTime startOfYesterday = now.minusDays(1).toLocalDate().atStartOfDay();
-//                LocalDateTime endOfYesterday = startOfYesterday.plusDays(1).minusNanos(1);
-//
-//                long startTimeMillis = startOfYesterday.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-//                long endTimeMillis = endOfYesterday.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-//
-//                FitnessResponse fitnessResponse = exerciseService.fetchGoogleFitData(accessToken, startTimeMillis, endTimeMillis);
-//                exerciseService.mapFitnessResponseToExercise(fitnessResponse, member);
-//            } catch (Exception e) {
-//                log.info(member.getNickname() + " 씨는 에러가 났다.", e);
-//            }
-//
-//        }
-//
-//    }
-
-
 //    @Scheduled(cron = "0 30 * * * *")
     @Scheduled(cron = "0 0 4 * * *")
     public void runBatchJob() {

@@ -20,10 +20,8 @@ import org.ssafy.d210.walk.dto.response.SliceResponseDto;
 import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.service.ExerciseService;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
