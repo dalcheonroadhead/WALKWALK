@@ -4,9 +4,8 @@
 
 # 🐣WALKWALK - 블록체인을 활용한 운동 격려 서비스🐣
 
-<div align="center">
- <img src="/uploads/574743d219fbbcd65b7a0423a1d1e020/Untitled.png" width="50%"> 
-</div>
+![free-icon-warehouse-1832646](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/2bcc01d3-9cb7-4f9c-b649-85ccdb85ffbf)
+
 
 
 WALKWALK 링크: https://j10d210.p.ssafy.io/
@@ -147,66 +146,54 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 
 ### 회원 가입 및 로그인
 
-<div align="center">
- <img src="/uploads/236e4873c27e9a5a69bfab77fb00eff8/스크린샷_2024-04-03_211351.png" width="50%"> 
-</div>
+![스크린샷_2024-04-03_211351](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/71e3f355-cf4b-4a1e-a42c-6d4a72250a15)
+
 
 ### 메인 화면
 
-<div align="center">
- <img src="/uploads/bac538d5fa61a2e3c5b5c3aae6e37534/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___1_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___1_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/6d909ae8-cf42-4dc1-b4b7-e78c14225eee)
+
 
 ### 랭킹
 
-<div align="center">
- <img src="/uploads/b037ba389d9dcf5a30ba6eca26c76f5d/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___5_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___5_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/7ce90968-b9f4-4ed5-abbb-d591b9c11a42)
+
 
 ### 운동 페이지
 
-<div align="center">
- <img src="/uploads/878093d1381368bb9296be897d386c4d/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___6_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___6_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/af4f7a36-13ee-4ce3-986f-2c2c958fbde9)
+
 
 ### 응원 메시지
 
-<div align="center">
- <img src="/uploads/344a716df6a480720972f4e4482d4c38/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___8_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___9_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/9767ce86-ac0e-471c-99b4-fcc7161c5a6c)
+
+
 
 ### 응원 메시지 보관함
 
-<div align="center">
- <img src="/uploads/9e8ec93f45ec80e67c0523088a1d16f8/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___9_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___8_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/4499a43f-c90d-4c7c-bb4a-4f9de0fa08d4)
 
 ### 응원 메시지 보내기
 
-<div align="center">
- <img src="/uploads/fedfbd3d2fd763ece021a647c570c62d/j10d210.p.ssafy.io_voice_sendvoice_Samsung_Galaxy_S20_Ultra_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___9_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/c1f1b427-1464-4d66-8d88-c0fcb02cc2d6)
 
 ### 친구 목록
 
-<div align="center">
- <img src="/uploads/89f295dcb94f3e7fd438950836de55a0/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/42b25c66-b167-470e-96cf-7323a78c4092)
+
 
 ### 친구 검색
 
-<div align="center">
- <img src="/uploads/f134cc65c308cb3363a52df95e570911/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___2_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___2_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/e71e094f-e12b-44d9-93c9-cc4c9641c827)
+
 
 ### 친구 신청
 
-<div align="center">
- <img src="/uploads/efdf427b1118fa9193ef3bf6cc039619/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___3_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___3_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/01bc8fb7-d7c6-4d61-8616-2687f5b499cd)
+
 
 ### 마이페이지
 
-<div align="center">
- <img src="/uploads/0c6fd0fd1b972a46e77c4f7f2cbbc896/j10d210.p.ssafy.io_main_Samsung_Galaxy_S20_Ultra___4_.png" width="50%"> 
-</div>
+![j10d210 p ssafy io_main_Samsung_Galaxy_S20_Ultra___4_](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/f8d0f012-0371-44ac-bbb6-608937dbe617)
+
