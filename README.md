@@ -126,6 +126,11 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 [포팅 메뉴얼 링크!](https://lab.ssafy.com/s10-blockchain-contract-sub2/S10P22D210/-/blob/d182195b6dea4772f0d6107ca9456296be04a571/exec/%ED%8F%AC%ED%8C%85%20%EB%A9%94%EB%89%B4%EC%96%BC%20WALK_WALK.pdf)
 <br><br><br>
 
+## UCC 및 시연영상
+
+- UCC - https://youtu.be/01bYtPFIBRs
+- 시연영상 - https://youtu.be/X-z9YPcKuxY
+<br><br><br>
 # 효도하기 10조의 팀원들을 소개합니다!
 
 | 이름 | 역할 | 개발 내용 |
