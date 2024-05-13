@@ -178,6 +178,7 @@ public class SocketService {
         log.info("{}",msg.getReceiverId());
 
 
+
     }
 
     public void sendLocationToSubscriber (GeoLocation gps) {

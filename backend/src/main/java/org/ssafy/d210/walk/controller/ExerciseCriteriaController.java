@@ -10,6 +10,7 @@ import org.ssafy.d210._common.response.MsgType;
 import org.ssafy.d210._common.response.ResponseUtils;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.walk.dto.request.CustomExerciseCriteriaRequestDto;
+import org.ssafy.d210.walk.entity.ExerciseCriteria;
 import org.ssafy.d210.walk.service.ExerciseCriteriaService;
 
 @RestController
@@ -23,7 +24,8 @@ public class ExerciseCriteriaController {
     @Operation(summary = "연령대별 디폴트 운동 기준 세팅")
     @GetMapping("/default")
     public ApiResponseDto<?> setDefaultCriteria(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseUtils.ok(exerciseCriteriaService.setDefaultExerciseCriteria(userDetails.getMember()), MsgType.SET_DEFAULT_CRITERIA_SUCCESSFULLY);
+        ExerciseCriteria exerciseCriteria = exerciseCriteriaService.setDefaultExerciseCriteria(userDetails.getMember());
+        return ResponseUtils.ok(exerciseCriteria != null ? exerciseCriteria : "회원의 출생년도가 기입되어있지 않아 업데이트에 실패했습니다.", MsgType.SET_DEFAULT_CRITERIA_SUCCESSFULLY);
     }
 
     @Operation(summary = "운동 기준 사용자 커스텀")

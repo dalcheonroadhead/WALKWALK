@@ -7,9 +7,9 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210._common.entity.BaseTime;
 import org.ssafy.d210._common.exception.CustomException;
-import org.ssafy.d210.wallets._payment.dto.request.PaymentExchangeRequest;
 
 import static org.ssafy.d210._common.exception.ErrorType.NOT_ENOUGH_EGG;
+import static org.ssafy.d210._common.exception.ErrorType.NOT_ENOUGH_MONEY;
 
 @Entity
 @Getter
@@ -56,21 +56,11 @@ public class MemberAccount extends BaseTime {
             this.money += money;
         } else {
             if (money < 0 || this.money < money) {
-                throw new CustomException(NOT_ENOUGH_EGG);
+                throw new CustomException(NOT_ENOUGH_MONEY);
             }
 
             this.money -= money;
         }
-
-        return money;
-    }
-
-    public Integer exchangeMoney(PaymentExchangeRequest paymentExchangeRequest) {
-        if (paymentExchangeRequest.getExchangeMoneyValue() < 0 || this.money < paymentExchangeRequest.getExchangeMoneyValue()) {
-            throw new CustomException(NOT_ENOUGH_EGG);
-        }
-
-        this.money -= paymentExchangeRequest.getExchangeMoneyValue();
 
         return money;
     }

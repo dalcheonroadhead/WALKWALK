@@ -17,10 +17,11 @@ import org.ssafy.d210._common.response.ResponseUtils;
 import org.ssafy.d210._common.service.UserDetailsImpl;
 import org.ssafy.d210.walk.dto.request.StepsRankingPeriodEnum;
 import org.ssafy.d210.walk.dto.response.SliceResponseDto;
+import org.ssafy.d210.walk.entity.Exercise;
 import org.ssafy.d210.walk.service.ExerciseService;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,19 +31,19 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
 
-    // 마지막으로 db에 저장된 날짜
+    @Operation(summary = "마지막으로 db에 저장된 날짜")
     @GetMapping("/last-date")
     public ApiResponseDto<?> getLastDate() {
         return ResponseUtils.ok(exerciseService.findLastSavedDate(), MsgType.GET_LAST_SAVED_DATE_SUCCESSFULLY);
     }
 
-    // 이번 주 운동 데이터(걸음 수) 조회
+    @Operation(summary = "이번 주 운동 데이터(걸음 수) 조회")
     @GetMapping("/{date}")
     public ApiResponseDto<?> getWeeklyExerciseRecords(@PathVariable(value = "date", required = true) LocalDate date, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(exerciseService.findWeeklyExerciseRecords(date, userDetails.getMember().getId()), MsgType.GET_WEEKLY_EXERCISE_DATA_SUCCESSFULLY);
     }
 
-    // 랭킹 조회, 내 위아래 4명
+    @Operation(summary = "랭킹 조회, 내 위아래 4명")
     @GetMapping("/ranking/streak")
     public ApiResponseDto<SliceResponseDto> getMemberRankingWithFriends(@PageableDefault(size = 10, sort = "streak", direction = Sort.Direction.DESC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseUtils.ok(exerciseService.getStreakRankingWithFriends(userDetails.getMember(), pageable), MsgType.GET_STREAK_RANKING_SUCCESSFULLY);
@@ -53,5 +54,26 @@ public class ExerciseController {
     public ApiResponseDto<SliceResponseDto> getStepsRankingWithFriends(@PageableDefault(size = 10, sort = "steps", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable("type") String typeStr, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StepsRankingPeriodEnum type = StepsRankingPeriodEnum.valueOf(typeStr.toUpperCase());
         return ResponseUtils.ok(exerciseService.getStepsRankingWithFriends(userDetails.getMember(), type, pageable), MsgType.GET_STEPS_RANKING_SUCCESSFULLY);
+    }
+
+    @Operation(summary = "한 달 운동")
+    @GetMapping("/calendar/{member-id}")
+    public ApiResponseDto<?> getMonthlyExerciseDataForCalendar(@PathVariable(name = "member-id", required = true) Long memberId) {
+        List<Exercise> exercises = exerciseService.findMonthlyExerciseData(memberId);
+        return ResponseUtils.ok(exercises != null ? exercises : "멤버가 존재하지 않습니다.", MsgType.GET_MONTHLY_EXERCISE_DATA_SUCCESSFULLY);
+    }
+
+    @Operation(summary = "그 날의 운동 데이터 조회")
+    @GetMapping("/calendar/{member-id}/{date}")
+    public ApiResponseDto<?> getCalendarDailyRecord(@PathVariable(value = "member-id", required = true) Long memberId, @PathVariable(value = "date", required = true) LocalDate date) {
+        Exercise exercise = exerciseService.findDailyFromCalendar(memberId, date);
+        return ResponseUtils.ok(exercise != null ? exercise : "멤버가 존재하지 않거나 해당일 운동 기록이 없습니다.", MsgType.GET_DAILY_FROM_CALENDAR_SUCCESSFULLY);
+    }
+
+    @Operation(summary = "어제와 나 용 해당일 운동 데이터 조회")
+    @GetMapping("/vs-me/{date}")
+    public ApiResponseDto<?> getCalendarDailyRecord(@PathVariable(value = "date", required = true) LocalDate date, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Exercise exercise = exerciseService.getExerciseDataFromDate(userDetails.getMember(), date);
+        return ResponseUtils.ok(exercise != null ? exercise : "해당일 운동 기록이 없습니다.", MsgType.GET_DAILY_FROM_CALENDAR_SUCCESSFULLY);
     }
 }

@@ -10,6 +10,7 @@ import org.ssafy.d210.friends.dto.FriendReceivedDto;
 import org.ssafy.d210.friends.dto.FriendSentDto;
 import org.ssafy.d210.friends.dto.GalleyMemberListDto;
 import org.ssafy.d210.friends.dto.MemberListDto;
+import org.ssafy.d210.friends.dto.request.DeleteFriendRequest;
 import org.ssafy.d210.friends.dto.request.PostSearchMemberListRequest;
 import org.ssafy.d210.friends.dto.response.GetFriendListResponse;
 import org.ssafy.d210.friends.dto.request.PostFriendRequest;
@@ -58,9 +59,10 @@ public class FriendService {
         Members receiver = membersRepository.findById(request.getMemberId())
                 .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
 
-        FriendList friendList = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver).orElse(null);
+        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverId(member, receiver).orElse(null);
+        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverId(receiver, member).orElse(null);
 
-        if(friendList == null) {
+        if(friendList1 == null && friendList2 == null) {
             friendListRepository.save(
                     FriendList.builder()
                             .senderId(member)
@@ -82,7 +84,7 @@ public class FriendService {
                     .receiverId(receiver)
                     .isChecked(false)
                     .notiType(NotiType.FRIEND)
-                    .notiContent("친구 요청이 왔습니다.")
+                    .notiContent(member.getNickname()+"님으로부터 친구 요청이 왔습니다")
                     .build();
             notificationService.insertNotification(notification);
             notificationService.notify(receiver.getId(), notification);
@@ -140,5 +142,19 @@ public class FriendService {
 
     public List<GalleyMemberListDto> getSearchedGalleyMemberList(Members member, PostSearchMemberListRequest request){
         return friendListRepository.findMembersById(member.getId(), request.getKeyword());
+    }
+
+    @Transactional
+    public String deleteFriend(Members member, Long friendId){
+        Members friend = membersRepository.findById(friendId)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_MEMBER));
+        FriendList friendList1 = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(member, friend)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+        FriendList friendList2 = friendListRepository.findFriendListBySenderIdAndReceiverIdAndIsFriendIsTrue(friend, member)
+                .orElseThrow(()->new CustomException(ErrorType.NOT_FOUND_FRIEND));
+        friendListRepository.delete(friendList1);
+        friendListRepository.delete(friendList2);
+
+        return "";
     }
 }

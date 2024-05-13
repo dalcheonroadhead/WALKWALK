@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostMissionRequest {
-    private Long memberId;
-    private Long exerciseMinute;
-    private Integer questMoney;
-    private Integer period;
-    private Integer dayoff;
+public class PutMissionRequest {
+    private List<Long> memberIdList;
 }

@@ -129,7 +129,7 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 
 - UCC - https://youtu.be/01bYtPFIBRs
 - 시연영상 - https://youtu.be/X-z9YPcKuxY
-  [![WALK_WALK_VIDEO](https://github.com/dalcheonroadhead/WALKWALK/assets/102154788/cdceea04-8359-49ba-a978-1a1f14b6f0a2)](https://youtu.be/X-z9YPcKuxY)
+[![WALK_WALK_VIDEO](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/523f2025-7d71-4bec-95a8-28a97dee969e)](https://youtu.be/X-z9YPcKuxY)
 
 <br><br><br>
 # 효도하기 10조의 팀원들을 소개합니다!

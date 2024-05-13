@@ -7,4 +7,5 @@ public class CustomExerciseCriteriaRequestDto {
     private Long steps;
     private Long exerciseMinute;
     private Long heartRate;
+    private Double exerciseDistance;
 }

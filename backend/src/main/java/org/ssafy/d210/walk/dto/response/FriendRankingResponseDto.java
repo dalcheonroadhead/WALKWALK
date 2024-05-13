@@ -14,11 +14,11 @@ public class FriendRankingResponseDto {
     private Long value;
 
     @Builder
-    public FriendRankingResponseDto(Long memberId, String nickname, String profileUrl, Long value) {
-        this.rank = 0L;
+    public FriendRankingResponseDto(Long memberId, String nickname, String profileUrl, Number value, Number rank) {
+        this.rank = (long) rank;
         this.memberId = memberId;
         this.nickname = nickname;
         this.profileUrl = profileUrl;
-        this.value = value;
+        this.value = (long) value;
     }
 }
