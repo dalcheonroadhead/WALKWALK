@@ -17,9 +17,9 @@ import org.ssafy.d210.notifications.service.NotificationService;
 public class NotificationController {
     private final NotificationService notificationService;
 
-    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ApiResponseDto<?> subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ApiResponseDto.of(MsgType.SUBSCRIBE_SUCCESSFULLY, notificationService.subscribe(userDetails.getMember().getId()));
+    @GetMapping(value = "/subscribe")
+    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return notificationService.subscribe(userDetails.getMember().getId());
     }
 
     @GetMapping("/")

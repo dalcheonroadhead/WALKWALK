@@ -7,30 +7,45 @@ import lombok.Setter;
 import org.ssafy.d210._common.entity.OnlyCreatedTime;
 import org.ssafy.d210.members.entity.Members;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Payment extends OnlyCreatedTime {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
     private Long id;
 
-    @Column(name = "cid")
+    @Column
     private String cid;
 
-    @Column(name = "partner_order_id")
+    @Column
+    private String tid;
+
+    @Column
     private String partner_order_id;
 
-    @Column(name = "partner_user_id")
+    @Column
     private String partner_user_id;
 
-    @Column(name = "total_amount")
+    @Column
     private Integer total_amount;
+
+    @Column
+    private Boolean isApprove;
+
+    @Column
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Members member;
+
+    public void updateIsApprove(Boolean flag) {
+        this.isApprove = flag;
+    }
 }

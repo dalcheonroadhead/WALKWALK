@@ -9,12 +9,14 @@ public class FriendReceivedDto {
     private String profileUrl;
     private String nickname;
     private Long memberId;
+    private String comment;
 
     @Builder
-    private FriendReceivedDto(String profileUrl, String nickname, Long memberId){
+    private FriendReceivedDto(String profileUrl, String nickname, Long memberId, String comment){
         this.profileUrl = profileUrl;
         this.nickname = nickname;
         this.memberId = memberId;
+        this.comment = comment;
     }
 
     public static FriendReceivedDto from(FriendList friendList){
@@ -22,6 +24,7 @@ public class FriendReceivedDto {
                 .profileUrl(friendList.getSenderId().getProfileUrl())
                 .nickname(friendList.getSenderId().getNickname())
                 .memberId(friendList.getSenderId().getId())
+                .comment(friendList.getSenderId().getComment())
                 .build();
     }
 }

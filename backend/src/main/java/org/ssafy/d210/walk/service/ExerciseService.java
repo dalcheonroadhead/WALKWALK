@@ -9,17 +9,20 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.ssafy.d210.items.entity.ItemsType;
 import org.ssafy.d210.items.entity.MemberItemHistory;
 import org.ssafy.d210.items.repository.MemberItemHistoryRepository;
 import org.ssafy.d210.members.entity.Members;
 import org.ssafy.d210.members.repository.MembersRepository;
-import org.ssafy.d210.members.service.MemberDataService;
 import org.ssafy.d210.walk.dto.request.StepsRankingPeriodEnum;
 import org.ssafy.d210.walk.dto.response.*;
 import org.ssafy.d210.walk.entity.Exercise;
+import org.ssafy.d210.walk.repository.ExerciseRankingRepository;
 import org.ssafy.d210.walk.repository.ExerciseRepository;
 
 import java.time.DayOfWeek;
@@ -38,6 +41,8 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final ExerciseCriteriaService exerciseCriteriaService;
     private final MemberItemHistoryRepository memberItemHistoryRepository;
+    private final ExerciseRankingRepository exerciseRankingRepository;
+    private final MembersRepository membersRepository;
 
 
     // db에 저장된 마지막 날짜
@@ -84,19 +89,66 @@ public class ExerciseService {
         return data;
     }
 
+    public List<Exercise> findMonthlyExerciseData(Long memberId) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.withDayOfMonth(1);
+        LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+
+        Optional<Members> membersOptional = membersRepository.findById(memberId);
+
+        if (membersOptional.isPresent()) {
+            Members member = membersRepository.findById(memberId).get();
+            return exerciseRepository.findExercisesByMemberAndExerciseDayBetween(member, startDate, endDate);
+        } else {
+            return null;
+        }
+
+    }
+
+    public Exercise findDailyFromCalendar(Long memberId, LocalDate date) {
+        Optional<Members> membersOptional = membersRepository.findById(memberId);
+        if (!membersOptional.isPresent()) return null;
+        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(membersOptional.get(), date);
+        if (exerciseOptional.isPresent()) return exerciseOptional.get();
+        else return null;
+    }
+
     public SliceResponseDto getStreakRankingWithFriends(Members member, Pageable pageable) {
 //        Members member = membersRepository.findById(memberId).orElseThrow();
         Long myId = member.getId();
-        Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStreakRankingByPage(myId, pageable, LocalDate.now().minusDays(1));
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        Slice<FriendRankingResponseDto> exercises = exerciseRankingRepository.findStreakRankingByPage(myId, pageable, yesterday);
 
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
+        Long myRank = 0L;
+        int myRankPage = 0;
+
+        int count = 0;
+        boolean found = false;
+
+        FriendRankingResponseDto myRankingInfo = null;
+
         for (FriendRankingResponseDto exercise : exercises) {
-            exercise.setRank((long) startRank++);
+            count++;
+            if (exercise.getMemberId().equals(myId)) {
+                myRank = exercise.getRank();
+                myRankingInfo = exercise;
+                found = true;
+            }
+            if (count % pageable.getPageSize() == 0 && !found) {
+                myRankPage++;
+            }
         }
 
-        return new SliceResponseDto(exercises);
+        // 내 순위에 해당하는 페이지 번호 계산
+//        int myRankPage = (int) (myRank / pageable.getPageSize());
+        if (myRank != null) {
+            myRankPage += (int) (myRank / pageable.getPageSize());
+        }
+
+        return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
     }
 
     public SliceResponseDto getStepsRankingWithFriends(Members member, StepsRankingPeriodEnum type, Pageable pageable) {
@@ -116,18 +168,39 @@ public class ExerciseService {
 
         Long myId = member.getId();
 
-        Slice<FriendRankingResponseDto> exercises = exerciseRepository.findStepsRankingByPage(myId, pageable, startDate, endDate);
+        Slice<FriendRankingResponseDto> exercises = exerciseRankingRepository.findStepsRankingByPage(myId, pageable, startDate, endDate);
 
         // 시작 순위 계산
         int startRank = pageable.getPageNumber() * pageable.getPageSize() + 1;
 
+        Long myRank = 0L;
+        int myRankPage = 0;
+
+        int count = 0;
+        boolean found = false;
+
+        FriendRankingResponseDto myRankingInfo = null;
+
         for (FriendRankingResponseDto exercise : exercises) {
-            exercise.setRank((long) startRank++);
+            count++;
+            if (exercise.getMemberId().equals(myId)) {
+                myRank = exercise.getRank();
+                myRankingInfo = exercise;
+                found = true;
+            }
+            if (count % pageable.getPageSize() == 0 && !found) {
+                myRankPage++;
+            }
         }
 
-        return new SliceResponseDto(exercises);
+        if (myRank != null) {
+            myRankPage += (int) (myRank / pageable.getPageSize());
+        }
+
+        return new SliceResponseDto(exercises, myRank, myRankPage, myRankingInfo);
     }
 
+    @Retryable(value = {RestClientException.class}, maxAttempts = 5, backoff = @Backoff(delay = 1000, multiplier = 2))
     public FitnessResponse fetchGoogleFitData(String accessToken, long startTimeMillis, long endTimeMillis) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate";
@@ -144,25 +217,22 @@ public class ExerciseService {
                 Map.of("dataTypeName", "com.google.heart_rate.bpm"),
                 Map.of("dataSourceId", "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes")
         ));
-        requestBody.put("bucketByTime", Map.of("durationMillis", 86400000)); // 24시간 (하루)를 밀리초로 표현
+        requestBody.put("bucketByTime", Map.of("durationMillis", endTimeMillis - startTimeMillis)); // 24시간 (하루)를 밀리초로 표현
         requestBody.put("startTimeMillis", startTimeMillis);
         requestBody.put("endTimeMillis", endTimeMillis);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-//        System.out.println("@@@@@@@김길규@@@@@@@" + restTemplate.postForEntity(url, entity, String.class).getBody());
-        // 얘가 문제임
         ResponseEntity<FitnessResponse> response = restTemplate.postForEntity(url, entity, FitnessResponse.class);
-
 
         return response.getBody();
     }
 
     @Transactional
-    public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member) {
+    public Exercise mapFitnessResponseToExercise(FitnessResponse fitnessResponse, Members member, LocalDate today) {
         Exercise exercise = new Exercise();
         exercise.setMember(member);
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate yesterday = today.minusDays(1);
         exercise.setExerciseDay(yesterday); // 어제 날짜로 설정
 
         for (FitnessResponse.Bucket bucket : fitnessResponse.getBucket()) {
@@ -195,7 +265,9 @@ public class ExerciseService {
         LocalDateTime endOfYesterday = yesterday.atTime(LocalTime.MAX);
         Optional<MemberItemHistory> memberItemHistory = memberItemHistoryRepository.findFirstByMemberAndCreatedAtBetweenAndItemType(member, startOfYesterday, endOfYesterday, ItemsType.STREAK);
 
-        if (criteria.getExerciseMinute() <= exercise.getExerciseMinute() || memberItemHistory.isPresent()) {
+        if (exercise.getExerciseMinute() == null || exercise.getSteps() == null) {
+            return null;
+        } else if (criteria.getExerciseMinute() <= exercise.getExerciseMinute() || memberItemHistory.isPresent()) {
             exercise.setIsAchieved(true);
             Optional<Exercise> lastExercise = exerciseRepository.findExerciseByMemberAndExerciseDay(member, LocalDate.now().minusDays(2));
             lastExercise.ifPresentOrElse(
@@ -207,7 +279,12 @@ public class ExerciseService {
             exercise.setStreak(0L);
         }
 
-        return exerciseRepository.save(exercise);
+        return exercise;
+    }
+
+    public Exercise getExerciseDataFromDate(Members member, LocalDate theDate) {
+        Optional<Exercise> exerciseOptional = exerciseRepository.findExerciseByMemberAndExerciseDay(member, theDate);
+        return exerciseOptional.orElse(null);
     }
 
 }

@@ -4,24 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.ssafy.d210.members.entity.Members;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
-public class Exercise {
-
-    private LocalDate today = LocalDate.now();
-
+public class ExerciseDecided {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 1)
-    @Column(name = "exercise_id")
+    @Column(name = "exercise_decided_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,26 +42,11 @@ public class Exercise {
     @Column(name = "exercise_day")
     private LocalDate exerciseDay = LocalDate.now();
 
-    @Column(name = "is_achieved")
-    @ColumnDefault("false")
-    private Boolean isAchieved;
+    @Column(name = "exercise_start")
+    private LocalDateTime exerciseStart = LocalDateTime.now();
+
+    @Column(name = "exercise_end")
+    private LocalDateTime exerciseEnd;
 
     private Double calorie;
-    private Long streak;
-
-    @Override
-    public String toString() {
-        return "Exercise{" +
-                "id=" + id +
-                ", steps=" + steps +
-                ", exerciseMinute=" + exerciseMinute +
-                ", heartRate=" + heartRate +
-                ", exerciseDistance=" + exerciseDistance +
-                ", exerciseDay=" + exerciseDay +
-                ", isAchieved=" + isAchieved +
-                ", calorie=" + calorie +
-                ", streak=" + streak +
-                '}';
-    }
-
 }
