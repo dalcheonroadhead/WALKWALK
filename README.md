@@ -44,6 +44,9 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 
 ## 주요 기술 및 개발 환경
 
+### 아키텍처 구성도
+![Web App Reference Architecture (9)](https://github.com/DoingHyoDo10/WALKWALK/assets/93258358/f018b5b6-4da4-43ad-af2f-ba2390ef4bb3)
+
 ### Frontend
 
 - Visual Studio Code
