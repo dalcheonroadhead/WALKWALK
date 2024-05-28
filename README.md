@@ -194,7 +194,8 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 <br><br>
 
 ### UI 디자인
-
+<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/370f483e-93ec-4c93-862e-8e7111204906">
+<br><br>
 
 ### ERD
 <img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/9e624fc0-b08d-4df8-a129-f080fd2327af">
