@@ -203,5 +203,3 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 ### ERD
 <img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/9e624fc0-b08d-4df8-a129-f080fd2327af">
 <br><br>
-
-### 서비스 아키텍처
