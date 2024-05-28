@@ -78,6 +78,7 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
     - Spring Data JPA
     - Spring Security
     - SSE Emitter
+- Maria DB
 - JWT
 - OAuth2.0
 - STOMP-WEB-SOCKET
