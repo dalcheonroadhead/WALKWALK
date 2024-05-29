@@ -1,14 +1,16 @@
-# 🐣WALKWALK - 블록체인을 활용한 운동 격려 서비스🐣
+# 🐣 WALKWALK - 블록체인을 활용한 운동 격려 서비스 🐣
 <img width="350" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/2bcc01d3-9cb7-4f9c-b649-85ccdb85ffbf">
 <br>
 WALKWALK 링크: https://j10d210.p.ssafy.io/
+
 <br><br><br>
 
 ## 서비스 개요
 운동을 안 해 걱정인 주변인이 있다면 용돈을 수단으로 삼아 운동을 시킬 수 있습니다.
 
 운동과 용돈 지급 내역은 블록체인으로 투명하게 운영됩니다.
-<br><br><br>
+
+<br><br>
 
 ## 주요 기능
 
@@ -34,13 +36,29 @@ WALKWALK 링크: https://j10d210.p.ssafy.io/
     - 자기 자신에게도 최소 운동 기준을 설정할 수 있습니다.
     - 초기에는 WHO의 연령대별 기준으로 초기화되어 있습니다.
     - 자가 미션을 기준으로 스트릭이 산정됩니다.
-<br><br><br>
+
+<br><br>
 
 ## 프로젝트 정보
+- 프로젝트명 :  
+SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
+
+- 기간 :  
 2024/02/19 ~ 2024/04/03 (45일간 진행)
 
-SSAFY 10기 2학기 특화 프로젝트 - WALKWALK 
-<br><br><br>
+- 팀원 :  
+효도하기 10조(D210)의 팀원들을 소개합니다!
+
+    | 이름 | 역할 | 개발 내용 |
+    | --- | --- | --- |
+    | 전수민 | 팀장<br/>Backend<br/>Frontend | - DB 설계<br/>- 회원, Spring Security & JWT &  OAuth2.0<br/>- 채팅 및 tts, 응원 메시지 구현<br/>- 화면 설계 |
+    | 김규리 | Frontend | - Figma를 이용한 화면 디자인 설계<br/>- 메인, 랭킹, 친구, 할리갈리 미션 설정, 상점, 응원메시지, 보물찾기 화면 구현<br/>- axios로 API 연결<br/>- Zustand로 상태관리 |
+    | 김세현 | Frontend<br/>Backend | - DB 설계<br/>- 서버 EC2 배포<br/>- CI/CD with Jenkins<br/>- 친구, 할리갈리 관리<br/>- SSE 알림 서비스<br/>- 메인화면, 할리갈리, 친구 페이지 구현 |
+    | 심규영 | Frontend<br/>Blockchain | - 화면 설계<br/>- 블록체인<br/>- 회원관리 & OAuth2.0<br/>- 결제 |
+    | 최지수 | Backend | - DB 설계<br/>- 운동 데이터, 기준 및 운동 도메인 api<br/>- 스프링 배치 및 스케줄링을 통한 대용량 데이터 처리 서버 구현<br/>- 랭킹 도메인 페이저블 구현 |
+    | 한채연 | Backend<br/>Blockchain | - DB 설계<br/>- 지갑 관리<br/>- 카카오페이 API를 통한 결제 구현<br/>- 블록체인을 활용한 영수증 발급 |
+
+<br><br>
 
 ## 주요 기술 및 개발 환경
 
@@ -102,7 +120,8 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 - AWS EC2
 - Docker
 - Jenkins
-<br><br><br>
+
+<br><br>
 
 ## 협업 툴
 
@@ -112,13 +131,32 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 - Figma - 목업, 와이어프레임, 디자인 공유
 - MatterMost - 자료 및 api 현황과 요청사항 공유
 - Code With Me - 실시간 협업 코딩
-<br><br><br>
+
+<br><br>
 
 ## 포팅 메뉴얼
 
-
 [포팅 메뉴얼 링크!](https://lab.ssafy.com/s10-blockchain-contract-sub2/S10P22D210/-/blob/d182195b6dea4772f0d6107ca9456296be04a571/exec/%ED%8F%AC%ED%8C%85%20%EB%A9%94%EB%89%B4%EC%96%BC%20WALK_WALK.pdf)
-<br><br><br>
+
+<br><br>
+
+
+## 프로젝트 산출물
+
+### 와이어프레임
+
+<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/c0881703-b992-44d8-b195-b83750cddfe6">
+<br><br>
+
+### UI 디자인
+
+<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/370f483e-93ec-4c93-862e-8e7111204906">
+<br><br>
+
+### ERD
+
+<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/9e624fc0-b08d-4df8-a129-f080fd2327af">
+<br><br>
 
 ## UCC 및 시연영상
 
@@ -126,20 +164,7 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 - 시연영상 - https://youtu.be/X-z9YPcKuxY
 [![WALK_WALK_VIDEO](https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/523f2025-7d71-4bec-95a8-28a97dee969e)](https://youtu.be/X-z9YPcKuxY)
 
-<br><br><br>
-
-# 효도하기 10조(D210)의 팀원들을 소개합니다!
-
-| 이름 | 역할 | 개발 내용 |
-| --- | --- | --- |
-| 전수민 | 팀장<br/>Backend<br/>Frontend | - DB 설계<br/>- 회원, Spring Security & JWT &  OAuth2.0<br/>- 채팅 및 tts, 응원 메시지 구현<br/>- 화면 설계 |
-| 한채연 | Backend<br/>Blockchain | - DB 설계<br/>- 지갑 관리<br/>- 카카오페이 API를 통한 결제 구현<br/>- 블록체인을 활용한 영수증 발급 |
-| 최지수 | Backend | - DB 설계<br/>- 운동 데이터, 기준 및 운동 도메인 api<br/>- 스프링 배치 및 스케줄링을 통한 대용량 데이터 처리 서버 구현<br/>- 랭킹 도메인 페이저블 구현 |
-| 심규영 | Frontend<br/>Blockchain | - 화면 설계<br/>- 블록체인<br/>- 회원관리 & OAuth2.0<br/>- 결제 |
-| 김세현 | Frontend<br/>Backend | - DB 설계<br/>- 서버 EC2 배포<br/>- CI/CD with Jenkins<br/>- 친구, 할리갈리 관리<br/>- SSE 알림 서비스<br/>- 메인화면, 할리갈리, 친구 페이지 구현 |
-| 김규리 | Frontend | - Figma를 이용한 화면 디자인 설계<br/>- 메인, 랭킹, 친구, 할리갈리 미션 설정, 상점, 응원메시지, 보물찾기 화면 구현<br/>- axios로 API 연결<br/>- Zustand로 상태관리 |
-
-<br><br><br>
+<br><br>
 
 ## 주요 서비스 화면
 
@@ -175,31 +200,14 @@ SSAFY 10기 2학기 특화 프로젝트 - WALKWALK
 <img width="350" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/42b25c66-b167-470e-96cf-7323a78c4092">
 <br><br><br>
 
-
 ### 9. 친구 검색
 <img width="350" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/e71e094f-e12b-44d9-93c9-cc4c9641c827">
 <br><br><br>
-
 
 ### 10. 친구 신청
 <img width="350" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/01bc8fb7-d7c6-4d61-8616-2687f5b499cd">
 <br><br><br>
 
-
 ### 11. 마이페이지
 <img width="350" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/102154788/f8d0f012-0371-44ac-bbb6-608937dbe617">
 <br><br><br>
-
-
-## 프로젝트 산출물
-### 와이어프레임
-<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/c0881703-b992-44d8-b195-b83750cddfe6">
-<br><br>
-
-### UI 디자인
-<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/370f483e-93ec-4c93-862e-8e7111204906">
-<br><br>
-
-### ERD
-<img width="900" alt="image" src="https://github.com/DoingHyoDo10/WALKWALK/assets/78338944/9e624fc0-b08d-4df8-a129-f080fd2327af">
-<br><br>
